@@ -13,13 +13,11 @@ import net.minecraft.client.model.geom.builders.UVPair;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.block.BlockAndTintGetter;
 import net.minecraft.client.renderer.block.BlockModelRenderState;
-import net.minecraft.client.renderer.block.BlockModelResolver;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
-import net.minecraft.client.renderer.entity.DisplayRenderer;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -620,8 +618,6 @@ public class BonsaiBlockEntityRenderer implements
         }
     }
 
-    private static @Nullable BlockModelResolver blockModelResolver;
-
     private static @Nullable ResolvedMaterial resolveMaterial(@Nullable Identifier blockId) {
         if (blockId == null) {
             return null;
@@ -635,10 +631,15 @@ public class BonsaiBlockEntityRenderer implements
             return Optional.empty();
         }
         BlockState blockState = block.defaultBlockState();
-        BlockModelRenderState renderState = new BlockModelRenderState();
-        getBlockModelResolver().update(renderState, blockState, DisplayRenderer.BLOCK_DISPLAY_CONTEXT);
-        List<BlockStateModelPart> parts = renderState.modelParts;
-        if (parts == null || parts.isEmpty()) {
+        BlockStateModel model = Minecraft.getInstance()
+                .getModelManager()
+                .getBlockStateModelSet()
+                .get(blockState);
+        List<BlockStateModelPart> parts = new ArrayList<>();
+        BlockAndTintGetter level = BlockAndTintGetter.EMPTY;
+        BlockPos pos = BlockPos.ZERO;
+        model.collectParts(level, pos, blockState, RandomSource.create(42L), parts);
+        if (parts.isEmpty()) {
             return Optional.empty();
         }
         Material.Baked particleMaterial = parts.getFirst().particleMaterial();
@@ -647,13 +648,6 @@ public class BonsaiBlockEntityRenderer implements
         boolean hasTranslucency = parts.stream()
                 .anyMatch(part -> (part.materialFlags() & BakedQuad.FLAG_TRANSLUCENT) != 0);
         return Optional.of(new ResolvedMaterial(particleSprite, materialInfo, hasTranslucency));
-    }
-
-    private static synchronized BlockModelResolver getBlockModelResolver() {
-        if (blockModelResolver == null) {
-            blockModelResolver = new BlockModelResolver(Minecraft.getInstance().getModelManager());
-        }
-        return blockModelResolver;
     }
 
     private static BakedQuad.@Nullable MaterialInfo findMaterialInfo(
@@ -768,7 +762,6 @@ public class BonsaiBlockEntityRenderer implements
         MATERIAL_CACHE.clear();
         baseLogSprite = null;
         baseLeavesSprite = null;
-        blockModelResolver = null;
     }
 
     public static class State extends BlockEntityRenderState {
