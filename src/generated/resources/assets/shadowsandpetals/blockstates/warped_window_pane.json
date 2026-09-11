@@ -1,0 +1,26 @@
+{
+  "variants": {
+    "axis=x,waterlogged=false": {
+      "model": "shadowsandpetals:block/window_pane/warped",
+      "y": 90
+    },
+    "axis=x,waterlogged=true": {
+      "model": "shadowsandpetals:block/window_pane/warped",
+      "y": 90
+    },
+    "axis=y,waterlogged=false": {
+      "model": "shadowsandpetals:block/window_pane/warped",
+      "x": 90
+    },
+    "axis=y,waterlogged=true": {
+      "model": "shadowsandpetals:block/window_pane/warped",
+      "x": 90
+    },
+    "axis=z,waterlogged=false": {
+      "model": "shadowsandpetals:block/window_pane/warped"
+    },
+    "axis=z,waterlogged=true": {
+      "model": "shadowsandpetals:block/window_pane/warped"
+    }
+  }
+}

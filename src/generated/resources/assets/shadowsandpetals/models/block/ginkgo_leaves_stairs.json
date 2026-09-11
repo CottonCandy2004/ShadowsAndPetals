@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/stairs",
+  "render_type": "cutout_mipped",
+  "textures": {
+    "bottom": "shadowsandpetals:block/ginkgo_leaves_0",
+    "side": "shadowsandpetals:block/ginkgo_leaves_0",
+    "top": "shadowsandpetals:block/ginkgo_leaves_0"
+  }
+}
