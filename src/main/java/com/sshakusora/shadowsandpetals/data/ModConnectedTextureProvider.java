@@ -26,11 +26,7 @@ public class ModConnectedTextureProvider implements DataProvider {
 
     public ModConnectedTextureProvider(PackOutput output) {
         this.texturePathProvider = output.createPathProvider(PackOutput.Target.RESOURCE_PACK, "textures");
-        Path projectRoot = output.getOutputFolder().toAbsolutePath().normalize()
-                .getParent()
-                .getParent()
-                .getParent();
-        this.sourceTextureRoot = projectRoot.resolve("src/main/resources/assets");
+        this.sourceTextureRoot = findSourceTextureRoot(output.getOutputFolder());
     }
 
     @Override
@@ -189,5 +185,17 @@ public class ModConnectedTextureProvider implements DataProvider {
                 .resolve(texture.getNamespace())
                 .resolve("textures")
                 .resolve(texture.getPath() + ".png");
+    }
+
+    private static Path findSourceTextureRoot(Path outputFolder) {
+        Path cursor = outputFolder.toAbsolutePath().normalize();
+        while (cursor != null) {
+            Path candidate = cursor.resolve("src/main/resources/assets");
+            if (Files.isDirectory(candidate)) {
+                return candidate;
+            }
+            cursor = cursor.getParent();
+        }
+        throw new IllegalStateException("Cannot locate src/main/resources/assets from " + outputFolder);
     }
 }

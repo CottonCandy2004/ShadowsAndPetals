@@ -47,7 +47,6 @@ public class WoodBlockList<T extends Block> extends BlockList<WoodBlockList.Wood
         DARK_OAK("dark_oak", "深色橡木", Blocks.STRIPPED_DARK_OAK_LOG, Blocks.DARK_OAK_PLANKS, Blocks.DARK_OAK_STAIRS, Blocks.DARK_OAK_SLAB),
         MANGROVE("mangrove", "红树木", Blocks.STRIPPED_MANGROVE_LOG, Blocks.MANGROVE_PLANKS, Blocks.MANGROVE_STAIRS, Blocks.MANGROVE_SLAB),
         CHERRY("cherry", "樱花木", Blocks.STRIPPED_CHERRY_LOG, Blocks.CHERRY_PLANKS, Blocks.CHERRY_STAIRS, Blocks.CHERRY_SLAB),
-        PALE("pale_oak", "苍白橡木", Blocks.STRIPPED_OAK_LOG, Blocks.OAK_PLANKS, Blocks.OAK_STAIRS, Blocks.OAK_SLAB),
         SAKURA("sakura", "樱", BlockRegistry.SAKURA_SET),
         MAPLE("maple", "枫木", BlockRegistry.MAPLE_SET),
         GINKGO("ginkgo", "银杏木", BlockRegistry.GINKGO_SET),

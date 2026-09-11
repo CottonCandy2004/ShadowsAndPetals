@@ -15,7 +15,7 @@ import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 
 @EventBusSubscriber(modid = ShadowsAndPetals.MOD_ID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
-@SuppressWarnings({"deprecation", "removal"})
+@SuppressWarnings({"removal"})
 public final class ClientEvents {
     private ClientEvents() {}
 

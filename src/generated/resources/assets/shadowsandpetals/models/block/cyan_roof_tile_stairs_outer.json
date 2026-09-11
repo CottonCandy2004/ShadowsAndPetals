@@ -1,8 +1,0 @@
-{
-  "parent": "shadowsandpetals:block/template/roof_tile_outer_stairs",
-  "textures": {
-    "bottom": "shadowsandpetals:block/roof_tile/cyan",
-    "side": "shadowsandpetals:block/roof_tile/cyan",
-    "top": "shadowsandpetals:block/roof_tile/cyan"
-  }
-}

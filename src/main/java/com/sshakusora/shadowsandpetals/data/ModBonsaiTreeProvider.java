@@ -39,8 +39,6 @@ public final class ModBonsaiTreeProvider implements DataProvider {
         add(tasks, cache, "dark_oak", Blocks.DARK_OAK_SAPLING, Blocks.DARK_OAK_LOG, Blocks.DARK_OAK_LEAVES);
         add(tasks, cache, "cherry", Blocks.CHERRY_SAPLING, Blocks.CHERRY_LOG, Blocks.CHERRY_LEAVES);
         add(tasks, cache, "mangrove", Blocks.MANGROVE_PROPAGULE, Blocks.MANGROVE_LOG, Blocks.MANGROVE_LEAVES);
-        add(tasks, cache, "pale_oak", Blocks.OAK_SAPLING, Blocks.OAK_LOG, Blocks.OAK_LEAVES);
-
         add(tasks, cache, "sakura", BlockRegistry.SAKURA_SET);
         add(tasks, cache, "maple", BlockRegistry.MAPLE_SET);
         add(tasks, cache, "ginkgo", BlockRegistry.GINKGO_SET);

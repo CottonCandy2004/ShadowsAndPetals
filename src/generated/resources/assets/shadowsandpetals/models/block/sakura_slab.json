@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/slab",
-  "textures": {
-    "bottom": "shadowsandpetals:block/sakura_planks",
-    "side": "shadowsandpetals:block/sakura_planks",
-    "top": "shadowsandpetals:block/sakura_planks"
-  }
-}
