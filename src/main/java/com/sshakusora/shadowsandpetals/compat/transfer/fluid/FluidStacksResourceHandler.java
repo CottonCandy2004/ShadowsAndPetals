@@ -25,11 +25,35 @@ public abstract class FluidStacksResourceHandler implements ResourceHandler<Flui
         check(index); if (amount <= 0 || !isValid(index, resource) || resource.isEmpty()) return 0;
         FluidStack current=stacks[index]; int free=capacity-(current.isEmpty()?0:current.getAmount());
         if (!current.isEmpty() && !FluidStack.isSameFluidSameComponents(current, resource.asStack())) return 0;
-        int inserted=Math.min(free, amount); if (inserted>0) { FluidStack previous=current.copy(); stacks[index]=current.isEmpty()?resource.toStack(inserted):current.copyWithAmount(current.getAmount()+inserted); onContentsChanged(index, previous); } return inserted;
+        int inserted=Math.min(free, amount);
+        if (inserted>0) {
+            FluidStack previous=current.copy();
+            stacks[index]=current.isEmpty()?resource.toStack(inserted):current.copyWithAmount(current.getAmount()+inserted);
+            onContentsChanged(index, previous);
+            if (tx != null) {
+                tx.addRollback(() -> {
+                    FluidStack currentContents = stacks[index];
+                    stacks[index] = previous.copy();
+                    onContentsChanged(index, currentContents);
+                });
+            }
+        }
+        return inserted;
     }
     @Override public int extract(int index, FluidResource resource, int amount, TransactionContext tx) {
         check(index); if (amount<=0 || resource.isEmpty() || stacks[index].isEmpty() || !FluidStack.isSameFluidSameComponents(stacks[index],resource.asStack())) return 0;
-        int extracted=Math.min(amount, stacks[index].getAmount()); FluidStack previous=stacks[index].copy(); stacks[index]=extracted>=previous.getAmount()?FluidStack.EMPTY:previous.copyWithAmount(previous.getAmount()-extracted); onContentsChanged(index,previous); return extracted;
+        int extracted=Math.min(amount, stacks[index].getAmount());
+        FluidStack previous=stacks[index].copy();
+        stacks[index]=extracted>=previous.getAmount()?FluidStack.EMPTY:previous.copyWithAmount(previous.getAmount()-extracted);
+        onContentsChanged(index,previous);
+        if (tx != null) {
+            tx.addRollback(() -> {
+                FluidStack currentContents = stacks[index];
+                stacks[index] = previous.copy();
+                onContentsChanged(index, currentContents);
+            });
+        }
+        return extracted;
     }
     public void serialize(CompoundTag output, HolderLookup.Provider registries) {
         if (!stacks[0].isEmpty()) output.put("Fluid", stacks[0].save(registries));

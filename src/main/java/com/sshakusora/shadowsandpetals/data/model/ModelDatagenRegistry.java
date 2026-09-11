@@ -41,13 +41,30 @@ public final class ModelDatagenRegistry {
         ITEMS.put(item.getId(), new RegisteredItem<>(new ItemModelContext<>(item.getId(), item), callback, clientModel, customClientType));
     }
 
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public static void generateBlocks(SAPBlockModelGenerator generator) {
-        // 1.21.1 uses the legacy model provider; callback execution is intentionally
-        // disabled because these callbacks target the 26.x model API.
+        BLOCKS.values().forEach(entry -> {
+            if (entry.callback() == null) {
+                return;
+            }
+            BlockModelCallback callback = entry.callback().get();
+            if (callback != null) {
+                callback.generate(entry.context(), generator);
+            }
+        });
     }
 
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public static void generateItemModels(SAPItemModelGenerator generator) {
-        // Legacy JSON assets provide item models on 1.21.1.
+        ITEMS.values().forEach(entry -> {
+            if (entry.callback() == null) {
+                return;
+            }
+            ItemModelCallback callback = entry.callback().get();
+            if (callback != null) {
+                callback.generate(entry.context(), generator);
+            }
+        });
     }
 
     public static void finalizeClientItems(SAPItemModelGenerator generator) {

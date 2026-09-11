@@ -40,6 +40,7 @@ public class ModDataGenerator {
         generator.addProvider(event.includeServer(), new AdvancementProvider(output, lookupProvider, List.of(
                 new ModAdvancementProvider()
         )));
+        generator.addProvider(event.includeServer(), new ModDataMapProvider(output, lookupProvider));
         generator.addProvider(event.includeServer(), new ModBonsaiTreeProvider(output));
         generator.addProvider(event.includeServer(), new ModRecipeProvider(output, lookupProvider));
         generator.addProvider(event.includeServer(), new LootTableProvider(output, Set.of(), List.of(

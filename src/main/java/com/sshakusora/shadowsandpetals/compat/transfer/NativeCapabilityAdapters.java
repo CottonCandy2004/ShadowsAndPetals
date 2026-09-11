@@ -68,11 +68,11 @@ public final class NativeCapabilityAdapters {
                             - delegate.getAmountAsInt(tank));
                     int amount = Math.min(remaining, free);
                     if (amount > 0) {
-                        if (action.execute()) {
-                            delegate.insert(tank, requested, amount, (TransactionContext) null);
-                        }
-                        total += amount;
-                        remaining -= amount;
+                        int moved = action.execute()
+                                ? delegate.insert(tank, requested, amount, (TransactionContext) null)
+                                : amount;
+                        total += moved;
+                        remaining -= moved;
                     }
                 }
                 return total;

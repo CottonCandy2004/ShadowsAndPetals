@@ -417,19 +417,50 @@ public class ShishiOdoshiBlockEntity extends BlockEntity {
 
         @Override
         public boolean isValid(int index, FluidResource resource) {
-            return index == 0 && resource.is(blockEntity.getFluid());
+            return index == 0
+                    && resource != null
+                    && !resource.isEmpty()
+                    && (blockEntity.getWaterAmount() == 0 || resource.is(blockEntity.getFluid()));
         }
 
         @Override
         public int insert(int index, FluidResource resource, int amount, TransactionContext transaction) {
             TransferPreconditions.checkNonEmptyNonNegative(resource, amount);
-            return 0;
+            if (!isValid(index, resource) || blockEntity.animationPhase != AnimationPhase.FILLING) {
+                return 0;
+            }
+
+            int inserted = Math.min(amount, CAPACITY_MB - blockEntity.fluidAmount);
+            if (inserted <= 0) {
+                return 0;
+            }
+            if (blockEntity.fluidAmount == 0) {
+                blockEntity.fluid = resource.getFluid();
+            }
+            blockEntity.fluidAmount += inserted;
+            blockEntity.setChanged();
+            blockEntity.syncToClient();
+            return inserted;
         }
 
         @Override
         public int extract(int index, FluidResource resource, int amount, TransactionContext transaction) {
             TransferPreconditions.checkNonEmptyNonNegative(resource, amount);
-            return 0;
+            if (index != 0 || blockEntity.fluidAmount <= 0
+                    || !resource.is(blockEntity.fluid)) {
+                return 0;
+            }
+
+            int extracted = Math.min(amount, blockEntity.fluidAmount);
+            blockEntity.fluidAmount -= extracted;
+            if (blockEntity.fluidAmount == 0) {
+                blockEntity.animationPhase = AnimationPhase.FILLING;
+                blockEntity.animationTick = 0.0F;
+                blockEntity.pourTick = -1.0F;
+            }
+            blockEntity.setChanged();
+            blockEntity.syncToClient();
+            return extracted;
         }
     }
 }

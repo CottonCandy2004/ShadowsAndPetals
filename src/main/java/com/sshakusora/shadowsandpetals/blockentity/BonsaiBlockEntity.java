@@ -326,12 +326,12 @@ public final class BonsaiBlockEntity extends BlockEntity {
 
         @Override
         public int insert(int index, ItemResource resource, int amount, TransactionContext transaction) {
-            return 0;
+            return super.insert(index, resource, amount, transaction);
         }
 
         @Override
         public int extract(int index, ItemResource resource, int amount, TransactionContext transaction) {
-            return 0;
+            return super.extract(index, resource, amount, transaction);
         }
     }
 

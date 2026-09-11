@@ -187,7 +187,7 @@ public class WoodenBarrelBlockItem extends BlockItem {
             return InteractionResult.FAIL;
         }
 
-        var pickedUp = FluidUtil.tryPickupFluid(handler, player, level, sourcePos, side);
+        var pickedUp = FluidUtil.tryPickupFluid(handler, player, level, hand, sourcePos, side);
         if (pickedUp.isEmpty()) {
             // The SOURCE_ONLY ray hit a fluid, but this particular source could
             // not be transferred into a barrel. Match the bucket's no-op result
