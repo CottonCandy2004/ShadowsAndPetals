@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "L": {
+      "item": "shadowsandpetals:maple_leaves"
+    }
+  },
+  "pattern": [
+    "LLL",
+    "LLL"
+  ],
+  "result": {
+    "count": 6,
+    "id": "shadowsandpetals:maple_hedge"
+  }
+}

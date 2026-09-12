@@ -54,6 +54,7 @@
 		{
 			"from": [2.5, 10.25, 12.01],
 			"to": [3.5, 14.25, 13.99],
+			"rotation": {"angle": 0, "axis": "y", "origin": [2.5, 12.25, 12]},
 			"faces": {
 				"north": {"uv": [9.25, 10.5, 9.5, 11.5], "texture": "#vanity"},
 				"east": {"uv": [2.25, 10, 2.75, 11], "texture": "#vanity"},
@@ -185,6 +186,7 @@
 		{
 			"from": [12.5, 10.25, 12.01],
 			"to": [13.5, 14.25, 13.99],
+			"rotation": {"angle": 0, "axis": "y", "origin": [13.5, 12.25, 12]},
 			"faces": {
 				"north": {"uv": [9.5, 10.5, 9.25, 11.5], "texture": "#vanity"},
 				"east": {"uv": [3.25, 10, 2.75, 11], "texture": "#vanity"},

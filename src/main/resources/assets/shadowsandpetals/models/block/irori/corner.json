@@ -46,6 +46,7 @@
 		{
 			"from": [0, 15, -12],
 			"to": [4, 16, 0],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, 15, 0]},
 			"faces": {
 				"east": {"uv": [2, 0, 8, 0.5], "texture": "#5"},
 				"west": {"uv": [8, 0, 2, 0.5], "texture": "#5"},

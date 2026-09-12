@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "W": {
+      "item": "shadowsandpetals:ginkgo_planks"
+    }
+  },
+  "pattern": [
+    "WWW"
+  ],
+  "result": {
+    "count": 6,
+    "id": "shadowsandpetals:ginkgo_slab"
+  }
+}

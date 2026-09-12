@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "shadowsandpetals:ginkgo_vertical_slab"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "shadowsandpetals:ginkgo_slab"
+  }
+}

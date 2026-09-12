@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "shadowsandpetals:wooden_barrel"
+    },
+    {
+      "tag": "c:buckets/milk"
+    }
+  ],
+  "result": {
+    "components": {
+      "minecraft:block_entity_data": {
+        "Fluid": {
+          "amount": 1000,
+          "id": "minecraft:milk"
+        },
+        "id": "shadowsandpetals:wooden_barrel"
+      }
+    },
+    "count": 1,
+    "id": "shadowsandpetals:wooden_barrel"
+  }
+}

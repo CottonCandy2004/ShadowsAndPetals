@@ -1,0 +1,6 @@
+{
+  "parent": "shadowsandpetals:block/template/roof_tile_block",
+  "textures": {
+    "all": "shadowsandpetals:block/roof_tile/pink"
+  }
+}

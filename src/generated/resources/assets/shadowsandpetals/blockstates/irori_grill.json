@@ -1,0 +1,33 @@
+{
+  "variants": {
+    "grill_part=quad_north_east": {
+      "model": "shadowsandpetals:block/grill/double/quad_north_east_upper"
+    },
+    "grill_part=quad_north_west": {
+      "model": "shadowsandpetals:block/grill/double/quad_north_west_upper"
+    },
+    "grill_part=quad_south_east": {
+      "model": "shadowsandpetals:block/grill/double/quad_south_east_upper"
+    },
+    "grill_part=quad_south_west": {
+      "model": "shadowsandpetals:block/grill/double/quad_south_west_upper"
+    },
+    "grill_part=single": {
+      "model": "shadowsandpetals:block/grill/double/single_upper"
+    },
+    "grill_part=strip_east": {
+      "model": "shadowsandpetals:block/grill/double/strip_east_upper",
+      "y": 90
+    },
+    "grill_part=strip_north": {
+      "model": "shadowsandpetals:block/grill/double/strip_north_upper"
+    },
+    "grill_part=strip_south": {
+      "model": "shadowsandpetals:block/grill/double/strip_south_upper"
+    },
+    "grill_part=strip_west": {
+      "model": "shadowsandpetals:block/grill/double/strip_west_upper",
+      "y": 90
+    }
+  }
+}

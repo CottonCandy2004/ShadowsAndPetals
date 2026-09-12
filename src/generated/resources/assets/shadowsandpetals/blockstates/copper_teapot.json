@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "shadowsandpetals:block/teapot/copper/main",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "shadowsandpetals:block/teapot/copper/main"
+    },
+    "facing=south": {
+      "model": "shadowsandpetals:block/teapot/copper/main",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "shadowsandpetals:block/teapot/copper/main",
+      "y": 270
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "A": {
+      "item": "shadowsandpetals:aluminum_ingot"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "AAA",
+    "ASA",
+    " S "
+  ],
+  "result": {
+    "count": 1,
+    "id": "shadowsandpetals:hammer"
+  }
+}

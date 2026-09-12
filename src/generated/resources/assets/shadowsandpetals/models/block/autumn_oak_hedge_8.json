@@ -1,0 +1,86 @@
+{
+  "parent": "minecraft:block/block",
+  "elements": [
+    {
+      "faces": {
+        "down": {
+          "cullface": "down",
+          "texture": "#all"
+        },
+        "east": {
+          "cullface": "east",
+          "texture": "#all"
+        },
+        "north": {
+          "cullface": "north",
+          "texture": "#all"
+        },
+        "south": {
+          "cullface": "south",
+          "texture": "#all"
+        },
+        "up": {
+          "cullface": "up",
+          "texture": "#all"
+        },
+        "west": {
+          "cullface": "west",
+          "texture": "#all"
+        }
+      },
+      "from": [
+        4,
+        0,
+        4
+      ],
+      "to": [
+        12,
+        16,
+        12
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "cullface": "down",
+          "texture": "#all"
+        },
+        "east": {
+          "cullface": "east",
+          "texture": "#all"
+        },
+        "north": {
+          "cullface": "north",
+          "texture": "#all"
+        },
+        "south": {
+          "cullface": "south",
+          "texture": "#all"
+        },
+        "up": {
+          "cullface": "up",
+          "texture": "#all"
+        },
+        "west": {
+          "cullface": "west",
+          "texture": "#all"
+        }
+      },
+      "from": [
+        0,
+        0,
+        4
+      ],
+      "to": [
+        4,
+        16,
+        12
+      ]
+    }
+  ],
+  "render_type": "minecraft:cutout_mipped",
+  "textures": {
+    "all": "shadowsandpetals:block/autumn_oak_leaves_0",
+    "particle": "shadowsandpetals:block/autumn_oak_leaves_0"
+  }
+}

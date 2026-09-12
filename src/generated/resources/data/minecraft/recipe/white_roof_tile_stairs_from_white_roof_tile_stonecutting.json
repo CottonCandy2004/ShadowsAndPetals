@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "shadowsandpetals:white_roof_tile"
+  },
+  "result": {
+    "count": 1,
+    "id": "shadowsandpetals:white_roof_tile_stairs"
+  }
+}

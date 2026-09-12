@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "item": "shadowsandpetals:aluminum_ingot"
+    },
+    "D": {
+      "tag": "minecraft:dirt"
+    }
+  },
+  "pattern": [
+    "ADA",
+    " A "
+  ],
+  "result": {
+    "count": 3,
+    "id": "shadowsandpetals:bonsai"
+  }
+}

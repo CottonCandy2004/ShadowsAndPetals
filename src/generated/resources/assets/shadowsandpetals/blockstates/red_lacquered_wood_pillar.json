@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "axis=x,waterlogged=false": {
+      "model": "shadowsandpetals:block/wood_pillar/red_lacquered_wood_pillar",
+      "uvlock": true,
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,waterlogged=true": {
+      "model": "shadowsandpetals:block/wood_pillar/red_lacquered_wood_pillar",
+      "uvlock": true,
+      "x": 90,
+      "y": 90
+    },
+    "axis=y,waterlogged=false": {
+      "model": "shadowsandpetals:block/wood_pillar/red_lacquered_wood_pillar",
+      "uvlock": true
+    },
+    "axis=y,waterlogged=true": {
+      "model": "shadowsandpetals:block/wood_pillar/red_lacquered_wood_pillar",
+      "uvlock": true
+    },
+    "axis=z,waterlogged=false": {
+      "model": "shadowsandpetals:block/wood_pillar/red_lacquered_wood_pillar",
+      "uvlock": true,
+      "x": 90
+    },
+    "axis=z,waterlogged=true": {
+      "model": "shadowsandpetals:block/wood_pillar/red_lacquered_wood_pillar",
+      "uvlock": true,
+      "x": 90
+    }
+  }
+}

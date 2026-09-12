@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "shadowsandpetals:autumn_oak_leaves_vertical_slab"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "shadowsandpetals:autumn_oak_leaves_slab"
+  }
+}

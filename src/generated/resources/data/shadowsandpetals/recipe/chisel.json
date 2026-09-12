@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "A": {
+      "item": "shadowsandpetals:aluminum_ingot"
+    }
+  },
+  "pattern": [
+    "A",
+    "A"
+  ],
+  "result": {
+    "count": 1,
+    "id": "shadowsandpetals:chisel"
+  }
+}

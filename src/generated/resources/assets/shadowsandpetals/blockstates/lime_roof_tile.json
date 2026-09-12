@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "shadowsandpetals:block/lime_roof_tile"
+    },
+    "facing=north": {
+      "model": "shadowsandpetals:block/lime_roof_tile",
+      "y": 270
+    },
+    "facing=south": {
+      "model": "shadowsandpetals:block/lime_roof_tile",
+      "y": 90
+    },
+    "facing=west": {
+      "model": "shadowsandpetals:block/lime_roof_tile",
+      "y": 180
+    }
+  }
+}

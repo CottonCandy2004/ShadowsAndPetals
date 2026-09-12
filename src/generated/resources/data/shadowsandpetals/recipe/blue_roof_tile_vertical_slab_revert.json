@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "shadowsandpetals:blue_roof_tile_vertical_slab"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "shadowsandpetals:blue_roof_tile_slab"
+  }
+}

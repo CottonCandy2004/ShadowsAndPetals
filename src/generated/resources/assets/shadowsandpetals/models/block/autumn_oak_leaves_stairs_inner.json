@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/inner_stairs",
+  "render_type": "minecraft:cutout_mipped",
+  "textures": {
+    "bottom": "shadowsandpetals:block/autumn_oak_leaves_0",
+    "side": "shadowsandpetals:block/autumn_oak_leaves_0",
+    "top": "shadowsandpetals:block/autumn_oak_leaves_0"
+  }
+}

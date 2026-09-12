@@ -1,0 +1,26 @@
+{
+  "parent": "shadowsandpetals:root",
+  "criteria": {
+    "excavated_seafood": {
+      "trigger": "shadowsandpetals:seafood_excavated"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.shadowsandpetals.nature.seafood_excavated.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "shadowsandpetals:clam"
+    },
+    "title": {
+      "translate": "advancements.shadowsandpetals.nature.seafood_excavated.title"
+    }
+  },
+  "requirements": [
+    [
+      "excavated_seafood"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

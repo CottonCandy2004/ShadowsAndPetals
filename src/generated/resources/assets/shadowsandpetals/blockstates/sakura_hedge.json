@@ -1,0 +1,100 @@
+{
+  "variants": {
+    "east=false,north=false,south=false,waterlogged=false,west=false": {
+      "model": "shadowsandpetals:block/sakura_hedge_0"
+    },
+    "east=false,north=false,south=false,waterlogged=false,west=true": {
+      "model": "shadowsandpetals:block/sakura_hedge_8"
+    },
+    "east=false,north=false,south=false,waterlogged=true,west=false": {
+      "model": "shadowsandpetals:block/sakura_hedge_0"
+    },
+    "east=false,north=false,south=false,waterlogged=true,west=true": {
+      "model": "shadowsandpetals:block/sakura_hedge_8"
+    },
+    "east=false,north=false,south=true,waterlogged=false,west=false": {
+      "model": "shadowsandpetals:block/sakura_hedge_4"
+    },
+    "east=false,north=false,south=true,waterlogged=false,west=true": {
+      "model": "shadowsandpetals:block/sakura_hedge_12"
+    },
+    "east=false,north=false,south=true,waterlogged=true,west=false": {
+      "model": "shadowsandpetals:block/sakura_hedge_4"
+    },
+    "east=false,north=false,south=true,waterlogged=true,west=true": {
+      "model": "shadowsandpetals:block/sakura_hedge_12"
+    },
+    "east=false,north=true,south=false,waterlogged=false,west=false": {
+      "model": "shadowsandpetals:block/sakura_hedge_1"
+    },
+    "east=false,north=true,south=false,waterlogged=false,west=true": {
+      "model": "shadowsandpetals:block/sakura_hedge_9"
+    },
+    "east=false,north=true,south=false,waterlogged=true,west=false": {
+      "model": "shadowsandpetals:block/sakura_hedge_1"
+    },
+    "east=false,north=true,south=false,waterlogged=true,west=true": {
+      "model": "shadowsandpetals:block/sakura_hedge_9"
+    },
+    "east=false,north=true,south=true,waterlogged=false,west=false": {
+      "model": "shadowsandpetals:block/sakura_hedge_5"
+    },
+    "east=false,north=true,south=true,waterlogged=false,west=true": {
+      "model": "shadowsandpetals:block/sakura_hedge_13"
+    },
+    "east=false,north=true,south=true,waterlogged=true,west=false": {
+      "model": "shadowsandpetals:block/sakura_hedge_5"
+    },
+    "east=false,north=true,south=true,waterlogged=true,west=true": {
+      "model": "shadowsandpetals:block/sakura_hedge_13"
+    },
+    "east=true,north=false,south=false,waterlogged=false,west=false": {
+      "model": "shadowsandpetals:block/sakura_hedge_2"
+    },
+    "east=true,north=false,south=false,waterlogged=false,west=true": {
+      "model": "shadowsandpetals:block/sakura_hedge_10"
+    },
+    "east=true,north=false,south=false,waterlogged=true,west=false": {
+      "model": "shadowsandpetals:block/sakura_hedge_2"
+    },
+    "east=true,north=false,south=false,waterlogged=true,west=true": {
+      "model": "shadowsandpetals:block/sakura_hedge_10"
+    },
+    "east=true,north=false,south=true,waterlogged=false,west=false": {
+      "model": "shadowsandpetals:block/sakura_hedge_6"
+    },
+    "east=true,north=false,south=true,waterlogged=false,west=true": {
+      "model": "shadowsandpetals:block/sakura_hedge_14"
+    },
+    "east=true,north=false,south=true,waterlogged=true,west=false": {
+      "model": "shadowsandpetals:block/sakura_hedge_6"
+    },
+    "east=true,north=false,south=true,waterlogged=true,west=true": {
+      "model": "shadowsandpetals:block/sakura_hedge_14"
+    },
+    "east=true,north=true,south=false,waterlogged=false,west=false": {
+      "model": "shadowsandpetals:block/sakura_hedge_3"
+    },
+    "east=true,north=true,south=false,waterlogged=false,west=true": {
+      "model": "shadowsandpetals:block/sakura_hedge_11"
+    },
+    "east=true,north=true,south=false,waterlogged=true,west=false": {
+      "model": "shadowsandpetals:block/sakura_hedge_3"
+    },
+    "east=true,north=true,south=false,waterlogged=true,west=true": {
+      "model": "shadowsandpetals:block/sakura_hedge_11"
+    },
+    "east=true,north=true,south=true,waterlogged=false,west=false": {
+      "model": "shadowsandpetals:block/sakura_hedge_7"
+    },
+    "east=true,north=true,south=true,waterlogged=false,west=true": {
+      "model": "shadowsandpetals:block/sakura_hedge_15"
+    },
+    "east=true,north=true,south=true,waterlogged=true,west=false": {
+      "model": "shadowsandpetals:block/sakura_hedge_7"
+    },
+    "east=true,north=true,south=true,waterlogged=true,west=true": {
+      "model": "shadowsandpetals:block/sakura_hedge_15"
+    }
+  }
+}

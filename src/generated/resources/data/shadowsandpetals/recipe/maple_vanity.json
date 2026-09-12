@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "G": {
+      "item": "minecraft:glass_pane"
+    },
+    "S": {
+      "item": "shadowsandpetals:maple_slab"
+    }
+  },
+  "pattern": [
+    "S  ",
+    "G  ",
+    "SSS"
+  ],
+  "result": {
+    "count": 1,
+    "id": "shadowsandpetals:maple_vanity"
+  }
+}

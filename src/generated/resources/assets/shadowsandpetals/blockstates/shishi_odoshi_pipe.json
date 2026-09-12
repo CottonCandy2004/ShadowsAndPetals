@@ -1,0 +1,79 @@
+{
+  "variants": {
+    "facing=east,length=long": {
+      "model": "shadowsandpetals:block/shishi_odoshi/pipe/long",
+      "y": 90
+    },
+    "facing=east,length=normal": {
+      "model": "shadowsandpetals:block/shishi_odoshi/pipe/normal",
+      "y": 90
+    },
+    "facing=east,length=normal_left": {
+      "model": "shadowsandpetals:block/shishi_odoshi/pipe/normal_left",
+      "y": 90
+    },
+    "facing=east,length=normal_right": {
+      "model": "shadowsandpetals:block/shishi_odoshi/pipe/normal_right",
+      "y": 90
+    },
+    "facing=east,length=short": {
+      "model": "shadowsandpetals:block/shishi_odoshi/pipe/short",
+      "y": 90
+    },
+    "facing=north,length=long": {
+      "model": "shadowsandpetals:block/shishi_odoshi/pipe/long"
+    },
+    "facing=north,length=normal": {
+      "model": "shadowsandpetals:block/shishi_odoshi/pipe/normal"
+    },
+    "facing=north,length=normal_left": {
+      "model": "shadowsandpetals:block/shishi_odoshi/pipe/normal_left"
+    },
+    "facing=north,length=normal_right": {
+      "model": "shadowsandpetals:block/shishi_odoshi/pipe/normal_right"
+    },
+    "facing=north,length=short": {
+      "model": "shadowsandpetals:block/shishi_odoshi/pipe/short"
+    },
+    "facing=south,length=long": {
+      "model": "shadowsandpetals:block/shishi_odoshi/pipe/long",
+      "y": 180
+    },
+    "facing=south,length=normal": {
+      "model": "shadowsandpetals:block/shishi_odoshi/pipe/normal",
+      "y": 180
+    },
+    "facing=south,length=normal_left": {
+      "model": "shadowsandpetals:block/shishi_odoshi/pipe/normal_left",
+      "y": 180
+    },
+    "facing=south,length=normal_right": {
+      "model": "shadowsandpetals:block/shishi_odoshi/pipe/normal_right",
+      "y": 180
+    },
+    "facing=south,length=short": {
+      "model": "shadowsandpetals:block/shishi_odoshi/pipe/short",
+      "y": 180
+    },
+    "facing=west,length=long": {
+      "model": "shadowsandpetals:block/shishi_odoshi/pipe/long",
+      "y": 270
+    },
+    "facing=west,length=normal": {
+      "model": "shadowsandpetals:block/shishi_odoshi/pipe/normal",
+      "y": 270
+    },
+    "facing=west,length=normal_left": {
+      "model": "shadowsandpetals:block/shishi_odoshi/pipe/normal_left",
+      "y": 270
+    },
+    "facing=west,length=normal_right": {
+      "model": "shadowsandpetals:block/shishi_odoshi/pipe/normal_right",
+      "y": 270
+    },
+    "facing=west,length=short": {
+      "model": "shadowsandpetals:block/shishi_odoshi/pipe/short",
+      "y": 270
+    }
+  }
+}

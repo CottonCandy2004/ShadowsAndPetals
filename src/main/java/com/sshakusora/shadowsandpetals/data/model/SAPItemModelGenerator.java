@@ -3,8 +3,11 @@ package com.sshakusora.shadowsandpetals.data.model;
 import com.sshakusora.shadowsandpetals.ShadowsAndPetals;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Map;
 
 /**
  * 1.21.1 compatibility facade for item model callbacks.
@@ -21,15 +24,35 @@ public class SAPItemModelGenerator {
     }
 
     public void generatedItem(Item item) {
+        generatedItem(item, ShadowsAndPetals.asResource("item/" + item.builtInRegistryHolder().key().location().getPath()));
+    }
+
+    public void generatedItem(Item item, ResourceLocation texture) {
         if (provider == null) {
             return;
         }
         String name = item.builtInRegistryHolder().key().location().getPath();
         provider.withExistingParent(name, "item/generated")
-                .texture("layer0", ShadowsAndPetals.asResource("item/" + name));
+                .texture("layer0", texture);
     }
 
     public void model(ResourceLocation id, Object model) {
+    }
+
+    public void parentModel(ResourceLocation id, ResourceLocation parent) {
+        if (provider == null) {
+            return;
+        }
+        provider.getBuilder(id.getPath()).parent(new ModelFile.UncheckedModelFile(parent));
+    }
+
+    public ModelFile createModel(String path, ResourceLocation parent, Map<String, ResourceLocation> textures) {
+        if (provider == null) {
+            throw new IllegalStateException("This generator is not attached to an ItemModelProvider");
+        }
+        var builder = provider.getBuilder(path).parent(new ModelFile.UncheckedModelFile(parent));
+        textures.forEach(builder::texture);
+        return builder;
     }
 
     public void finalizeClientItem(Item item, ResourceLocation clientModel, ResourceLocation customClientType) {
@@ -38,7 +61,11 @@ public class SAPItemModelGenerator {
         }
         String name = item.builtInRegistryHolder().key().location().getPath();
         if (clientModel != null) {
-            provider.withExistingParent(name, clientModel);
+            // Some client models are emitted by a later provider (curtain,
+            // grill, and rockery asset providers).  The shared
+            // ExistingFileHelper cannot see those outputs yet, so retain the
+            // reference without asserting its existence at this stage.
+            provider.getBuilder(name).parent(new ModelFile.UncheckedModelFile(clientModel));
             return;
         }
         if (customClientType == null) {

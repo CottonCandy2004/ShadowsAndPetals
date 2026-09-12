@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "persistent=false": [
+      {
+        "model": "shadowsandpetals:block/autumn_oak_leaves_0"
+      },
+      {
+        "model": "shadowsandpetals:block/autumn_oak_leaves_1"
+      },
+      {
+        "model": "shadowsandpetals:block/autumn_oak_leaves_2"
+      },
+      {
+        "model": "shadowsandpetals:block/autumn_oak_leaves_3"
+      }
+    ],
+    "persistent=true": {
+      "model": "shadowsandpetals:block/autumn_oak_leaves_0"
+    }
+  }
+}

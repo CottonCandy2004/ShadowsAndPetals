@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "L": {
+      "item": "shadowsandpetals:maple_leaves"
+    }
+  },
+  "pattern": [
+    "L  ",
+    "LL ",
+    "LLL"
+  ],
+  "result": {
+    "count": 4,
+    "id": "shadowsandpetals:maple_leaves_stairs"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "C": {
+      "tag": "c:concrete_powders"
+    },
+    "P": {
+      "tag": "minecraft:planks"
+    }
+  },
+  "pattern": [
+    "PPP",
+    "PCP",
+    "PPP"
+  ],
+  "result": {
+    "count": 8,
+    "id": "shadowsandpetals:raw_concrete"
+  }
+}

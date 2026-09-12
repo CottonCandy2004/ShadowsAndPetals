@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "shadowsandpetals:block/shishi_odoshi/block",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "shadowsandpetals:block/shishi_odoshi/block"
+    },
+    "facing=south": {
+      "model": "shadowsandpetals:block/shishi_odoshi/block",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "shadowsandpetals:block/shishi_odoshi/block",
+      "y": 270
+    }
+  }
+}

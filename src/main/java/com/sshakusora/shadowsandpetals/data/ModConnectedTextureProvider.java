@@ -6,6 +6,8 @@ import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.PackType;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -24,9 +26,10 @@ public class ModConnectedTextureProvider implements DataProvider {
     private final PackOutput.PathProvider texturePathProvider;
     private final Path sourceTextureRoot;
 
-    public ModConnectedTextureProvider(PackOutput output) {
+    public ModConnectedTextureProvider(PackOutput output, ExistingFileHelper existingFileHelper) {
         this.texturePathProvider = output.createPathProvider(PackOutput.Target.RESOURCE_PACK, "textures");
         this.sourceTextureRoot = findSourceTextureRoot(output.getOutputFolder());
+        trackGeneratedTextures(existingFileHelper);
     }
 
     @Override
@@ -70,6 +73,25 @@ public class ModConnectedTextureProvider implements DataProvider {
     @Override
     public String getName() {
         return "ShadowsAndPetals Connected Textures";
+    }
+
+    private static void trackGeneratedTextures(ExistingFileHelper existingFileHelper) {
+        ExistingFileHelper.IResourceType textureType =
+                new ExistingFileHelper.ResourceType(PackType.CLIENT_RESOURCES, ".png", "textures");
+        Set<ResourceLocation> tracked = new HashSet<>();
+        for (CTRegistry.CTEntry entry : CTRegistry.entries().values()) {
+            if (entry.padding() <= 0) {
+                continue;
+            }
+            if (tracked.add(entry.baseTexture())) {
+                existingFileHelper.trackGenerated(entry.baseTexture(), textureType);
+            }
+            for (ResourceLocation texture : entry.connectedTextures()) {
+                if (tracked.add(texture)) {
+                    existingFileHelper.trackGenerated(texture, textureType);
+                }
+            }
+        }
     }
 
     private static void generateBase(CachedOutput cache, Path source, Path output,

@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "corner=false,facing=east": {
+      "model": "shadowsandpetals:block/samon/straight",
+      "y": 90
+    },
+    "corner=false,facing=north": {
+      "model": "shadowsandpetals:block/samon/straight"
+    },
+    "corner=false,facing=south": {
+      "model": "shadowsandpetals:block/samon/straight",
+      "y": 180
+    },
+    "corner=false,facing=west": {
+      "model": "shadowsandpetals:block/samon/straight",
+      "y": 270
+    },
+    "corner=true,facing=east": {
+      "model": "shadowsandpetals:block/samon/corner",
+      "y": 90
+    },
+    "corner=true,facing=north": {
+      "model": "shadowsandpetals:block/samon/corner"
+    },
+    "corner=true,facing=south": {
+      "model": "shadowsandpetals:block/samon/corner",
+      "y": 180
+    },
+    "corner=true,facing=west": {
+      "model": "shadowsandpetals:block/samon/corner",
+      "y": 270
+    }
+  }
+}

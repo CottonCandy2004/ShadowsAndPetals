@@ -1,0 +1,26 @@
+{
+  "parent": "shadowsandpetals:root",
+  "criteria": {
+    "excavated_gravel": {
+      "trigger": "shadowsandpetals:gravel_excavated"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.shadowsandpetals.nature.gravel_excavated.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "shadowsandpetals:harrow"
+    },
+    "title": {
+      "translate": "advancements.shadowsandpetals.nature.gravel_excavated.title"
+    }
+  },
+  "requirements": [
+    [
+      "excavated_gravel"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

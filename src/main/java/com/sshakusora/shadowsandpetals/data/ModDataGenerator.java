@@ -33,7 +33,7 @@ public class ModDataGenerator {
         generator.addProvider(event.includeClient(), new ModCurtainAssetProvider(output));
         generator.addProvider(event.includeClient(), new ModIroriGrillAssetProvider(output));
         generator.addProvider(event.includeClient(), new ModRockeryModelProvider(output));
-        generator.addProvider(event.includeClient(), new ModConnectedTextureProvider(output));
+        generator.addProvider(event.includeClient(), new ModConnectedTextureProvider(output, existingFileHelper));
         generator.addProvider(event.includeClient(), new ModSoundDefinitionsProvider(output, existingFileHelper));
         generator.addProvider(event.includeClient(), new ModLanguageProvider(output, "en_us"));
         generator.addProvider(event.includeClient(), new ModLanguageProvider(output, "zh_cn"));
