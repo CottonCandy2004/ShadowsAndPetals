@@ -1,13 +1,16 @@
 package com.sshakusora.shadowsandpetals.client.tooltip;
 
 import com.sshakusora.shadowsandpetals.data.BuiltinLanguageKeys;
+import com.sshakusora.shadowsandpetals.tooltip.TooltipTranslationKeys;
 import com.sshakusora.shadowsandpetals.tooltip.TooltipModifier;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.language.I18n;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 import org.jetbrains.annotations.Nullable;
@@ -40,11 +43,33 @@ public record ItemDescription(List<Component> baseline, List<Component> onShift,
 
     @Nullable
     public static ItemDescription of(Item item) {
-        String key = item.getDescriptionId() + ".tooltip";
+        String key = tooltipTranslationPrefix(item);
+        if (key == null) {
+            return null;
+        }
         if (!I18n.exists(key + ".summary")) {
             return null;
         }
         return new Builder(key).build();
+    }
+
+    /**
+     * Returns the translation prefix used by the generated item tooltip data.
+     *
+     * <p>In 1.21.1, {@code BlockItem#getDescriptionId()} delegates to its block
+     * and therefore returns a {@code block.*} key. Tooltip data is intentionally
+     * generated under the item namespace for both ordinary items and block
+     * items, so the registry id must be used here instead of the display name
+     * description id.</p>
+     */
+    @Nullable
+    static String tooltipTranslationPrefix(Item item) {
+        ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(item);
+        return itemId == null ? null : tooltipTranslationPrefix(itemId);
+    }
+
+    static String tooltipTranslationPrefix(ResourceLocation itemId) {
+        return TooltipTranslationKeys.itemTooltip(itemId);
     }
 
     static final class Builder {

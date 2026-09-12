@@ -16,6 +16,7 @@ import com.sshakusora.shadowsandpetals.legacy.LegacyStateBlock;
 import com.sshakusora.shadowsandpetals.registries.*;
 import com.sshakusora.shadowsandpetals.tooltip.TooltipComponentRegistry;
 import com.sshakusora.shadowsandpetals.tooltip.TooltipModifier;
+import com.sshakusora.shadowsandpetals.tooltip.TooltipTranslationKeys;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
@@ -552,7 +553,7 @@ public class RegBlockBuilder<B extends Block> {
             return;
         }
         TooltipLangBuilder tooltip = TooltipLangBuilder.of(
-                "item." + ShadowsAndPetals.MOD_ID + "." + name + ".tooltip");
+                TooltipTranslationKeys.itemTooltip(ShadowsAndPetals.asResource(name)));
         tooltipDescriptionGenerator.accept(tooltip);
         tooltip.register();
     }
