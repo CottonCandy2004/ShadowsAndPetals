@@ -17,6 +17,7 @@ import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.SaplingBlock;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.StairBlock;
+import net.neoforged.neoforge.client.model.generators.BlockModelBuilder;
 import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
 
@@ -36,6 +37,7 @@ public final class NatureBlockModels {
         ModelFile[] models = new ModelFile[4];
         for (int i = 0; i < models.length; i++) {
             models[i] = generator.provider().models().leaves(base + "_" + i, texture.withSuffix("_" + i));
+            ((BlockModelBuilder) models[i]).renderType("cutout_mipped");
         }
         var variants = generator.provider().getVariantBuilder(context.get());
         variants.partialState().with(LeavesBlock.PERSISTENT, false).addModels(
@@ -58,8 +60,8 @@ public final class NatureBlockModels {
     }
     public static void sapling(BlockModelContext<? extends SaplingBlock> context, SAPBlockModelGenerator generator,
                                ResourceLocation texture) {
-        ModelFile model = generator.provider().models().cross(context.name(), texture);
-        ((net.neoforged.neoforge.client.model.generators.BlockModelBuilder) model).renderType("cutout");
+        BlockModelBuilder model = generator.provider().models().cross(context.name(), texture);
+        model.renderType("cutout");
         generator.provider().simpleBlock(context.get(), model);
     }
     public static void hedge(BlockModelContext<? extends HedgeBlock> context, SAPBlockModelGenerator generator,

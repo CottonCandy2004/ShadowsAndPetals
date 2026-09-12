@@ -1,6 +1,8 @@
 {
   "values": [
     "shadowsandpetals:wind_chime",
+    "minecraft:lantern",
+    "minecraft:soul_lantern",
     "#minecraft:ceiling_hanging_signs"
   ]
 }

@@ -145,35 +145,42 @@ public final class StandaloneBlockModel implements ClientModelEntry {
             x -= 0.5F;
             y -= 0.5F;
             z -= 0.5F;
+            float[] point = rotateVector(x, y, z, rotation);
+            return new float[]{point[0] + 0.5F, point[1] + 0.5F, point[2] + 0.5F};
+        }
+
+        private static float[] rotateVector(float x, float y, float z, StandaloneModelRotation rotation) {
             float[] point = rotateX(x, y, z, rotation.xDegrees());
             point = rotateY(point[0], point[1], point[2], rotation.yDegrees());
-            point = rotateZ(point[0], point[1], point[2], rotation.zDegrees());
-            return new float[]{point[0] + 0.5F, point[1] + 0.5F, point[2] + 0.5F};
+            return rotateZ(point[0], point[1], point[2], rotation.zDegrees());
         }
 
         private static float[] rotateX(float x, float y, float z, int degrees) {
             return switch (Math.floorMod(degrees, 360)) {
-                case 90 -> new float[]{x, -z, y};
+                // BlockModelRotation stores positive X angles as a negative
+                // physical rotation (the same convention used by the
+                // vanilla block-state baker).
+                case 90 -> new float[]{x, z, -y};
                 case 180 -> new float[]{x, -y, -z};
-                case 270 -> new float[]{x, z, -y};
+                case 270 -> new float[]{x, -z, y};
                 default -> new float[]{x, y, z};
             };
         }
 
         private static float[] rotateY(float x, float y, float z, int degrees) {
             return switch (Math.floorMod(degrees, 360)) {
-                case 90 -> new float[]{z, y, -x};
+                case 90 -> new float[]{-z, y, x};
                 case 180 -> new float[]{-x, y, -z};
-                case 270 -> new float[]{-z, y, x};
+                case 270 -> new float[]{z, y, -x};
                 default -> new float[]{x, y, z};
             };
         }
 
         private static float[] rotateZ(float x, float y, float z, int degrees) {
             return switch (Math.floorMod(degrees, 360)) {
-                case 90 -> new float[]{-y, x, z};
+                case 90 -> new float[]{y, -x, z};
                 case 180 -> new float[]{-x, -y, z};
-                case 270 -> new float[]{y, -x, z};
+                case 270 -> new float[]{-y, x, z};
                 default -> new float[]{x, y, z};
             };
         }
@@ -188,18 +195,18 @@ public final class StandaloneBlockModel implements ClientModelEntry {
         }
 
         private static Direction rotateDirection(Direction source, StandaloneModelRotation rotation) {
-            float[] point = rotatePoint(source.getStepX(), source.getStepY(), source.getStepZ(), rotation);
-            return Direction.getNearest(point[0] - 0.5F, point[1] - 0.5F, point[2] - 0.5F);
+            float[] vector = rotateVector(source.getStepX(), source.getStepY(), source.getStepZ(), rotation);
+            return Direction.getNearest(vector[0], vector[1], vector[2]);
         }
 
         private static int rotateNormal(int packed, StandaloneModelRotation rotation) {
             float x = ((byte) (packed & 0xFF)) / 127.0F;
             float y = ((byte) ((packed >>> 8) & 0xFF)) / 127.0F;
             float z = ((byte) ((packed >>> 16) & 0xFF)) / 127.0F;
-            float[] point = rotatePoint(x, y, z, rotation);
-            int nx = Math.round((point[0] - 0.5F) * 127.0F) & 0xFF;
-            int ny = Math.round((point[1] - 0.5F) * 127.0F) & 0xFF;
-            int nz = Math.round((point[2] - 0.5F) * 127.0F) & 0xFF;
+            float[] vector = rotateVector(x, y, z, rotation);
+            int nx = Math.round(vector[0] * 127.0F) & 0xFF;
+            int ny = Math.round(vector[1] * 127.0F) & 0xFF;
+            int nz = Math.round(vector[2] * 127.0F) & 0xFF;
             return nx | (ny << 8) | (nz << 16);
         }
     }

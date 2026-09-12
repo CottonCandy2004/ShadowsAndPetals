@@ -1,8 +1,8 @@
 package com.sshakusora.shadowsandpetals.data.model;
 
 import com.sshakusora.shadowsandpetals.ShadowsAndPetals;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.world.item.Item;
@@ -15,7 +15,9 @@ import net.neoforged.neoforge.client.model.generators.loaders.ObjModelBuilder;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 1.21.1 compatibility facade for the 26.x model generator.
@@ -26,6 +28,7 @@ import java.util.Map;
  */
 public class SAPBlockModelGenerator {
     private final @Nullable BlockStateProvider provider;
+    private final Set<String> createdModelPaths = new HashSet<>();
 
     public SAPBlockModelGenerator() {
         this(null);
@@ -83,6 +86,17 @@ public class SAPBlockModelGenerator {
             builder.renderType(renderType);
         }
         return builder;
+    }
+
+    /**
+     * Reserves a model path for one-time generation.
+     *
+     * <p>This mirrors the old generator's {@code jsonModelOnce} behavior. It
+     * is needed for shared connection models which are requested once for each
+     * wood post but must contain one fixed set of elements.</p>
+     */
+    public boolean shouldCreateModelOnce(String path) {
+        return createdModelPaths.add(path);
     }
 
     public ModelFile createObjModel(String path, ResourceLocation parent, ResourceLocation obj,

@@ -1,8 +1,8 @@
 package com.sshakusora.shadowsandpetals.client.tooltip;
 
 import com.sshakusora.shadowsandpetals.data.BuiltinLanguageKeys;
-import com.sshakusora.shadowsandpetals.tooltip.TooltipTranslationKeys;
 import com.sshakusora.shadowsandpetals.tooltip.TooltipModifier;
+import com.sshakusora.shadowsandpetals.tooltip.TooltipTranslationKeys;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.language.I18n;

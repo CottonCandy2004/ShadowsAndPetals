@@ -1,5 +1,6 @@
 {
   "parent": "minecraft:block/leaves",
+  "render_type": "minecraft:cutout_mipped",
   "textures": {
     "all": "shadowsandpetals:block/autumn_oak_leaves_1"
   }

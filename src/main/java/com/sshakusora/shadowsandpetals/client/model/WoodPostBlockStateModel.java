@@ -10,6 +10,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.client.ChunkRenderTypeSet;
 import net.neoforged.neoforge.client.model.BakedModelWrapper;
 import net.neoforged.neoforge.client.model.IDynamicBakedModel;
 import net.neoforged.neoforge.client.model.data.ModelData;
@@ -45,6 +46,25 @@ public final class WoodPostBlockStateModel extends BakedModelWrapper<BakedModel>
     }
 
     @Override
+    public ChunkRenderTypeSet getRenderTypes(BlockState state, RandomSource random, ModelData data) {
+        ChunkRenderTypeSet result = super.getRenderTypes(state, random, data);
+        WoodPostBlock.Connections connections = data.get(CONNECTIONS);
+        if (connections == null) {
+            return result;
+        }
+
+        List<ChunkRenderTypeSet> renderTypes = new ArrayList<>();
+        renderTypes.add(result);
+        for (Direction direction : Direction.values()) {
+            BakedModel connection = connectionModel(state, connections, direction);
+            if (connection != null) {
+                renderTypes.add(connection.getRenderTypes(state, random, data));
+            }
+        }
+        return ChunkRenderTypeSet.union(renderTypes);
+    }
+
+    @Override
     public List<BakedQuad> getQuads(
             BlockState state,
             @Nullable Direction face,
@@ -52,24 +72,55 @@ public final class WoodPostBlockStateModel extends BakedModelWrapper<BakedModel>
             ModelData data,
             @Nullable RenderType renderType
     ) {
-        List<BakedQuad> result = new ArrayList<>(
-                BakedModelSupport.getQuads(originalModel, state, face, random, data, renderType));
+        List<BakedQuad> result = new ArrayList<>(getQuadsForRenderType(
+                originalModel, state, face, random, data, renderType));
         WoodPostBlock.Connections connections = data.get(CONNECTIONS);
         if (connections == null) {
             return result;
         }
         for (Direction direction : Direction.values()) {
-            WoodPostBlock.ConnectionType type = connections.get(direction);
-            if (type == WoodPostBlock.ConnectionType.NONE) {
-                continue;
-            }
-            BakedModel connection = BlockModelRegistry.getWoodPostConnectionModel(
-                    expectedBlock, type, direction);
+            BakedModel connection = connectionModel(state, connections, direction);
             if (connection != null) {
-                result.addAll(BakedModelSupport.getQuads(
+                result.addAll(getQuadsForRenderType(
                         connection, state, face, random, data, renderType));
             }
         }
         return result;
+    }
+
+    private @Nullable BakedModel connectionModel(
+            BlockState state,
+            WoodPostBlock.Connections connections,
+            Direction direction
+    ) {
+        WoodPostBlock.ConnectionType type = connections.get(direction);
+        if (type == WoodPostBlock.ConnectionType.NONE || isRedundantPostConnection(state, type, direction)) {
+            return null;
+        }
+        return BlockModelRegistry.getWoodPostConnectionModel(expectedBlock, type, direction);
+    }
+
+    private static boolean isRedundantPostConnection(
+            BlockState state,
+            WoodPostBlock.ConnectionType type,
+            Direction direction
+    ) {
+        return type == WoodPostBlock.ConnectionType.OTHER_POST
+                && state.hasProperty(WoodPostBlock.AXIS)
+                && state.getValue(WoodPostBlock.AXIS) == direction.getAxis();
+    }
+
+    private static List<BakedQuad> getQuadsForRenderType(
+            BakedModel model,
+            BlockState state,
+            @Nullable Direction face,
+            RandomSource random,
+            ModelData data,
+            @Nullable RenderType renderType
+    ) {
+        if (renderType != null && !model.getRenderTypes(state, random, data).contains(renderType)) {
+            return List.of();
+        }
+        return BakedModelSupport.getQuads(model, state, face, random, data, renderType);
     }
 }

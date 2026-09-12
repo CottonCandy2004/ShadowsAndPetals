@@ -25,6 +25,7 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.neoforged.neoforge.common.Tags;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
@@ -43,7 +44,9 @@ public class WoodPostBlock extends Block implements SimpleWaterloggedBlock {
     private static final double INNER_MIN = 6.0D;
     private static final double INNER_MAX = 10.0D;
     private static final VoxelShape CORE_SHAPE = Block.box(INNER_MIN, INNER_MIN, INNER_MIN, INNER_MAX, INNER_MAX, INNER_MAX);
-    private static final VoxelShape HANGING_SUPPORT_SHAPE = Block.box(7.0D, 0.0D, 7.0D, 9.0D, 16.0D, 9.0D);
+    // 26.1.2's Block.column(2, 0, 1) is a 2x2-pixel column touching the
+    // bottom face. Block.box is the equivalent helper in the 1.21.1 target.
+    private static final VoxelShape HANGING_SUPPORT_SHAPE = Block.box(7.0D, 0.0D, 7.0D, 9.0D, 1.0D, 9.0D);
     private static final VoxelShape[] ARM_SHAPES = new VoxelShape[]{
             Block.box(INNER_MIN, 0.0D, INNER_MIN, INNER_MAX, INNER_MAX, INNER_MAX),
             Block.box(INNER_MIN, INNER_MIN, INNER_MIN, INNER_MAX, 16.0D, INNER_MAX),
@@ -184,7 +187,7 @@ public class WoodPostBlock extends Block implements SimpleWaterloggedBlock {
     }
 
     private static boolean isAlignedChain(BlockState state, Direction direction) {
-        return BuiltInRegistries.BLOCK.getKey(state.getBlock()).getPath().endsWith("_chain")
+        return state.is(Tags.Blocks.CHAINS)
                 && state.hasProperty(BlockStateProperties.AXIS)
                 && state.getValue(BlockStateProperties.AXIS) == direction.getAxis();
     }
