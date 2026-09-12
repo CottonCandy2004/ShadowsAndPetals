@@ -1,9 +1,9 @@
 package com.sshakusora.shadowsandpetals.client.animation;
 
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 

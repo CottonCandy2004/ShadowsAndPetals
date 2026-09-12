@@ -1,9 +1,9 @@
 package com.sshakusora.shadowsandpetals.block.decoration.irori;
 
-import com.sshakusora.shadowsandpetals.compat.InteractionResultCompat;
 import com.mojang.serialization.MapCodec;
 import com.sshakusora.shadowsandpetals.blockentity.irori.IroriBlockEntity;
 import com.sshakusora.shadowsandpetals.blockentity.irori.IroriComponentTopology;
+import com.sshakusora.shadowsandpetals.compat.InteractionResultCompat;
 import com.sshakusora.shadowsandpetals.registries.BlockEntityRegistry;
 import com.sshakusora.shadowsandpetals.registries.BlockTagRegistry;
 import com.sshakusora.shadowsandpetals.util.VoxelShapeUtils;
@@ -23,7 +23,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;

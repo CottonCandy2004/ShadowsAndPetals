@@ -1,12 +1,12 @@
 package com.sshakusora.shadowsandpetals.item.barrel;
 
 import com.sshakusora.shadowsandpetals.blockentity.WoodenBarrelBlockEntity;
-import net.minecraft.world.item.Item;
-import net.neoforged.neoforge.fluids.FluidStack;
 import com.sshakusora.shadowsandpetals.compat.transfer.ItemAccessResourceHandler;
 import com.sshakusora.shadowsandpetals.compat.transfer.access.ItemAccess;
 import com.sshakusora.shadowsandpetals.compat.transfer.fluid.FluidResource;
 import com.sshakusora.shadowsandpetals.compat.transfer.item.ItemResource;
+import net.minecraft.world.item.Item;
+import net.neoforged.neoforge.fluids.FluidStack;
 
 /**
  * NeoForge fluid capability for a wooden barrel item.

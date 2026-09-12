@@ -7,11 +7,11 @@ import com.sshakusora.shadowsandpetals.client.renderer.WoodenBarrelFluidSpecialR
 import com.sshakusora.shadowsandpetals.item.barrel.WoodenBarrelItemFluid;
 import com.sshakusora.shadowsandpetals.registries.BlockRegistry;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.ItemRenderer;
-import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;

@@ -138,6 +138,11 @@ public final class LampOutlineCache extends SimplePreparableReloadListener<LampO
         };
     }
 
+    static OutlineGeometry selectDirection(Map<Direction, OutlineGeometry> cache, Direction direction) {
+        OutlineGeometry selected = cache.get(direction);
+        return selected != null ? selected : cache.get(Direction.UP);
+    }
+
     private static <V> Map<Block, V> immutableIdentityMap(Map<Block, V> source) {
         return Collections.unmodifiableMap(new IdentityHashMap<>(source));
     }

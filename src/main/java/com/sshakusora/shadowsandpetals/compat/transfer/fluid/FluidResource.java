@@ -1,8 +1,8 @@
 package com.sshakusora.shadowsandpetals.compat.transfer.fluid;
 
-import net.neoforged.neoforge.fluids.FluidStack;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
+import net.neoforged.neoforge.fluids.FluidStack;
 
 public final class FluidResource {
     public static final FluidResource EMPTY = new FluidResource(FluidStack.EMPTY);

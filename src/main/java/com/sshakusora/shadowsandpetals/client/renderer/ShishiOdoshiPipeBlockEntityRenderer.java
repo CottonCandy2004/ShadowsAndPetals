@@ -18,8 +18,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
 
 public class ShishiOdoshiPipeBlockEntityRenderer implements BlockEntityRenderer<ShishiOdoshiPipeBlockEntity> {
     private static final float WATER_SURFACE_Y = 1.02F / 16.0F;
@@ -43,6 +43,36 @@ public class ShishiOdoshiPipeBlockEntityRenderer implements BlockEntityRenderer<
             new ClientFluidRenderInfo.Cache<>();
 
     public ShishiOdoshiPipeBlockEntityRenderer(BlockEntityRendererProvider.Context context) {
+    }
+
+    @Override
+    public AABB getRenderBoundingBox(ShishiOdoshiPipeBlockEntity blockEntity) {
+        ShishiOdoshiBlockEntity shishiOdoshi = blockEntity.getConnectedShishiOdoshi();
+        double streamBottomY;
+        if (shishiOdoshi != null) {
+            streamBottomY = shishiOdoshi.getBlockPos().getY();
+        } else {
+            Vec3 impactPosition = blockEntity.getFallbackImpactPosition();
+            streamBottomY = impactPosition == null
+                    ? blockEntity.getBlockPos().getY() - 1.0D
+                    : impactPosition.y;
+        }
+
+        BlockPos pos = blockEntity.getBlockPos();
+        double downwardExpansion = Math.max(1.0D, pos.getY() - streamBottomY);
+        return new AABB(pos).expandTowards(0.0D, -downwardExpansion, 0.0D);
+    }
+
+    @Override
+    public boolean shouldRender(ShishiOdoshiPipeBlockEntity blockEntity, Vec3 cameraPosition) {
+        double viewDistance = getViewDistance();
+        return getRenderBoundingBox(blockEntity).distanceToSqr(cameraPosition)
+                < viewDistance * viewDistance;
+    }
+
+    @Override
+    public boolean shouldRenderOffScreen(ShishiOdoshiPipeBlockEntity blockEntity) {
+        return true;
     }
 
     @Override

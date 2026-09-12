@@ -1,13 +1,12 @@
 package com.sshakusora.shadowsandpetals.block.decoration.irori;
 
-import com.sshakusora.shadowsandpetals.compat.InteractionResultCompat;
 import com.mojang.serialization.MapCodec;
 import com.sshakusora.shadowsandpetals.blockentity.irori.IroriBlockEntity;
+import com.sshakusora.shadowsandpetals.compat.InteractionResultCompat;
 import com.sshakusora.shadowsandpetals.registries.BlockRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
@@ -18,8 +17,8 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RenderShape;

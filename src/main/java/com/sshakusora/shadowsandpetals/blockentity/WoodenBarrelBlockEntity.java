@@ -1,5 +1,8 @@
 package com.sshakusora.shadowsandpetals.blockentity;
 
+import com.sshakusora.shadowsandpetals.compat.transfer.fluid.FluidResource;
+import com.sshakusora.shadowsandpetals.compat.transfer.fluid.FluidStacksResourceHandler;
+import com.sshakusora.shadowsandpetals.compat.transfer.transaction.Transaction;
 import com.sshakusora.shadowsandpetals.registries.BlockEntityRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
@@ -12,9 +15,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
-import com.sshakusora.shadowsandpetals.compat.transfer.fluid.FluidResource;
-import com.sshakusora.shadowsandpetals.compat.transfer.fluid.FluidStacksResourceHandler;
-import com.sshakusora.shadowsandpetals.compat.transfer.transaction.Transaction;
 import org.jetbrains.annotations.Nullable;
 
 import static net.minecraft.world.level.material.Fluids.WATER;

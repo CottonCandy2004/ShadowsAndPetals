@@ -1,18 +1,6 @@
 package com.sshakusora.shadowsandpetals.data.model.generator;
 
-import com.sshakusora.shadowsandpetals.block.decoration.BedroomLampBlock;
-import com.sshakusora.shadowsandpetals.block.decoration.CopperTeapotBlock;
-import com.sshakusora.shadowsandpetals.block.decoration.DeskLampBlock;
-import com.sshakusora.shadowsandpetals.block.decoration.EmergencyLampBlock;
-import com.sshakusora.shadowsandpetals.block.decoration.IngotPileBlock;
-import com.sshakusora.shadowsandpetals.block.decoration.RecessedLampBlock;
-import com.sshakusora.shadowsandpetals.block.decoration.RecessedLampCompositeBlock;
-import com.sshakusora.shadowsandpetals.block.decoration.SamonBlock;
-import com.sshakusora.shadowsandpetals.block.decoration.ShishiOdoshiBlock;
-import com.sshakusora.shadowsandpetals.block.decoration.ShishiOdoshiPipeBlock;
-import com.sshakusora.shadowsandpetals.block.decoration.VanityBlock;
-import com.sshakusora.shadowsandpetals.block.decoration.WallLampBlock;
-import com.sshakusora.shadowsandpetals.block.decoration.WoodenBarrelBlock;
+import com.sshakusora.shadowsandpetals.block.decoration.*;
 import com.sshakusora.shadowsandpetals.block.decoration.irori.IroriBlock;
 import com.sshakusora.shadowsandpetals.block.decoration.irori.IroriGrillBlock;
 import com.sshakusora.shadowsandpetals.block.decoration.irori.IroriGrillCopperTeapotBlock;

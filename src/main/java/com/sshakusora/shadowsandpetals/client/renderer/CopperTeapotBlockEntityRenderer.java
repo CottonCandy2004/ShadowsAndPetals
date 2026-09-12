@@ -5,18 +5,29 @@ import com.mojang.math.Axis;
 import com.sshakusora.shadowsandpetals.ShadowsAndPetals;
 import com.sshakusora.shadowsandpetals.block.decoration.CopperTeapotBlock;
 import com.sshakusora.shadowsandpetals.block.decoration.irori.IroriGrillCopperTeapotBlock;
+import com.sshakusora.shadowsandpetals.blockentity.CopperTeapotBlockEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import com.sshakusora.shadowsandpetals.blockentity.CopperTeapotBlockEntity;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 
 public class CopperTeapotBlockEntityRenderer implements BlockEntityRenderer<CopperTeapotBlockEntity> {
     private final BlockRenderDispatcher blockRenderer;
 
     public CopperTeapotBlockEntityRenderer(BlockEntityRendererProvider.Context context) {
         this.blockRenderer = context.getBlockRenderDispatcher();
+    }
+
+    @Override
+    public AABB getRenderBoundingBox(CopperTeapotBlockEntity blockEntity) {
+        BlockPos pos = blockEntity.getBlockPos();
+        return new AABB(
+                pos.getX(), pos.getY(), pos.getZ(),
+                pos.getX() + 1.0D, pos.getY() + 2.0D, pos.getZ() + 1.0D
+        );
     }
 
     @Override

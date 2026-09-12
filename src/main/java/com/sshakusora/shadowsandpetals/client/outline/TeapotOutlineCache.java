@@ -121,6 +121,34 @@ public final class TeapotOutlineCache extends SimplePreparableReloadListener<Tea
         return OutlineGeometry.of(lines);
     }
 
+    static Map<IroriGrillPart, Map<Direction, OutlineGeometry>> buildCompositeOutlines(
+            Map<Direction, OutlineGeometry> teapotDirections,
+            EnumMap<IroriGrillPart, OutlineGeometry> grillOutlines
+    ) {
+        EnumMap<IroriGrillPart, Map<Direction, OutlineGeometry>> result = new EnumMap<>(IroriGrillPart.class);
+        for (IroriGrillPart part : IroriGrillPart.values()) {
+            OutlineGeometry grill = grillOutlines.get(part);
+            if (grill == null) {
+                continue;
+            }
+            if (part == IroriGrillPart.STRIP_WEST || part == IroriGrillPart.STRIP_EAST) {
+                grill = RockeryOutlineGeometry.rotateClockwise(grill);
+            }
+            EnumMap<Direction, OutlineGeometry> byDirection = new EnumMap<>(Direction.class);
+            for (Direction direction : Direction.Plane.HORIZONTAL) {
+                byDirection.put(direction, combine(teapotDirections.get(direction), grill));
+            }
+            result.put(part, Map.copyOf(byDirection));
+        }
+        return Map.copyOf(result);
+    }
+
+    static OutlineGeometry orientGrillOutline(IroriGrillPart part, OutlineGeometry geometry) {
+        return part == IroriGrillPart.STRIP_WEST || part == IroriGrillPart.STRIP_EAST
+                ? RockeryOutlineGeometry.rotateClockwise(geometry)
+                : geometry;
+    }
+
     public record Prepared(
             Map<Boolean, Map<Direction, OutlineGeometry>> outlines,
             Map<IroriGrillPart, Map<Direction, OutlineGeometry>> compositeOutlines

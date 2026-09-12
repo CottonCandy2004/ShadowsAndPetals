@@ -1,7 +1,10 @@
 package com.sshakusora.shadowsandpetals.item.barrel;
 
 import com.sshakusora.shadowsandpetals.blockentity.WoodenBarrelBlockEntity;
-import com.sshakusora.shadowsandpetals.registries.BlockEntityRegistry;
+import com.sshakusora.shadowsandpetals.compat.transfer.ResourceHandler;
+import com.sshakusora.shadowsandpetals.compat.transfer.access.ItemAccess;
+import com.sshakusora.shadowsandpetals.compat.transfer.fluid.FluidResource;
+import com.sshakusora.shadowsandpetals.compat.transfer.fluid.FluidUtil;
 import com.sshakusora.shadowsandpetals.registries.BlockRegistry;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
@@ -29,10 +32,6 @@ import net.minecraft.world.phys.HitResult;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
-import com.sshakusora.shadowsandpetals.compat.transfer.ResourceHandler;
-import com.sshakusora.shadowsandpetals.compat.transfer.access.ItemAccess;
-import com.sshakusora.shadowsandpetals.compat.transfer.fluid.FluidResource;
-import com.sshakusora.shadowsandpetals.compat.transfer.fluid.FluidUtil;
 import org.jetbrains.annotations.Nullable;
 
 /**

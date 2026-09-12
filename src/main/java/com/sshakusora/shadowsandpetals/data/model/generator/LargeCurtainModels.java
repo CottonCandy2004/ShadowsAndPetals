@@ -1,10 +1,8 @@
 package com.sshakusora.shadowsandpetals.data.model.generator;
 
-import com.sshakusora.shadowsandpetals.data.model.BlockModelContext;
-import com.sshakusora.shadowsandpetals.data.model.ItemModelContext;
-import com.sshakusora.shadowsandpetals.data.model.SAPBlockModelGenerator;
-import com.sshakusora.shadowsandpetals.data.model.SAPItemModelGenerator;
 import com.sshakusora.shadowsandpetals.block.decoration.curtain.LargeCurtainBlock;
+import com.sshakusora.shadowsandpetals.data.model.BlockModelContext;
+import com.sshakusora.shadowsandpetals.data.model.SAPBlockModelGenerator;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;

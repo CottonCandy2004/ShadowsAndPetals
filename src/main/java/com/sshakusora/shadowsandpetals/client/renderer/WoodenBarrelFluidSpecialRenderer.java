@@ -7,9 +7,9 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.core.Direction;
 
 /** Shared 1.21.1 implementation for the barrel's item fluid layer. */
 public final class WoodenBarrelFluidSpecialRenderer {

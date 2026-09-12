@@ -36,18 +36,13 @@ public final class SereneSeasonsSeasonModifier implements SandExcavationSeasonMo
         try {
             Object state = getSeasonState.invoke(null, level);
             Object season = getSeason.invoke(state);
-            float adjusted = currentChance * multiplier(String.valueOf(season));
-            return Math.clamp(
-                    adjusted,
-                    SandExcavationChanceRules.MINIMUM_SEAFOOD_CHANCE,
-                    1.0F - SandExcavationChanceRules.TRASH_CHANCE
-            );
+            return modifySeafoodChance(currentChance, String.valueOf(season));
         } catch (IllegalAccessException | InvocationTargetException exception) {
             throw new IllegalStateException("Unable to read Serene Seasons season", exception);
         }
     }
 
-    private static float multiplier(String seasonName) {
+    static float getMultiplier(String seasonName) {
         return switch (seasonName.toUpperCase(java.util.Locale.ROOT)) {
             case "SPRING" -> SPRING_MULTIPLIER;
             case "SUMMER" -> SUMMER_MULTIPLIER;
@@ -55,5 +50,13 @@ public final class SereneSeasonsSeasonModifier implements SandExcavationSeasonMo
             case "WINTER" -> WINTER_MULTIPLIER;
             default -> 1.0F;
         };
+    }
+
+    static float modifySeafoodChance(float currentChance, String seasonName) {
+        return Math.clamp(
+                currentChance * getMultiplier(seasonName),
+                SandExcavationChanceRules.MINIMUM_SEAFOOD_CHANCE,
+                1.0F - SandExcavationChanceRules.TRASH_CHANCE
+        );
     }
 }

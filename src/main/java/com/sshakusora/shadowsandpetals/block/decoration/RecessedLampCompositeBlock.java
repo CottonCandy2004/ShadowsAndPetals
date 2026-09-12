@@ -5,7 +5,6 @@ import com.sshakusora.shadowsandpetals.blockentity.RecessedLampBlockEntity;
 import com.sshakusora.shadowsandpetals.registries.BlockRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;

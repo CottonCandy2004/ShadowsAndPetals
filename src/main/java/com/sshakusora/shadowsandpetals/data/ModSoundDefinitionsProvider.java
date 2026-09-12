@@ -3,8 +3,8 @@ package com.sshakusora.shadowsandpetals.data;
 import com.sshakusora.shadowsandpetals.ShadowsAndPetals;
 import com.sshakusora.shadowsandpetals.registries.SAPRegistries;
 import net.minecraft.data.PackOutput;
-import net.neoforged.neoforge.common.data.SoundDefinitionsProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.common.data.SoundDefinitionsProvider;
 
 public class ModSoundDefinitionsProvider extends SoundDefinitionsProvider {
     public ModSoundDefinitionsProvider(PackOutput output, ExistingFileHelper existingFileHelper) {

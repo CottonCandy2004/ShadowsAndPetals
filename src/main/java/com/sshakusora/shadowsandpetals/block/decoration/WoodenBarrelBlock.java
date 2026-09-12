@@ -1,8 +1,9 @@
 package com.sshakusora.shadowsandpetals.block.decoration;
 
-import com.sshakusora.shadowsandpetals.compat.InteractionResultCompat;
 import com.mojang.serialization.MapCodec;
 import com.sshakusora.shadowsandpetals.blockentity.WoodenBarrelBlockEntity;
+import com.sshakusora.shadowsandpetals.compat.InteractionResultCompat;
+import com.sshakusora.shadowsandpetals.compat.transfer.fluid.FluidUtil;
 import com.sshakusora.shadowsandpetals.registries.BlockEntityRegistry;
 import com.sshakusora.shadowsandpetals.util.VoxelShapeUtils;
 import net.minecraft.core.BlockPos;
@@ -12,7 +13,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
@@ -26,7 +26,6 @@ import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.*;
@@ -45,7 +44,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import com.sshakusora.shadowsandpetals.compat.transfer.fluid.FluidUtil;
 
 import java.util.EnumMap;
 import java.util.List;

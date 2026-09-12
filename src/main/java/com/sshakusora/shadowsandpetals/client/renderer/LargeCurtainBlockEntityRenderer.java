@@ -4,12 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import com.sshakusora.shadowsandpetals.block.decoration.curtain.LargeCurtainBlock;
 import com.sshakusora.shadowsandpetals.blockentity.LargeCurtainBlockEntity;
-import com.sshakusora.shadowsandpetals.client.animation.AnimatedBlockModel;
-import com.sshakusora.shadowsandpetals.client.animation.AnimationControllerEvaluator;
-import com.sshakusora.shadowsandpetals.client.animation.AnimationResourceRef;
-import com.sshakusora.shadowsandpetals.client.animation.BlockAnimationDefinition;
-import com.sshakusora.shadowsandpetals.client.animation.RigPose;
-import com.sshakusora.shadowsandpetals.client.animation.SAPAnimations;
+import com.sshakusora.shadowsandpetals.client.animation.*;
 import com.sshakusora.shadowsandpetals.client.model.BlockModelRegistry;
 import com.sshakusora.shadowsandpetals.client.model.registry.StandaloneBlockModelSet;
 import com.sshakusora.shadowsandpetals.registries.BlockRegistry;
@@ -23,6 +18,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -46,6 +42,11 @@ public class LargeCurtainBlockEntityRenderer implements BlockEntityRenderer<Larg
 
     public LargeCurtainBlockEntityRenderer(BlockEntityRendererProvider.Context context) {
         this.blockRenderer = context.getBlockRenderDispatcher();
+    }
+
+    @Override
+    public AABB getRenderBoundingBox(LargeCurtainBlockEntity blockEntity) {
+        return new AABB(blockEntity.getBlockPos()).inflate(1.5D);
     }
 
     @Override

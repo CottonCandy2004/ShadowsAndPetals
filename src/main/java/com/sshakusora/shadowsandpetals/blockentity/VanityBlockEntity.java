@@ -27,8 +27,6 @@ import net.minecraft.world.level.block.entity.ContainerOpenersCounter;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-import java.util.List;
-
 public class VanityBlockEntity extends RandomizableContainerBlockEntity {
     public static final int CONTAINER_SIZE = 9;
     private static final String DRAWER_TRAVEL_LIMIT_TAG = "drawer_travel_limit";

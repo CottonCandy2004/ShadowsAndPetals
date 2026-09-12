@@ -1,6 +1,7 @@
 package com.sshakusora.shadowsandpetals.compat.jei;
 
 import com.sshakusora.shadowsandpetals.ShadowsAndPetals;
+import com.sshakusora.shadowsandpetals.item.barrel.WoodenBarrelItemFluid;
 import com.sshakusora.shadowsandpetals.item.chime.WindChimeColors;
 import com.sshakusora.shadowsandpetals.item.hammer.HammerItem;
 import com.sshakusora.shadowsandpetals.recipe.WindChimeDyeRecipe;
@@ -10,11 +11,8 @@ import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.ingredients.subtypes.IIngredientSubtypeInterpreter;
 import mezz.jei.api.ingredients.subtypes.UidContext;
-import mezz.jei.api.registration.IRecipeCategoryRegistration;
-import mezz.jei.api.registration.IRecipeCatalystRegistration;
-import mezz.jei.api.registration.IRecipeRegistration;
-import mezz.jei.api.registration.ISubtypeRegistration;
-import mezz.jei.api.registration.IVanillaCategoryExtensionRegistration;
+import mezz.jei.api.registration.*;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
 
@@ -36,7 +34,18 @@ public final class ShadowsAndPetalsJeiPlugin implements IModPlugin {
                         context == UidContext.Recipe
                                 ? IIngredientSubtypeInterpreter.NONE
                                 : WindChimeColors.fromStack(stack).ribbon().getName()
-                                + ":" + WindChimeColors.fromStack(stack).vane().getName()
+                                 + ":" + WindChimeColors.fromStack(stack).vane().getName()
+        );
+        registration.registerSubtypeInterpreter(
+                BlockRegistry.WOODEN_BARREL.get().asItem(),
+                (IIngredientSubtypeInterpreter<net.minecraft.world.item.ItemStack>) (stack, context) -> {
+                    if (context == UidContext.Recipe) {
+                        return IIngredientSubtypeInterpreter.NONE;
+                    }
+                    return WoodenBarrelItemFluid.read(stack)
+                            .map(fluid -> BuiltInRegistries.FLUID.getKey(fluid.getFluid()).toString())
+                            .orElse("empty");
+                }
         );
     }
 

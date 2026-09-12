@@ -1,7 +1,9 @@
 package com.sshakusora.shadowsandpetals.compat.transfer.access;
 
 import com.sshakusora.shadowsandpetals.compat.transfer.ResourceHandler;
+import com.sshakusora.shadowsandpetals.compat.transfer.fluid.FluidResource;
 import com.sshakusora.shadowsandpetals.compat.transfer.item.ItemResource;
+import com.sshakusora.shadowsandpetals.compat.transfer.transaction.TransactionContext;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -10,8 +12,7 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
 import net.neoforged.neoforge.items.IItemHandler;
-import com.sshakusora.shadowsandpetals.compat.transfer.fluid.FluidResource;
-import com.sshakusora.shadowsandpetals.compat.transfer.transaction.TransactionContext;
+
 import java.util.function.Consumer;
 
 public final class ItemAccess {

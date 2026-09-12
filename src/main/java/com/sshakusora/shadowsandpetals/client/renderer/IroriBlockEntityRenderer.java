@@ -3,20 +3,23 @@ package com.sshakusora.shadowsandpetals.client.renderer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import com.sshakusora.shadowsandpetals.block.decoration.irori.IroriBlock;
 import com.sshakusora.shadowsandpetals.ShadowsAndPetals;
+import com.sshakusora.shadowsandpetals.block.decoration.irori.IroriBlock;
+import com.sshakusora.shadowsandpetals.blockentity.irori.IroriBlockEntity;
+import com.sshakusora.shadowsandpetals.blockentity.irori.IroriComponentTopology;
 import com.sshakusora.shadowsandpetals.client.effect.IroriClientEffects;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
-import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import com.sshakusora.shadowsandpetals.blockentity.irori.IroriBlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.AABB;
 
 import java.util.Random;
 
@@ -32,6 +35,27 @@ public class IroriBlockEntityRenderer implements BlockEntityRenderer<IroriBlockE
     public IroriBlockEntityRenderer(BlockEntityRendererProvider.Context context) {
         this.blockRenderer = context.getBlockRenderDispatcher();
         this.itemRenderer = context.getItemRenderer();
+    }
+
+    @Override
+    public AABB getRenderBoundingBox(IroriBlockEntity blockEntity) {
+        if (blockEntity.getLevel() == null || blockEntity.getMaster() != blockEntity) {
+            return new AABB(blockEntity.getBlockPos());
+        }
+
+        IroriComponentTopology.Bounds component = IroriComponentTopology.bounds(
+                blockEntity.getLevel(),
+                blockEntity.getBlockPos()
+        );
+        BlockPos pos = blockEntity.getBlockPos();
+        return new AABB(
+                component.minX(),
+                pos.getY(),
+                component.minZ(),
+                component.maxX() + 1.0D,
+                pos.getY() + 2.0D,
+                component.maxZ() + 1.0D
+        );
     }
 
     @Override

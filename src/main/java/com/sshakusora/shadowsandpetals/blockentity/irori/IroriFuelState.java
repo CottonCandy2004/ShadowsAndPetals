@@ -1,7 +1,7 @@
 package com.sshakusora.shadowsandpetals.blockentity.irori;
 
-import net.minecraft.core.NonNullList;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.ContainerHelper;

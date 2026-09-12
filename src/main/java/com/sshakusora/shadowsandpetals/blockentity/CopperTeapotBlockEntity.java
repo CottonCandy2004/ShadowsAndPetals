@@ -1,7 +1,18 @@
 package com.sshakusora.shadowsandpetals.blockentity;
 
 import com.sshakusora.shadowsandpetals.block.decoration.irori.IroriBlock;
+import com.sshakusora.shadowsandpetals.block.decoration.irori.IroriGrillBlock;
+import com.sshakusora.shadowsandpetals.block.decoration.irori.IroriGrillCopperTeapotBlock;
+import com.sshakusora.shadowsandpetals.block.decoration.irori.IroriGrillPartHolder;
 import com.sshakusora.shadowsandpetals.blockentity.irori.IroriBlockEntity;
+import com.sshakusora.shadowsandpetals.compat.transfer.ResourceHandler;
+import com.sshakusora.shadowsandpetals.compat.transfer.ResourceHandlerUtil;
+import com.sshakusora.shadowsandpetals.compat.transfer.access.ItemAccess;
+import com.sshakusora.shadowsandpetals.compat.transfer.fluid.FluidResource;
+import com.sshakusora.shadowsandpetals.compat.transfer.fluid.FluidStacksResourceHandler;
+import com.sshakusora.shadowsandpetals.compat.transfer.item.ItemResource;
+import com.sshakusora.shadowsandpetals.compat.transfer.item.VanillaContainerWrapper;
+import com.sshakusora.shadowsandpetals.compat.transfer.transaction.Transaction;
 import com.sshakusora.shadowsandpetals.data.BuiltinLanguageKeys;
 import com.sshakusora.shadowsandpetals.menu.TeapotMenu;
 import com.sshakusora.shadowsandpetals.recipe.TeapotRecipe;
@@ -11,8 +22,8 @@ import com.sshakusora.shadowsandpetals.registries.RecipeSerializerRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -31,17 +42,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
-import com.sshakusora.shadowsandpetals.compat.transfer.ResourceHandler;
-import com.sshakusora.shadowsandpetals.compat.transfer.ResourceHandlerUtil;
-import com.sshakusora.shadowsandpetals.compat.transfer.access.ItemAccess;
-import com.sshakusora.shadowsandpetals.compat.transfer.fluid.FluidResource;
-import com.sshakusora.shadowsandpetals.compat.transfer.fluid.FluidStacksResourceHandler;
-import com.sshakusora.shadowsandpetals.compat.transfer.item.ItemResource;
-import com.sshakusora.shadowsandpetals.compat.transfer.item.VanillaContainerWrapper;
-import com.sshakusora.shadowsandpetals.compat.transfer.transaction.Transaction;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 public class CopperTeapotBlockEntity extends RandomizableContainerBlockEntity {
     public static final int TEA_SLOT = 0;
@@ -107,6 +108,47 @@ public class CopperTeapotBlockEntity extends RandomizableContainerBlockEntity {
     private @Nullable ResourceLocation activeRecipeId;
     private float lidProgress;
     private float lidProgressOld;
+
+    /**
+     * 1.21.1 no longer exposes the old block removal callback that ran after
+     * neighbor updates. A teapot block entity is removed exactly when its
+     * block is replaced or removed, so use this lifecycle boundary to preserve
+     * the composite grill cleanup semantics for non-player removals as well.
+     */
+    @Override
+    public void setRemoved() {
+        cleanupInstalledGrillAfterRemoval();
+        super.setRemoved();
+    }
+
+    private void cleanupInstalledGrillAfterRemoval() {
+        Level level = getLevel();
+        BlockState previousState = getBlockState();
+        if (level == null
+                || level.isClientSide()
+                || !(previousState.getBlock() instanceof IroriGrillCopperTeapotBlock)) {
+            return;
+        }
+
+        BlockState replacement = level.getBlockState(getBlockPos());
+        if (replacement.getBlock() == previousState.getBlock()) {
+            // The chunk is unloading, or the state changed without removing the entity.
+            return;
+        }
+
+        boolean preservesGrillPart = IroriGrillPartHolder.isGrillPart(replacement)
+                && IroriGrillPartHolder.masterPosition(getBlockPos(), previousState)
+                .equals(IroriGrillPartHolder.masterPosition(getBlockPos(), replacement));
+        if (!preservesGrillPart
+                && IroriGrillBlock.isValidLower(level.getBlockState(getBlockPos().below()))) {
+            IroriBlockEntity.removeInstalledGrill(
+                    level,
+                    getBlockPos().below(),
+                    getBlockPos(),
+                    true
+            );
+        }
+    }
 
     public CopperTeapotBlockEntity(BlockPos pos, BlockState blockState) {
         super(BlockEntityRegistry.COPPER_TEAPOT.get(), pos, blockState);

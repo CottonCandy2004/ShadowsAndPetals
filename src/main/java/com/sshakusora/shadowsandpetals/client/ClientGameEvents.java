@@ -12,15 +12,15 @@ import com.sshakusora.shadowsandpetals.item.hammer.HammerClientExtensions;
 import com.sshakusora.shadowsandpetals.item.harrow.HarrowClientExtensions;
 import com.sshakusora.shadowsandpetals.tooltip.TooltipComponentRegistry;
 import com.sshakusora.shadowsandpetals.tooltip.TooltipModifier;
+import net.minecraft.world.phys.shapes.CollisionContext;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
-import net.neoforged.neoforge.client.event.RenderTooltipEvent;
 import net.neoforged.neoforge.client.event.RenderHighlightEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
+import net.neoforged.neoforge.client.event.RenderTooltipEvent;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
-import net.minecraft.world.phys.shapes.CollisionContext;
 
 /** Client game-bus hooks that must run after the client has been initialized. */
 @EventBusSubscriber(modid = ShadowsAndPetals.MOD_ID, value = Dist.CLIENT)

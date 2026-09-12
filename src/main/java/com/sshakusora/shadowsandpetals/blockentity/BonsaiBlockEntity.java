@@ -1,11 +1,14 @@
 package com.sshakusora.shadowsandpetals.blockentity;
 
+import com.sshakusora.shadowsandpetals.compat.transfer.ResourceHandler;
+import com.sshakusora.shadowsandpetals.compat.transfer.item.ItemResource;
+import com.sshakusora.shadowsandpetals.compat.transfer.item.ItemStackResourceHandler;
+import com.sshakusora.shadowsandpetals.compat.transfer.transaction.TransactionContext;
 import com.sshakusora.shadowsandpetals.registries.BlockEntityRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -21,10 +24,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.client.model.data.ModelProperty;
-import com.sshakusora.shadowsandpetals.compat.transfer.ResourceHandler;
-import com.sshakusora.shadowsandpetals.compat.transfer.item.ItemResource;
-import com.sshakusora.shadowsandpetals.compat.transfer.item.ItemStackResourceHandler;
-import com.sshakusora.shadowsandpetals.compat.transfer.transaction.TransactionContext;
 import org.jetbrains.annotations.Nullable;
 
 /**

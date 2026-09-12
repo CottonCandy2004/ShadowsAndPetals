@@ -1,18 +1,16 @@
 package com.sshakusora.shadowsandpetals.item.barrel;
 
-import com.mojang.serialization.DataResult;
+import com.sshakusora.shadowsandpetals.compat.transfer.fluid.FluidResource;
+import com.sshakusora.shadowsandpetals.compat.transfer.item.ItemResource;
 import com.sshakusora.shadowsandpetals.registries.BlockEntityRegistry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
 import net.neoforged.neoforge.fluids.FluidStack;
-import com.sshakusora.shadowsandpetals.compat.transfer.StacksResourceHandler;
-import com.sshakusora.shadowsandpetals.compat.transfer.fluid.FluidResource;
-import com.sshakusora.shadowsandpetals.compat.transfer.item.ItemResource;
 
 import java.util.Optional;
 

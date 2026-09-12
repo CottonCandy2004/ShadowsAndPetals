@@ -1,14 +1,14 @@
 package com.sshakusora.shadowsandpetals.data.model.generator;
 
-import com.sshakusora.shadowsandpetals.data.model.BlockModelContext;
-import com.sshakusora.shadowsandpetals.data.model.ItemModelContext;
-import com.sshakusora.shadowsandpetals.data.model.SAPBlockModelGenerator;
-import com.sshakusora.shadowsandpetals.data.model.SAPItemModelGenerator;
 import com.sshakusora.shadowsandpetals.block.RockeryDimensions;
 import com.sshakusora.shadowsandpetals.block.agriculture.OrangeTreeBlock;
 import com.sshakusora.shadowsandpetals.block.decoration.HedgeBlock;
 import com.sshakusora.shadowsandpetals.block.nature.RockeryBlock;
 import com.sshakusora.shadowsandpetals.block.nature.SandExcavationBlock;
+import com.sshakusora.shadowsandpetals.data.model.BlockModelContext;
+import com.sshakusora.shadowsandpetals.data.model.ItemModelContext;
+import com.sshakusora.shadowsandpetals.data.model.SAPBlockModelGenerator;
+import com.sshakusora.shadowsandpetals.data.model.SAPItemModelGenerator;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
@@ -17,12 +17,8 @@ import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.SaplingBlock;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.StairBlock;
-import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /** 1.21.1 compatibility callbacks for the 26.x model generator. */
 public final class NatureBlockModels {

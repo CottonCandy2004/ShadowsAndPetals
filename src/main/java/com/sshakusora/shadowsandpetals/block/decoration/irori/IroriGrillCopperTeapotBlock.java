@@ -3,7 +3,6 @@ package com.sshakusora.shadowsandpetals.block.decoration.irori;
 import com.mojang.serialization.MapCodec;
 import com.sshakusora.shadowsandpetals.block.decoration.CopperTeapotBlock;
 import com.sshakusora.shadowsandpetals.blockentity.CopperTeapotBlockEntity;
-import com.sshakusora.shadowsandpetals.blockentity.irori.IroriBlockEntity;
 import com.sshakusora.shadowsandpetals.registries.BlockRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.Containers;

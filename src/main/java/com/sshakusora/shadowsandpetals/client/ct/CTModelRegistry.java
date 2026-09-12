@@ -1,7 +1,6 @@
 package com.sshakusora.shadowsandpetals.client.ct;
 
 import com.sshakusora.shadowsandpetals.client.ct.CTRegistry.CTEntry;
-import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.neoforged.neoforge.client.event.ModelEvent;

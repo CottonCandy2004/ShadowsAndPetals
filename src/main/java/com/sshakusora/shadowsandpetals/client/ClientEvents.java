@@ -8,7 +8,6 @@ import com.sshakusora.shadowsandpetals.client.model.BlockModelRegistry;
 import com.sshakusora.shadowsandpetals.client.model.WindChimeItemModel;
 import com.sshakusora.shadowsandpetals.client.model.WoodenBarrelItemModel;
 import com.sshakusora.shadowsandpetals.client.model.bonsai.BonsaiTreeGeometryCache;
-import com.sshakusora.shadowsandpetals.client.renderer.BonsaiBlockTintSources;
 import com.sshakusora.shadowsandpetals.client.outline.*;
 import com.sshakusora.shadowsandpetals.client.particle.FallingLeafParticle;
 import com.sshakusora.shadowsandpetals.client.renderer.*;
@@ -19,12 +18,12 @@ import com.sshakusora.shadowsandpetals.client.tooltip.RockeryTooltipComponent;
 import com.sshakusora.shadowsandpetals.item.hammer.HammerClientExtensions;
 import com.sshakusora.shadowsandpetals.item.harrow.HarrowClientExtensions;
 import com.sshakusora.shadowsandpetals.registries.*;
+import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
-import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 
 @EventBusSubscriber(modid = ShadowsAndPetals.MOD_ID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
 @SuppressWarnings({"removal"})

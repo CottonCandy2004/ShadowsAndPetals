@@ -2,19 +2,34 @@ package com.sshakusora.shadowsandpetals.client.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.minecraft.client.renderer.entity.ItemRenderer;
+import com.sshakusora.shadowsandpetals.block.nature.SandExcavationBlock;
+import com.sshakusora.shadowsandpetals.blockentity.SandExcavationBlockEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import com.sshakusora.shadowsandpetals.block.nature.SandExcavationBlock;
-import com.sshakusora.shadowsandpetals.blockentity.SandExcavationBlockEntity;
+import net.minecraft.world.phys.AABB;
 
 public class SandExcavationBlockEntityRenderer implements BlockEntityRenderer<SandExcavationBlockEntity> {
     private final ItemRenderer itemRenderer;
 
     public SandExcavationBlockEntityRenderer(BlockEntityRendererProvider.Context context) {
         this.itemRenderer = context.getItemRenderer();
+    }
+
+    @Override
+    public AABB getRenderBoundingBox(SandExcavationBlockEntity blockEntity) {
+        BlockPos pos = blockEntity.getBlockPos();
+        return new AABB(
+                pos.getX() - 0.25D,
+                pos.getY() - 0.25D,
+                pos.getZ() - 0.25D,
+                pos.getX() + 1.25D,
+                pos.getY() + 1.25D,
+                pos.getZ() + 1.25D
+        );
     }
 
     @Override

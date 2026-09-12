@@ -2,14 +2,14 @@ package com.sshakusora.shadowsandpetals.registries;
 
 import com.sshakusora.shadowsandpetals.ShadowsAndPetals;
 import com.sshakusora.shadowsandpetals.blockentity.ShishiOdoshiBlockEntity;
-import com.sshakusora.shadowsandpetals.item.barrel.WoodenBarrelItemFluidHandler;
 import com.sshakusora.shadowsandpetals.compat.transfer.NativeCapabilityAdapters;
 import com.sshakusora.shadowsandpetals.compat.transfer.access.ItemAccess;
+import com.sshakusora.shadowsandpetals.compat.transfer.item.VanillaContainerWrapper;
+import com.sshakusora.shadowsandpetals.item.barrel.WoodenBarrelItemFluidHandler;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
-import com.sshakusora.shadowsandpetals.compat.transfer.item.VanillaContainerWrapper;
 
 @EventBusSubscriber(modid = ShadowsAndPetals.MOD_ID)
 public class CapabilityRegistry {

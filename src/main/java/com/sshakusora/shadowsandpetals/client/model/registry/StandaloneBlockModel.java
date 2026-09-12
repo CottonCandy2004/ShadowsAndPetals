@@ -1,13 +1,11 @@
 package com.sshakusora.shadowsandpetals.client.model.registry;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.sshakusora.shadowsandpetals.client.model.registry.StandaloneModelRotation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
@@ -20,9 +18,7 @@ import net.neoforged.neoforge.client.model.data.ModelData;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /** Handle for one additional model and its resource-reload-aware baked cache. */
