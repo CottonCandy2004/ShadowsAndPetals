@@ -105,7 +105,7 @@ public final class StructureEditorWorldBootstrap {
         version.putBoolean("Snapshot", false);
         version.putString("Series", "main");
         version.putInt("Id", dataVersion);
-        version.putString("Name", "26.1.2");
+        version.putString("Name", "1.21.1");
         data.put("Version", version);
 
         CompoundTag dataPacks = new CompoundTag();

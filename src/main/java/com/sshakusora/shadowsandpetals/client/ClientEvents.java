@@ -18,6 +18,7 @@ import com.sshakusora.shadowsandpetals.client.tooltip.RockeryTooltipComponent;
 import com.sshakusora.shadowsandpetals.item.hammer.HammerClientExtensions;
 import com.sshakusora.shadowsandpetals.item.harrow.HarrowClientExtensions;
 import com.sshakusora.shadowsandpetals.registries.*;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -53,8 +54,7 @@ public final class ClientEvents {
         event.registerEntityRenderer(EntityRegistry.SEAT.get(), net.minecraft.client.renderer.entity.NoopRenderer::new);
         event.registerBlockEntityRenderer(BlockEntityRegistry.SAND_EXCAVATION.get(), SandExcavationBlockEntityRenderer::new);
         event.registerBlockEntityRenderer(BlockEntityRegistry.IRORI.get(), IroriBlockEntityRenderer::new);
-        event.registerBlockEntityRenderer(BlockEntityRegistry.VANITY.get(),
-                com.sshakusora.shadowsandpetals.client.VanityBlockEntityRenderer::new);
+        event.registerBlockEntityRenderer(BlockEntityRegistry.VANITY.get(), VanityBlockEntityRenderer::new);
         event.registerBlockEntityRenderer(BlockEntityRegistry.SHISHI_ODOSHI.get(), ShishiOdoshiBlockEntityRenderer::new);
         event.registerBlockEntityRenderer(BlockEntityRegistry.SHISHI_ODOSHI_PIPE.get(), ShishiOdoshiPipeBlockEntityRenderer::new);
         event.registerBlockEntityRenderer(BlockEntityRegistry.WOODEN_BARREL.get(), WoodenBarrelBlockEntityRenderer::new);
@@ -88,7 +88,7 @@ public final class ClientEvents {
         VanityOutlineCache.register(event);
         event.registerReloadListener(new ResourceManagerReloadListener() {
             @Override
-            public void onResourceManagerReload(net.minecraft.server.packs.resources.ResourceManager resourceManager) {
+            public void onResourceManagerReload(ResourceManager resourceManager) {
                 BonsaiTreeGeometryCache.invalidate();
             }
         });

@@ -11,10 +11,12 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.client.RenderTypeHelper;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import org.jetbrains.annotations.Nullable;
 
@@ -29,17 +31,6 @@ import org.jetbrains.annotations.Nullable;
  */
 final class LegacyBlockEntityRenderSupport {
     private LegacyBlockEntityRenderSupport() {
-    }
-
-    static void renderBlock(
-            BlockRenderDispatcher dispatcher,
-            BlockState state,
-            PoseStack poseStack,
-            MultiBufferSource buffers,
-            int light,
-            int overlay
-    ) {
-        dispatcher.renderSingleBlock(state, poseStack, buffers, light, overlay);
     }
 
     static void renderStandalone(
@@ -62,6 +53,37 @@ final class LegacyBlockEntityRenderSupport {
                 1.0F, 1.0F, 1.0F, light, overlay,
                 ModelData.EMPTY, RenderType.cutout()
         );
+    }
+
+    static void renderModel(
+            BlockRenderDispatcher dispatcher,
+            BakedModel model,
+            BlockState state,
+            PoseStack poseStack,
+            MultiBufferSource buffers,
+            int light,
+            int overlay
+    ) {
+        ModelData modelData = ModelData.EMPTY;
+        RandomSource random = RandomSource.create(42L);
+        for (RenderType renderType : model.getRenderTypes(state, random, modelData)) {
+            VertexConsumer consumer = buffers.getBuffer(
+                    RenderTypeHelper.getEntityRenderType(renderType, false)
+            );
+            dispatcher.getModelRenderer().renderModel(
+                    poseStack.last(),
+                    consumer,
+                    state,
+                    model,
+                    1.0F,
+                    1.0F,
+                    1.0F,
+                    light,
+                    overlay,
+                    modelData,
+                    renderType
+            );
+        }
     }
 
     static void renderItem(
