@@ -24,5 +24,4 @@ public final class BonsaiBlockModels {
                 .build());
         StandardBlockModels.parentBlockItem(block, generator, generator.modLoc("block/bonsai/bonsai"));
     }
-    public static void block(Object... ignored) {}
 }

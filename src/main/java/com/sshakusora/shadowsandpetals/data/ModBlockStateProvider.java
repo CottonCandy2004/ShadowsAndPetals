@@ -112,9 +112,15 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 ? blockName.substring(0, blockName.length() - "_vanity".length())
                 : blockName;
 
-        // TODO: Need To Replace Oak Upper
-        ResourceLocation lowerModel = modelExists("block/vanity/" + woodName + "_lower") ? modLoc("block/vanity/" + woodName + "_lower") : modLoc("block/vanity/oak_lower");
-        ResourceLocation upperModel = modelExists("block/vanity/" + woodName + "_upper") ? modLoc("block/vanity/" + woodName + "_upper") : modLoc("block/vanity/oak_upper");
+        // Every registered wood type has its own lower/upper model.  Keep the
+        // oak fallback for third-party/generated variants that are assembled
+        // without an asset pair yet.
+        ResourceLocation lowerModel = modelExists("block/vanity/" + woodName + "_lower")
+                ? modLoc("block/vanity/" + woodName + "_lower")
+                : modLoc("block/vanity/oak_lower");
+        ResourceLocation upperModel = modelExists("block/vanity/" + woodName + "_upper")
+                ? modLoc("block/vanity/" + woodName + "_upper")
+                : modLoc("block/vanity/oak_upper");
         getVariantBuilder(block).forAllStates(state -> {
             ResourceLocation model = state.getValue(VanityBlock.HALF) == DoubleBlockHalf.LOWER ? lowerModel : upperModel;
             int rotationY = switch (state.getValue(VanityBlock.FACING)) {

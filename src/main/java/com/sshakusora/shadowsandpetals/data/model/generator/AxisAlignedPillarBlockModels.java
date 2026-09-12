@@ -34,5 +34,4 @@ public final class AxisAlignedPillarBlockModels {
         });
         StandardBlockModels.parentBlockItem(block, generator, model);
     }
-    public static void withItem(Object... ignored) {}
 }

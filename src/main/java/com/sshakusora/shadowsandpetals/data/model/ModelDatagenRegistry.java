@@ -16,8 +16,9 @@ import java.util.stream.Stream;
 
 /**
  * Compatibility registry for model callbacks authored against 26.x.
- * 1.21.1 datagen providers use the legacy NeoForge model API, so callbacks are
- * intentionally retained as optional no-op hooks.
+ * 1.21.1 datagen providers use the legacy NeoForge model API; registered
+ * callbacks are adapted to that API by {@link SAPBlockModelGenerator} and
+ * {@link SAPItemModelGenerator}.
  */
 public final class ModelDatagenRegistry {
     private static final Map<ResourceLocation, RegisteredBlock<?>> BLOCKS = new LinkedHashMap<>();

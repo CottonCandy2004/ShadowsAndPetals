@@ -3,12 +3,13 @@ package com.sshakusora.shadowsandpetals.client.particle;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
-import net.minecraft.client.particle.SingleQuadParticle;
+import net.minecraft.client.particle.TextureSheetParticle;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.particles.SimpleParticleType;
 
-public class FallingLeafParticle extends SingleQuadParticle {
+public class FallingLeafParticle extends TextureSheetParticle {
     private static final float ACCELERATION_SCALE = 0.0025F;
     private static final int VANILLA_LEAF_LIFETIME = 300;
     private float rotSpeed;
@@ -20,8 +21,9 @@ public class FallingLeafParticle extends SingleQuadParticle {
     private final double zaFlowScale;
     private final double swirlPeriod;
 
-    protected FallingLeafParticle(ClientLevel level, double x, double y, double z, float fallAcceleration, float sideAcceleration, boolean swirl, boolean flowAway, float scale, float startVelocity) {
+    protected FallingLeafParticle(ClientLevel level, double x, double y, double z, TextureAtlasSprite sprite, float fallAcceleration, float sideAcceleration, boolean swirl, boolean flowAway, float scale, float startVelocity) {
         super(level, x, y, z);
+        this.setSprite(sprite);
         this.rotSpeed = (float) Math.toRadians(this.random.nextBoolean() ? -30.0F : 30.0F);
         this.spinAcceleration = (float) Math.toRadians(this.random.nextBoolean() ? -5.0F : 5.0F);
         this.windBig = sideAcceleration;
@@ -86,28 +88,8 @@ public class FallingLeafParticle extends SingleQuadParticle {
         return ParticleRenderType.PARTICLE_SHEET_OPAQUE;
     }
 
-    @Override
-    protected float getU0() {
-        return 0.0F;
-    }
-
-    @Override
-    protected float getU1() {
-        return 1.0F;
-    }
-
-    @Override
-    protected float getV0() {
-        return 0.0F;
-    }
-
-    @Override
-    protected float getV1() {
-        return 1.0F;
-    }
-
-    private static Particle createVanillaLeafParticle(ClientLevel level, double x, double y, double z, float fallAcceleration, float sideAcceleration, boolean swirl, boolean flowAway, float scale, float startVelocity) {
-        return new FallingLeafParticle(level, x, y, z, fallAcceleration, sideAcceleration, swirl, flowAway, scale, startVelocity);
+    private static Particle createVanillaLeafParticle(SpriteSet sprites, ClientLevel level, double x, double y, double z, float fallAcceleration, float sideAcceleration, boolean swirl, boolean flowAway, float scale, float startVelocity) {
+        return new FallingLeafParticle(level, x, y, z, sprites.get(level.random), fallAcceleration, sideAcceleration, swirl, flowAway, scale, startVelocity);
     }
 
     public static class GinkgoProvider implements ParticleProvider<SimpleParticleType> {
@@ -119,7 +101,7 @@ public class FallingLeafParticle extends SingleQuadParticle {
 
         @Override
         public Particle createParticle(SimpleParticleType type, ClientLevel level, double x, double y, double z, double speedX, double speedY, double speedZ) {
-            return createVanillaLeafParticle(level, x, y, z, 0.06F, 9.0F, true, false, 2.2F, 0.018F);
+            return createVanillaLeafParticle(this.sprites, level, x, y, z, 0.06F, 9.0F, true, false, 2.2F, 0.018F);
         }
     }
 
@@ -132,7 +114,7 @@ public class FallingLeafParticle extends SingleQuadParticle {
 
         @Override
         public Particle createParticle(SimpleParticleType type, ClientLevel level, double x, double y, double z, double speedX, double speedY, double speedZ) {
-            return createVanillaLeafParticle(level, x, y, z, 0.09F, 8.5F, true, false, 1.8F, 0.024F);
+            return createVanillaLeafParticle(this.sprites, level, x, y, z, 0.09F, 8.5F, true, false, 1.8F, 0.024F);
         }
     }
 
@@ -145,7 +127,7 @@ public class FallingLeafParticle extends SingleQuadParticle {
 
         @Override
         public Particle createParticle(SimpleParticleType type, ClientLevel level, double x, double y, double z, double speedX, double speedY, double speedZ) {
-            return createVanillaLeafParticle(level, x, y, z, 0.25F, 2.0F, false, true, 1.0F, 0.0F);
+            return createVanillaLeafParticle(this.sprites, level, x, y, z, 0.25F, 2.0F, false, true, 1.0F, 0.0F);
         }
     }
 }

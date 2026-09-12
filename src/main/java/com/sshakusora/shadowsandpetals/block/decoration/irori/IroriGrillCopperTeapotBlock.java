@@ -72,6 +72,28 @@ public final class IroriGrillCopperTeapotBlock extends CopperTeapotBlock impleme
     }
 
     @Override
+    public boolean onDestroyedByPlayer(
+            BlockState state,
+            Level level,
+            BlockPos pos,
+            Player player,
+            boolean willHarvest,
+            FluidState fluid
+    ) {
+        // This block is the upper teapot half of an installed grill.  Breaking it
+        // removes the teapot contents but leaves the shared grill component in place.
+        if (!level.isClientSide() && level.getBlockEntity(pos) instanceof CopperTeapotBlockEntity teapot) {
+            Containers.dropContents(level, pos, teapot);
+        }
+
+        BlockState grillState = BlockRegistry.IRORI_GRILL.get()
+                .defaultBlockState()
+                .setValue(IroriGrillBlock.GRILL_PART, state.getValue(IroriGrillBlock.GRILL_PART))
+                .setValue(IroriGrillBlock.WATERLOGGED, state.getValue(WATERLOGGED));
+        return level.setBlock(pos, grillState, Block.UPDATE_ALL);
+    }
+
+    @Override
     public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
         return new ItemStack(BlockRegistry.COPPER_TEAPOT.get());
     }

@@ -135,16 +135,4 @@ public final class StandardBlockModels {
         }
     }
 
-    // Erased overloads remain for old source call sites that are not used by
-    // this branch's registry after generic type resolution.
-    public static void cubeAll(Object... ignored) {}
-    public static void simpleBlock(Object... ignored) {}
-    public static void simpleBlockWithItem(Object... ignored) {}
-    public static void simpleWaterloggedBlockWithItem(Object... ignored) {}
-    public static void horizontalFacingCubeAll(Object... ignored) {}
-    public static void fluid(Object... ignored) {}
-    public static void verticalSlab(Object... ignored) {}
-    public static void slab(Object... ignored) {}
-    public static void stairs(Object... ignored) {}
-    public static void parentBlockItem(Object... ignored) {}
 }

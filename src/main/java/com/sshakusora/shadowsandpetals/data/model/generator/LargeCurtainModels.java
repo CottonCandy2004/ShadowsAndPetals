@@ -30,5 +30,4 @@ public final class LargeCurtainModels {
         }, LargeCurtainBlock.POWERED);
         StandardBlockModels.parentBlockItem(block, generator, generator.modLoc("block/large_curtain/item/" + color));
     }
-    public static void block(Object... ignored) {}
 }

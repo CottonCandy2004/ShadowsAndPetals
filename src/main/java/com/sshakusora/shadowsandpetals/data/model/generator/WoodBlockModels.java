@@ -59,7 +59,6 @@ public final class WoodBlockModels {
         StandardBlockModels.parentBlockItem(set.button().get(), generator,
                 generator.blockModelId(set.button().get()));
     }
-    public static void woodSet(Object... ignored) {}
     public static void post(BlockModelContext<? extends WoodPostBlock> context, SAPBlockModelGenerator generator,
                             ResourceLocation sideTexture, ResourceLocation endTexture) {
         WoodPostBlock block = context.get();
@@ -106,5 +105,4 @@ public final class WoodBlockModels {
         float toY = upper ? 16 : 6;
         builder.element().from(6.5F, fromY, 7).to(9.5F, toY, 9).cube("#all").end();
     }
-    public static void post(Object... ignored) {}
 }

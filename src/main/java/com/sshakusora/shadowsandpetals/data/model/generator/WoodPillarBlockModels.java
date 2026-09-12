@@ -33,5 +33,4 @@ public final class WoodPillarBlockModels {
         });
         StandardBlockModels.parentBlockItem(context.get(), generator, blockModel);
     }
-    public static void strippedWoodPillar(Object... ignored) {}
 }

@@ -24,9 +24,6 @@ public class WoodenBarrelBlockEntityRenderer implements BlockEntityRenderer<Wood
     @Override
     public void render(WoodenBarrelBlockEntity blockEntity, float partialTick, PoseStack poseStack,
                        MultiBufferSource buffer, int packedLight, int packedOverlay) {
-        LegacyBlockEntityRenderSupport.renderBlock(
-                blockRenderer, blockEntity.getBlockState(), poseStack, buffer, packedLight, packedOverlay);
-
         if (blockEntity.getLevel() == null) {
             return;
         }

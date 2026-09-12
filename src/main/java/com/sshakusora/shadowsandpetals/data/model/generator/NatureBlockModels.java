@@ -34,7 +34,6 @@ public final class NatureBlockModels {
                     ResourceLocation.withDefaultNamespace("block/suspicious_sand_" + dusted))).build();
         });
     }
-    public static void sandExcavation(Object... ignored) {}
     public static void leaves(BlockModelContext<? extends LeavesBlock> context, SAPBlockModelGenerator generator,
                               ResourceLocation texture) {
         String base = generator.blockModelId(context.get()).getPath();
@@ -53,24 +52,20 @@ public final class NatureBlockModels {
         StandardBlockModels.parentBlockItem(context.get(), generator,
                 generator.blockModelId(context.get()).withSuffix("_0"));
     }
-    public static void leaves(Object... ignored) {}
     public static void leavesSlab(BlockModelContext<? extends SlabBlock> context, SAPBlockModelGenerator generator,
                                   ResourceLocation texture) {
         StandardBlockModels.slab(context, generator, texture, true);
     }
-    public static void leavesSlab(Object... ignored) {}
     public static void leavesStairs(BlockModelContext<? extends StairBlock> context, SAPBlockModelGenerator generator,
                                     ResourceLocation texture) {
         StandardBlockModels.stairs(context, generator, texture, true);
     }
-    public static void leavesStairs(Object... ignored) {}
     public static void sapling(BlockModelContext<? extends SaplingBlock> context, SAPBlockModelGenerator generator,
                                ResourceLocation texture) {
         ModelFile model = generator.provider().models().cross(context.name(), texture);
         ((net.neoforged.neoforge.client.model.generators.BlockModelBuilder) model).renderType("cutout");
         generator.provider().simpleBlock(context.get(), model);
     }
-    public static void sapling(Object... ignored) {}
     public static void hedge(BlockModelContext<? extends HedgeBlock> context, SAPBlockModelGenerator generator,
                              ResourceLocation texture) {
         for (int mask = 0; mask < 16; mask++) {
@@ -89,7 +84,6 @@ public final class NatureBlockModels {
         StandardBlockModels.parentBlockItem(context.get(), generator,
                 generator.modLoc("block/" + context.name() + "_5"));
     }
-    public static void hedge(Object... ignored) {}
     public static void orangeTree(BlockModelContext<? extends OrangeTreeBlock> context, SAPBlockModelGenerator generator) {
         generator.provider().getVariantBuilder(context.get()).forAllStates(state -> {
             int age = state.getValue(OrangeTreeBlock.AGE);
@@ -102,7 +96,6 @@ public final class NatureBlockModels {
         });
         StandardBlockModels.parentBlockItem(context.get(), generator, generator.modLoc("block/orange/tree_0"));
     }
-    public static void orangeTree(Object... ignored) {}
     public static void rockery(BlockModelContext<? extends RockeryBlock> context, SAPBlockModelGenerator generator,
                                RockeryDimensions dimensions) {
         generator.provider().getVariantBuilder(context.get()).forAllStates(state -> {
@@ -115,10 +108,8 @@ public final class NatureBlockModels {
                     .rotationY(y).build();
         });
     }
-    public static void rockery(Object... ignored) {}
     public static void saplingItem(ItemModelContext<? extends BlockItem> context, SAPItemModelGenerator generator,
                                    ResourceLocation texture) {
         generator.generatedItem(context.get(), texture);
     }
-    public static void saplingItem(Object... ignored) {}
 }

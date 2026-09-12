@@ -163,12 +163,4 @@ public class SAPBlockModelGenerator {
         provider.simpleBlockItem(block, new ModelFile.UncheckedModelFile(model));
     }
 
-    public void jsonModel(ResourceLocation id, Object model) {
-    }
-
-    public void blockState(Object generator) {
-    }
-
-    public void model(ResourceLocation id, Object model) {
-    }
 }

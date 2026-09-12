@@ -1,5 +1,6 @@
 package com.sshakusora.shadowsandpetals.client.renderer;
 
+import com.sshakusora.shadowsandpetals.api.shishiOdoshi.ShishiOdoshiFluidRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.BiomeColors;
@@ -20,6 +21,8 @@ import java.util.WeakHashMap;
 
 /** Resolves fluid sprites and colors using the 1.21.1 client fluid extension API. */
 public final class ClientFluidRenderInfo {
+    private static final int STREAM_ALPHA = 208;
+
     private ClientFluidRenderInfo() {
     }
 
@@ -47,17 +50,32 @@ public final class ClientFluidRenderInfo {
 
     private static Info create(Fluid fluid, BlockAndTintGetter level, BlockPos pos, boolean surface) {
         IClientFluidTypeExtensions extension = IClientFluidTypeExtensions.of(fluid);
-        ResourceLocation texture = surface
-                ? extension.getStillTexture(fluid.defaultFluidState(), level, pos)
-                : extension.getFlowingTexture(fluid.defaultFluidState(), level, pos);
+        ShishiOdoshiFluidRegistry.RenderProperties properties =
+                ShishiOdoshiFluidRegistry.getRegisteredRenderProperties(fluid);
+        ResourceLocation texture;
+        if (surface) {
+            texture = extension.getStillTexture(fluid.defaultFluidState(), level, pos);
+        } else if (properties != null) {
+            texture = properties.flowingTexture();
+        } else {
+            texture = extension.getFlowingTexture(fluid.defaultFluidState(), level, pos);
+        }
         if (texture == null) {
             texture = fallbackTexture(fluid, !surface);
         }
-        int tint = extension.getTintColor(fluid.defaultFluidState(), level, pos);
-        if (fluid == Fluids.WATER) {
-            tint = BiomeColors.getAverageWaterColor(level, pos);
+        int tint;
+        if (properties != null) {
+            tint = fluid == Fluids.WATER
+                    ? BiomeColors.getAverageWaterColor(level, pos)
+                    : properties.tintColor();
+        } else {
+            tint = extension.getTintColor(fluid.defaultFluidState(), level, pos);
+            if (fluid == Fluids.WATER) {
+                tint = BiomeColors.getAverageWaterColor(level, pos);
+            }
         }
-        return new Info(sprite(texture), 0xFF000000 | tint & 0x00FFFFFF, fluidLight(fluid));
+        int alpha = surface ? 0xFF : STREAM_ALPHA;
+        return new Info(sprite(texture), (alpha << 24) | tint & 0x00FFFFFF, fluidLight(fluid));
     }
 
     private static TextureAtlasSprite sprite(ResourceLocation texture) {
@@ -92,17 +110,21 @@ public final class ClientFluidRenderInfo {
         private final Map<T, CachedInfo> entries = new WeakHashMap<>();
 
         public Info getSurface(T owner, Fluid fluid, BlockAndTintGetter level, BlockPos pos) {
-            return get(owner, fluid, level, pos);
+            return get(owner, fluid, level, pos, true);
         }
 
         public Info get(T owner, Fluid fluid, BlockAndTintGetter level, BlockPos pos) {
+            return get(owner, fluid, level, pos, false);
+        }
+
+        private Info get(T owner, Fluid fluid, BlockAndTintGetter level, BlockPos pos, boolean surface) {
             long packedPos = pos.asLong();
             CachedInfo cached = entries.get(owner);
-            if (cached != null && cached.fluid == fluid && cached.pos == packedPos) {
+            if (cached != null && cached.fluid == fluid && cached.pos == packedPos && cached.surface == surface) {
                 return cached.info;
             }
-            Info info = create(fluid, level, pos, false);
-            entries.put(owner, new CachedInfo(fluid, packedPos, info));
+            Info info = create(fluid, level, pos, surface);
+            entries.put(owner, new CachedInfo(fluid, packedPos, surface, info));
             return info;
         }
 
@@ -110,7 +132,7 @@ public final class ClientFluidRenderInfo {
             entries.clear();
         }
 
-        private record CachedInfo(Fluid fluid, long pos, Info info) {
+        private record CachedInfo(Fluid fluid, long pos, boolean surface, Info info) {
         }
     }
 }

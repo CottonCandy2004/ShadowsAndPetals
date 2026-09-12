@@ -33,7 +33,6 @@ public final class WindChimeModels {
                     Map.of("windchime0", vane, "particle", vane), null);
         }
     }
-    public static void block(Object... ignored) {}
     public static void item(ItemModelContext<? extends Item> context, SAPItemModelGenerator generator) {
         generator.parentModel(WindChimeColors.itemBodyModelId(), ShadowsAndPetals.asResource("item/wind_chime_body"));
         for (DyeColor color : DyeColor.values()) {
@@ -47,5 +46,4 @@ public final class WindChimeModels {
                     Map.of("windchime0", vane, "particle", vane));
         }
     }
-    public static void item(Object... ignored) {}
 }

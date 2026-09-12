@@ -294,21 +294,4 @@ public final class DecorationBlockModels {
         return value.endsWith(suffix) ? value.substring(0, value.length() - suffix.length()) : value;
     }
 
-    // Kept for source-compatible registry call sites from the 26.x branch.
-    public static void ingotPile(Object... ignored) {}
-    public static void woodenBarrel(Object... ignored) {}
-    public static void vanity(Object... ignored) {}
-    public static void irori(Object... ignored) {}
-    public static void iroriGrill(Object... ignored) {}
-    public static void copperTeapot(Object... ignored) {}
-    public static void iroriGrillCopperTeapot(Object... ignored) {}
-    public static void bedroomLamp(Object... ignored) {}
-    public static void wallLamp(Object... ignored) {}
-    public static void emergencyLamp(Object... ignored) {}
-    public static void recessedLamp(Object... ignored) {}
-    public static void recessedLampComposite(Object... ignored) {}
-    public static void deskLamp(Object... ignored) {}
-    public static void samon(Object... ignored) {}
-    public static void shishiOdoshi(Object... ignored) {}
-    public static void shishiOdoshiPipe(Object... ignored) {}
 }

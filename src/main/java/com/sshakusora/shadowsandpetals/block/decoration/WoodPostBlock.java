@@ -219,15 +219,19 @@ public class WoodPostBlock extends Block implements SimpleWaterloggedBlock {
 
     public enum ConnectionType implements StringRepresentable {
         NONE("none"),
-        IRON_CHAIN("iron_chain", ResourceLocation.withDefaultNamespace("block/iron_chain")),
-        COPPER_CHAIN("copper_chain", ResourceLocation.withDefaultNamespace("block/copper_chain")),
-        EXPOSED_COPPER_CHAIN("exposed_copper_chain", ResourceLocation.withDefaultNamespace("block/exposed_copper_chain")),
-        WEATHERED_COPPER_CHAIN("weathered_copper_chain", ResourceLocation.withDefaultNamespace("block/weathered_copper_chain")),
-        OXIDIZED_COPPER_CHAIN("oxidized_copper_chain", ResourceLocation.withDefaultNamespace("block/oxidized_copper_chain")),
-        WAXED_COPPER_CHAIN("waxed_copper_chain", ResourceLocation.withDefaultNamespace("block/copper_chain")),
-        WAXED_EXPOSED_COPPER_CHAIN("waxed_exposed_copper_chain", ResourceLocation.withDefaultNamespace("block/exposed_copper_chain")),
-        WAXED_WEATHERED_COPPER_CHAIN("waxed_weathered_copper_chain", ResourceLocation.withDefaultNamespace("block/weathered_copper_chain")),
-        WAXED_OXIDIZED_COPPER_CHAIN("waxed_oxidized_copper_chain", ResourceLocation.withDefaultNamespace("block/oxidized_copper_chain")),
+        IRON_CHAIN("iron_chain", ResourceLocation.withDefaultNamespace("block/chain")),
+        // Copper chains are newer than the 1.21.1 target and do not exist in
+        // its vanilla registries/textures. Keep their serialized names for
+        // forward-compatible saves, but do not treat them as renderable
+        // connection types in this version.
+        COPPER_CHAIN("copper_chain"),
+        EXPOSED_COPPER_CHAIN("exposed_copper_chain"),
+        WEATHERED_COPPER_CHAIN("weathered_copper_chain"),
+        OXIDIZED_COPPER_CHAIN("oxidized_copper_chain"),
+        WAXED_COPPER_CHAIN("waxed_copper_chain"),
+        WAXED_EXPOSED_COPPER_CHAIN("waxed_exposed_copper_chain"),
+        WAXED_WEATHERED_COPPER_CHAIN("waxed_weathered_copper_chain"),
+        WAXED_OXIDIZED_COPPER_CHAIN("waxed_oxidized_copper_chain"),
         OTHER_POST("other_post");
 
         private static final Map<String, ConnectionType> BY_BLOCK_PATH = Arrays.stream(values())

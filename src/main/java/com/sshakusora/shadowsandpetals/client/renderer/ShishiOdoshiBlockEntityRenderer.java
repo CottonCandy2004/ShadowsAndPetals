@@ -22,9 +22,6 @@ public class ShishiOdoshiBlockEntityRenderer implements BlockEntityRenderer<Shis
     public void render(ShishiOdoshiBlockEntity blockEntity, float partialTick, PoseStack poseStack,
                        MultiBufferSource buffer, int packedLight, int packedOverlay) {
         BlockState state = blockEntity.getBlockState();
-        LegacyBlockEntityRenderSupport.renderBlock(
-                blockRenderer, state, poseStack, buffer, packedLight, packedOverlay);
-
         poseStack.pushPose();
         poseStack.translate(0.5D, 0.0D, 0.5D);
         poseStack.mulPose(Axis.YP.rotationDegrees(-state.getValue(ShishiOdoshiBlock.FACING).toYRot() + 180.0F));

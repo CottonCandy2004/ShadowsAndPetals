@@ -1,3 +1,55 @@
 package com.sshakusora.shadowsandpetals.client.model.registry;
 
-// Client model hooks are intentionally inert on the 1.21.1 renderer API.
+import com.sshakusora.shadowsandpetals.client.model.builder.RegStandaloneBlockModelBuilder;
+import com.sshakusora.shadowsandpetals.client.model.builder.RegStandaloneBlockModelSetBuilder;
+import net.neoforged.neoforge.client.event.ModelEvent;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+/** Client-only registry for additional standalone baked models. */
+public final class ClientModelRegistry {
+    private static final List<ClientModelEntry> ENTRIES = new ArrayList<>();
+
+    private ClientModelRegistry() {
+    }
+
+    public static RegStandaloneBlockModelBuilder blockState(String name) {
+        return new RegStandaloneBlockModelBuilder(name);
+    }
+
+    public static <K> RegStandaloneBlockModelSetBuilder<K> blockStateSet(String name) {
+        return new RegStandaloneBlockModelSetBuilder<>(name);
+    }
+
+    public static <E extends Enum<E>> RegStandaloneBlockModelSetBuilder<E> enumBlockStateSet(
+            String name, Class<E> enumType) {
+        return ClientModelRegistry.<E>blockStateSet(name)
+                .keys(() -> List.of(enumType.getEnumConstants()));
+    }
+
+    public static StandaloneBlockModel register(StandaloneBlockModel model) {
+        ENTRIES.add(model);
+        return model;
+    }
+
+    public static <K> StandaloneBlockModelSet<K> register(StandaloneBlockModelSet<K> models) {
+        ENTRIES.add(models);
+        return models;
+    }
+
+    public static void registerAdditionalModels(ModelEvent.RegisterAdditional event) {
+        Set<net.minecraft.client.resources.model.ModelResourceLocation> registeredIds = new HashSet<>();
+        for (ClientModelEntry entry : ENTRIES) {
+            entry.registerModels(event, registeredIds);
+        }
+    }
+
+    public static void cacheBakedModels(ModelEvent.BakingCompleted event) {
+        for (ClientModelEntry entry : ENTRIES) {
+            entry.cacheModels(event);
+        }
+    }
+}

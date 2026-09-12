@@ -24,7 +24,6 @@ public final class WindowPaneModels {
         registerStates(context.get(), generator, model);
         StandardBlockModels.parentBlockItem(context.get(), generator, model);
     }
-    public static void block(Object... ignored) {}
     public static void redLacquered(BlockModelContext<? extends WindowPaneBlock> context,
                                     SAPBlockModelGenerator generator) {
         ResourceLocation model = generator.modLoc("block/window_pane/red");
@@ -44,5 +43,4 @@ public final class WindowPaneModels {
                     .rotationX(x).rotationY(y).build();
         });
     }
-    public static void redLacquered(Object... ignored) {}
 }

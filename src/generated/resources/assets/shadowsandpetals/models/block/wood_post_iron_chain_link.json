@@ -459,7 +459,7 @@
   ],
   "render_type": "minecraft:cutout",
   "textures": {
-    "all": "minecraft:block/iron_chain",
-    "particle": "minecraft:block/iron_chain"
+    "all": "minecraft:block/chain",
+    "particle": "minecraft:block/chain"
   }
 }

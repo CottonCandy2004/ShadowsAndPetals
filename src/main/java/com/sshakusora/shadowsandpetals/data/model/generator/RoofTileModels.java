@@ -39,7 +39,6 @@ public final class RoofTileModels {
         StandardBlockModels.parentBlockItem(block, generator, generator.blockModelId(block));
     }
 
-    public static void base(Object... ignored) {}
 
     public static void shapes(BlockModelContext context, SAPBlockModelGenerator generator,
                              net.minecraft.world.item.DyeColor color) {
@@ -107,8 +106,6 @@ public final class RoofTileModels {
         }, StairBlock.WATERLOGGED);
         generator.suggestItemModel(stairs.asItem(), straight.getLocation());
     }
-
-    public static void shapes(Object... ignored) {}
 
     private static ModelFile generatedModel(SAPBlockModelGenerator generator, Block block,
                                              String parentPath, String modelSuffix,
