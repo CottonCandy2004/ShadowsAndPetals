@@ -1,94 +1,94 @@
 {
   "variants": {
     "facing=east,type=bottom,waterlogged=false": {
-      "model": "shadowsandpetals:block/red_roof_tile_slab"
+      "model": "shadowsandpetals:block/red_roof_tile_slab",
+      "y": 90
     },
     "facing=east,type=bottom,waterlogged=true": {
-      "model": "shadowsandpetals:block/red_roof_tile_slab"
+      "model": "shadowsandpetals:block/red_roof_tile_slab",
+      "y": 90
     },
     "facing=east,type=double,waterlogged=false": {
-      "model": "shadowsandpetals:block/red_roof_tile"
+      "model": "shadowsandpetals:block/red_roof_tile",
+      "y": 90
     },
     "facing=east,type=double,waterlogged=true": {
-      "model": "shadowsandpetals:block/red_roof_tile"
+      "model": "shadowsandpetals:block/red_roof_tile",
+      "y": 90
     },
     "facing=east,type=top,waterlogged=false": {
-      "model": "shadowsandpetals:block/red_roof_tile_slab_top"
+      "model": "shadowsandpetals:block/red_roof_tile_slab_top",
+      "y": 90
     },
     "facing=east,type=top,waterlogged=true": {
-      "model": "shadowsandpetals:block/red_roof_tile_slab_top"
+      "model": "shadowsandpetals:block/red_roof_tile_slab_top",
+      "y": 90
     },
     "facing=north,type=bottom,waterlogged=false": {
-      "model": "shadowsandpetals:block/red_roof_tile_slab",
-      "y": 270
+      "model": "shadowsandpetals:block/red_roof_tile_slab"
     },
     "facing=north,type=bottom,waterlogged=true": {
-      "model": "shadowsandpetals:block/red_roof_tile_slab",
-      "y": 270
+      "model": "shadowsandpetals:block/red_roof_tile_slab"
     },
     "facing=north,type=double,waterlogged=false": {
-      "model": "shadowsandpetals:block/red_roof_tile",
-      "y": 270
+      "model": "shadowsandpetals:block/red_roof_tile"
     },
     "facing=north,type=double,waterlogged=true": {
-      "model": "shadowsandpetals:block/red_roof_tile",
-      "y": 270
+      "model": "shadowsandpetals:block/red_roof_tile"
     },
     "facing=north,type=top,waterlogged=false": {
-      "model": "shadowsandpetals:block/red_roof_tile_slab_top",
-      "y": 270
+      "model": "shadowsandpetals:block/red_roof_tile_slab_top"
     },
     "facing=north,type=top,waterlogged=true": {
-      "model": "shadowsandpetals:block/red_roof_tile_slab_top",
-      "y": 270
+      "model": "shadowsandpetals:block/red_roof_tile_slab_top"
     },
     "facing=south,type=bottom,waterlogged=false": {
       "model": "shadowsandpetals:block/red_roof_tile_slab",
-      "y": 90
+      "y": 180
     },
     "facing=south,type=bottom,waterlogged=true": {
       "model": "shadowsandpetals:block/red_roof_tile_slab",
-      "y": 90
+      "y": 180
     },
     "facing=south,type=double,waterlogged=false": {
       "model": "shadowsandpetals:block/red_roof_tile",
-      "y": 90
+      "y": 180
     },
     "facing=south,type=double,waterlogged=true": {
       "model": "shadowsandpetals:block/red_roof_tile",
-      "y": 90
+      "y": 180
     },
     "facing=south,type=top,waterlogged=false": {
       "model": "shadowsandpetals:block/red_roof_tile_slab_top",
-      "y": 90
+      "y": 180
     },
     "facing=south,type=top,waterlogged=true": {
       "model": "shadowsandpetals:block/red_roof_tile_slab_top",
-      "y": 90
+      "y": 180
     },
     "facing=west,type=bottom,waterlogged=false": {
       "model": "shadowsandpetals:block/red_roof_tile_slab",
-      "y": 180
+      "y": 270
     },
     "facing=west,type=bottom,waterlogged=true": {
       "model": "shadowsandpetals:block/red_roof_tile_slab",
-      "y": 180
+      "y": 270
     },
     "facing=west,type=double,waterlogged=false": {
       "model": "shadowsandpetals:block/red_roof_tile",
-      "y": 180
+      "y": 270
     },
     "facing=west,type=double,waterlogged=true": {
       "model": "shadowsandpetals:block/red_roof_tile",
-      "y": 180
+      "y": 270
     },
     "facing=west,type=top,waterlogged=false": {
       "model": "shadowsandpetals:block/red_roof_tile_slab_top",
-      "y": 180
+      "y": 270
     },
     "facing=west,type=top,waterlogged=true": {
       "model": "shadowsandpetals:block/red_roof_tile_slab_top",
-      "y": 180
+      "y": 270
     }
   }
 }

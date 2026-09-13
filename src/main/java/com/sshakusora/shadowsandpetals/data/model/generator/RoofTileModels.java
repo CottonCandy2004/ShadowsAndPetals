@@ -33,7 +33,7 @@ public final class RoofTileModels {
                 Map.of("all", texture));
         generator.provider().getVariantBuilder(block).forAllStates(state -> ConfiguredModel.builder()
                 .modelFile(model)
-                .rotationY(horizontalRotation(state.getValue(BlockStateProperties.HORIZONTAL_FACING)))
+                .rotationY(facingRotation(state.getValue(BlockStateProperties.HORIZONTAL_FACING)))
                 .build());
         StandardBlockModels.parentBlockItem(block, generator, generator.blockModelId(block));
     }
@@ -54,7 +54,7 @@ public final class RoofTileModels {
             SlabType type = state.getValue(BlockStateProperties.SLAB_TYPE);
             ModelFile model = type == SlabType.BOTTOM ? slabBottom : type == SlabType.TOP ? slabTop : full;
             return ConfiguredModel.builder().modelFile(model)
-                    .rotationY(horizontalRotation(state.getValue(RoofTileSlabBlock.FACING)))
+                    .rotationY(facingRotation(state.getValue(RoofTileSlabBlock.FACING)))
                     .build();
         });
         generator.suggestItemModel(slab.asItem(), slabBottom.getLocation());
@@ -79,7 +79,7 @@ public final class RoofTileModels {
                 };
             }
             return ConfiguredModel.builder().modelFile(model)
-                    .rotationY(horizontalRotation(facing))
+                    .rotationY(facingRotation(facing))
                     .build();
         });
         generator.suggestItemModel(vertical.asItem(), verticalNorth.getLocation());
@@ -88,18 +88,22 @@ public final class RoofTileModels {
         ModelFile straight = generatedModel(generator, stairs, "block/template/roof_tile_stairs", "", texture);
         ModelFile outer = generatedModel(generator, stairs, "block/template/roof_tile_outer_stairs", "_outer", texture);
         generator.provider().getVariantBuilder(stairs).forAllStatesExcept(state -> {
+            Half half = state.getValue(StairBlock.HALF);
             StairsShape shape = state.getValue(StairBlock.SHAPE);
             ModelFile model = switch (shape) {
                 case STRAIGHT -> straight;
                 case INNER_LEFT, INNER_RIGHT -> inner;
                 case OUTER_LEFT, OUTER_RIGHT -> outer;
             };
-            int y = horizontalRotation(state.getValue(StairBlock.FACING));
+            int y = stairRotation(state.getValue(StairBlock.FACING));
             if (shape == StairsShape.INNER_LEFT || shape == StairsShape.OUTER_LEFT) {
                 y = (y + 270) % 360;
             }
+            if (shape != StairsShape.STRAIGHT && half == Half.TOP) {
+                y = (y + 90) % 360;
+            }
             return ConfiguredModel.builder().modelFile(model)
-                    .rotationX(state.getValue(StairBlock.HALF) == Half.TOP ? 180 : 0)
+                    .rotationX(half == Half.TOP ? 180 : 0)
                     .rotationY(y)
                     .build();
         }, StairBlock.WATERLOGGED);
@@ -116,7 +120,17 @@ public final class RoofTileModels {
                 "side", texture));
     }
 
-    private static int horizontalRotation(Direction facing) {
+    private static int facingRotation(Direction facing) {
+        return switch (facing) {
+            case NORTH -> 0;
+            case EAST -> 90;
+            case SOUTH -> 180;
+            case WEST -> 270;
+            default -> throw new IllegalArgumentException("Roof tile facing must be horizontal: " + facing);
+        };
+    }
+
+    private static int stairRotation(Direction facing) {
         return switch (facing) {
             case EAST -> 0;
             case SOUTH -> 90;

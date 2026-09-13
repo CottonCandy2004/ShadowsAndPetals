@@ -19,21 +19,21 @@
     },
     "facing=east,half=top,shape=inner_left": {
       "model": "shadowsandpetals:block/yellow_roof_tile_stairs_inner",
-      "x": 180,
-      "y": 270
+      "x": 180
     },
     "facing=east,half=top,shape=inner_right": {
       "model": "shadowsandpetals:block/yellow_roof_tile_stairs_inner",
-      "x": 180
+      "x": 180,
+      "y": 90
     },
     "facing=east,half=top,shape=outer_left": {
       "model": "shadowsandpetals:block/yellow_roof_tile_stairs_outer",
-      "x": 180,
-      "y": 270
+      "x": 180
     },
     "facing=east,half=top,shape=outer_right": {
       "model": "shadowsandpetals:block/yellow_roof_tile_stairs_outer",
-      "x": 180
+      "x": 180,
+      "y": 90
     },
     "facing=east,half=top,shape=straight": {
       "model": "shadowsandpetals:block/yellow_roof_tile_stairs",
@@ -62,22 +62,20 @@
     "facing=north,half=top,shape=inner_left": {
       "model": "shadowsandpetals:block/yellow_roof_tile_stairs_inner",
       "x": 180,
-      "y": 180
+      "y": 270
     },
     "facing=north,half=top,shape=inner_right": {
       "model": "shadowsandpetals:block/yellow_roof_tile_stairs_inner",
-      "x": 180,
-      "y": 270
+      "x": 180
     },
     "facing=north,half=top,shape=outer_left": {
       "model": "shadowsandpetals:block/yellow_roof_tile_stairs_outer",
       "x": 180,
-      "y": 180
+      "y": 270
     },
     "facing=north,half=top,shape=outer_right": {
       "model": "shadowsandpetals:block/yellow_roof_tile_stairs_outer",
-      "x": 180,
-      "y": 270
+      "x": 180
     },
     "facing=north,half=top,shape=straight": {
       "model": "shadowsandpetals:block/yellow_roof_tile_stairs",
@@ -104,21 +102,23 @@
     },
     "facing=south,half=top,shape=inner_left": {
       "model": "shadowsandpetals:block/yellow_roof_tile_stairs_inner",
-      "x": 180
+      "x": 180,
+      "y": 90
     },
     "facing=south,half=top,shape=inner_right": {
       "model": "shadowsandpetals:block/yellow_roof_tile_stairs_inner",
       "x": 180,
-      "y": 90
+      "y": 180
     },
     "facing=south,half=top,shape=outer_left": {
       "model": "shadowsandpetals:block/yellow_roof_tile_stairs_outer",
-      "x": 180
+      "x": 180,
+      "y": 90
     },
     "facing=south,half=top,shape=outer_right": {
       "model": "shadowsandpetals:block/yellow_roof_tile_stairs_outer",
       "x": 180,
-      "y": 90
+      "y": 180
     },
     "facing=south,half=top,shape=straight": {
       "model": "shadowsandpetals:block/yellow_roof_tile_stairs",
@@ -148,22 +148,22 @@
     "facing=west,half=top,shape=inner_left": {
       "model": "shadowsandpetals:block/yellow_roof_tile_stairs_inner",
       "x": 180,
-      "y": 90
+      "y": 180
     },
     "facing=west,half=top,shape=inner_right": {
       "model": "shadowsandpetals:block/yellow_roof_tile_stairs_inner",
       "x": 180,
-      "y": 180
+      "y": 270
     },
     "facing=west,half=top,shape=outer_left": {
       "model": "shadowsandpetals:block/yellow_roof_tile_stairs_outer",
       "x": 180,
-      "y": 90
+      "y": 180
     },
     "facing=west,half=top,shape=outer_right": {
       "model": "shadowsandpetals:block/yellow_roof_tile_stairs_outer",
       "x": 180,
-      "y": 180
+      "y": 270
     },
     "facing=west,half=top,shape=straight": {
       "model": "shadowsandpetals:block/yellow_roof_tile_stairs",
