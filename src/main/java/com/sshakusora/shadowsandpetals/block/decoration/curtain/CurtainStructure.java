@@ -135,6 +135,9 @@ record CurtainStructure(
                 .map(level::getBlockState)
                 .filter(state -> state.getBlock() == anchorState.getBlock())
                 .map(state -> state.getValue(CurtainBlock.OPEN)), open);
+        int animationFlags = level.isClientSide()
+                ? Block.UPDATE_ALL_IMMEDIATE
+                : Block.UPDATE_ALL;
 
         for (BlockPos member : members) {
             BlockState state = level.getBlockState(member);
@@ -147,7 +150,7 @@ record CurtainStructure(
                 recordClock(level, member, gameTime, open);
                 level.setBlock(member, updated
                         .setValue(CurtainBlock.OPEN, open)
-                        .setValue(CurtainBlock.ANIMATING, true), Block.UPDATE_ALL);
+                        .setValue(CurtainBlock.ANIMATING, true), animationFlags);
                 level.scheduleTick(member, state.getBlock(), CurtainBlock.ANIMATION_TICKS);
             } else if (updated != state) {
                 // Keep OPEN, ANIMATING and the existing animation clock when

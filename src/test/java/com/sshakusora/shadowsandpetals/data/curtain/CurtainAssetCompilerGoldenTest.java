@@ -12,6 +12,7 @@ import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Locale;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -53,6 +54,47 @@ class CurtainAssetCompilerGoldenTest {
         assertDoesNotThrow(
                 () -> new CurtainAssetCompiler(projectRoot()).compile(),
                 "curated large-curtain open masters must preserve baked face UVs");
+    }
+
+    @Test
+    void largeCurtainStaticParticlesUseFabricColor() {
+        CurtainAssetCompiler compiler = new CurtainAssetCompiler(projectRoot());
+        Map<String, JsonElement> actual = compiler.compile();
+
+        for (String side : List.of("right", "left")) {
+            for (String pose : List.of("closed", "open")) {
+                for (String half : List.of("lower", "upper")) {
+                    for (String column : List.of("inner", "outer")) {
+                        String quadrant = half + "_" + column;
+                        String base = "models/block/large_curtain/static/"
+                                + side + "/" + pose + "/";
+                        String whitePath = base + "white/" + quadrant + ".json";
+                        JsonObject whiteMaster = compiler.readExistingObject(whitePath);
+                        assertEquals(
+                                CurtainAssetCompiler.CURTAIN_WHITE_TEXTURE,
+                                whiteMaster.getAsJsonObject("textures")
+                                        .get("particle").getAsString(),
+                                whitePath + " must use the white curtain texture for particles"
+                        );
+
+                        for (String color : CurtainAssetCompiler.COLORS) {
+                            if ("white".equals(color)) {
+                                continue;
+                            }
+                            String path = base + color + "/" + quadrant + ".json";
+                            JsonElement generated = actual.get(path);
+                            assertNotNull(generated, "missing generated model: " + path);
+                            assertEquals(
+                                    CurtainAssetCompiler.MOD_ID + ":block/curtain/" + color,
+                                    generated.getAsJsonObject().getAsJsonObject("textures")
+                                            .get("particle").getAsString(),
+                                    path + " must use its dyed curtain texture for particles"
+                            );
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private static Path projectRoot() {
@@ -117,4 +159,3 @@ class CurtainAssetCompilerGoldenTest {
         return value.toString();
     }
 }
-

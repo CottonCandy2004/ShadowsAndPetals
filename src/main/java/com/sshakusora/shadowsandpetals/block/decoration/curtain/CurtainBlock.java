@@ -212,7 +212,7 @@ public class CurtainBlock extends BaseEntityBlock {
     protected RenderShape getRenderShape(BlockState state) {
         // Static chunk-mesh rendering outside the animation window; the
         // block-entity renderer takes over only while ANIMATING.
-        return state.getValue(ANIMATING) ? RenderShape.INVISIBLE : RenderShape.MODEL;
+        return state.getValue(ANIMATING) ? RenderShape.ENTITYBLOCK_ANIMATED : RenderShape.MODEL;
     }
 
     @Override
@@ -301,9 +301,6 @@ public class CurtainBlock extends BaseEntityBlock {
             return InteractionResult.PASS;
         }
         boolean open = !state.getValue(OPEN);
-        if (level.isClientSide()) {
-            return InteractionResult.SUCCESS;
-        }
         togglePair(level, pos, state, open);
         return InteractionResult.SUCCESS;
     }

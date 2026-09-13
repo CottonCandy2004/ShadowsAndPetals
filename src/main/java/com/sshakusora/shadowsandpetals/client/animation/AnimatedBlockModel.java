@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.client.RenderTypeHelper;
 import net.neoforged.neoforge.client.model.data.ModelData;
 
 import java.util.ArrayList;
@@ -87,7 +88,7 @@ public final class AnimatedBlockModel {
             RenderType renderType = binding.renderType();
             blockRenderer.getModelRenderer().renderModel(
                     poseStack.last(),
-                    buffers.getBuffer(renderType),
+                    buffers.getBuffer(RenderTypeHelper.getEntityRenderType(renderType, false)),
                     tintState,
                     model,
                     1.0F,
