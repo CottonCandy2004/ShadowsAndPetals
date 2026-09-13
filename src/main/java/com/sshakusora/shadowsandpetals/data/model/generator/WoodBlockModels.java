@@ -25,13 +25,11 @@ public final class WoodBlockModels {
         RotatedPillarBlock wood = set.wood().get();
         RotatedPillarBlock strippedWood = set.strippedWood().get();
         ResourceLocation logSide = provider.blockTexture(log);
-        ResourceLocation logTop = logSide.withSuffix("_top");
         ResourceLocation strippedSide = provider.blockTexture(strippedLog);
-        ResourceLocation strippedTop = strippedSide.withSuffix("_top");
         provider.logBlock(log);
         provider.logBlock(strippedLog);
-        provider.axisBlock(wood, logSide, logTop);
-        provider.axisBlock(strippedWood, strippedSide, strippedTop);
+        provider.axisBlock(wood, logSide, logSide);
+        provider.axisBlock(strippedWood, strippedSide, strippedSide);
 
         Block planks = set.planks().get();
         ResourceLocation plankTexture = provider.blockTexture(planks);
