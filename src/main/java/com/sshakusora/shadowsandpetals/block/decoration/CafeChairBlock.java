@@ -42,7 +42,6 @@ import java.util.Map;
 
 public class CafeChairBlock extends AbstractSeatBlock {
     public static final MapCodec<CafeChairBlock> CODEC = simpleCodec(CafeChairBlock::new);
-    public static final String DYE_HINT_PREFIX_KEY = "block.shadowsandpetals.cafe_chair.dye_hint";
     private static final double SEAT_HEIGHT = 0.625D;
     private static final VoxelShape SHAPE = Shapes.or(
             Block.box(7.0D, 0.0D, 7.0D, 9.0D, 7.0D, 9.0D),
@@ -206,8 +205,10 @@ public class CafeChairBlock extends AbstractSeatBlock {
         super.fallOn(level, state, pos, entity, fallDistance * 0.5F);
     }
 
-    public void updateEntityMovementAfterFallOn(BlockGetter level, Entity entity) {
+    @Override
+    public void updateEntityAfterFallOn(BlockGetter level, Entity entity) {
         if (entity.isSuppressingBounce()) {
+            super.updateEntityAfterFallOn(level, entity);
             return;
         }
         Vec3 deltaMovement = entity.getDeltaMovement();

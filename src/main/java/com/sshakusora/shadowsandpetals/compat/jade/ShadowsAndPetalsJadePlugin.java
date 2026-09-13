@@ -1,6 +1,5 @@
 package com.sshakusora.shadowsandpetals.compat.jade;
 
-import com.sshakusora.shadowsandpetals.block.decoration.CafeChairBlock;
 import com.sshakusora.shadowsandpetals.block.decoration.RecessedLampCompositeBlock;
 import com.sshakusora.shadowsandpetals.block.decoration.irori.IroriBlock;
 import net.minecraft.world.level.block.Block;
@@ -20,10 +19,6 @@ public final class ShadowsAndPetalsJadePlugin implements IWailaPlugin {
 
     @Override
     public void registerClient(IWailaClientRegistration registration) {
-        // registerBlockComponent automatically creates the provider toggle in
-        // Jade 15; adding the same keys manually causes duplicate-config
-        // failures during client plugin loading.
-        registration.registerBlockComponent(CafeChairBlockComponentProvider.INSTANCE, CafeChairBlock.class);
         registration.registerBlockComponent(IroriBurnTimeComponentProvider.INSTANCE, IroriBlock.class);
         registration.registerBlockComponent(SandExcavationCooldownComponentProvider.INSTANCE, Block.class);
         registration.registerBlockComponent(new RecessedLampHarvestComponentProvider(registration), RecessedLampCompositeBlock.class);
