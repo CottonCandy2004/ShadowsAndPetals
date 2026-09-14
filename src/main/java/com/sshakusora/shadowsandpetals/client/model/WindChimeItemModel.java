@@ -3,16 +3,17 @@ package com.sshakusora.shadowsandpetals.client.model;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.sshakusora.shadowsandpetals.item.chime.WindChimeColors;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.client.resources.model.ModelResourceLocation;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
+import org.jetbrains.annotations.Nullable;
 
 /** 1.21.1 custom item renderer for independently dyeable wind chimes. */
 public final class WindChimeItemModel implements IClientItemExtensions {
@@ -30,8 +31,8 @@ public final class WindChimeItemModel implements IClientItemExtensions {
 
     private static final class Renderer extends BlockEntityWithoutLevelRenderer {
         private Renderer(
-                net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher dispatcher,
-                net.minecraft.client.model.geom.EntityModelSet entityModels
+                BlockEntityRenderDispatcher dispatcher,
+                EntityModelSet entityModels
         ) {
             super(dispatcher, entityModels);
         }
@@ -48,11 +49,11 @@ public final class WindChimeItemModel implements IClientItemExtensions {
             WindChimeColors colors = WindChimeColors.fromStack(stack);
             ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
             renderModel(itemRenderer, stack, poseStack, buffers, packedLight, packedOverlay,
-                    WindChimeColors.itemBodyModelId());
+                    BlockModelRegistry.WIND_CHIME_ITEM_BODY.get());
             renderModel(itemRenderer, stack, poseStack, buffers, packedLight, packedOverlay,
-                    WindChimeColors.itemRibbonModelId(colors.ribbon()));
+                    BlockModelRegistry.WIND_CHIME_ITEM_RIBBON.get(colors.ribbon()));
             renderModel(itemRenderer, stack, poseStack, buffers, packedLight, packedOverlay,
-                    WindChimeColors.itemVaneModelId(colors.vane()));
+                    BlockModelRegistry.WIND_CHIME_ITEM_VANE.get(colors.vane()));
         }
 
         private static void renderModel(
@@ -62,11 +63,9 @@ public final class WindChimeItemModel implements IClientItemExtensions {
                 MultiBufferSource buffers,
                 int packedLight,
                 int packedOverlay,
-                ResourceLocation modelId
+                @Nullable BakedModel model
         ) {
-            BakedModel model = Minecraft.getInstance().getModelManager()
-                    .getModel(ModelResourceLocation.inventory(modelId));
-            if (model == Minecraft.getInstance().getModelManager().getMissingModel()) {
+            if (model == null) {
                 return;
             }
             for (RenderType renderType : model.getRenderTypes(stack, stack.hasFoil())) {

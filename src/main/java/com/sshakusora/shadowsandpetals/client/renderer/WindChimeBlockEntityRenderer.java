@@ -39,6 +39,9 @@ public class WindChimeBlockEntityRenderer implements BlockEntityRenderer<WindChi
         if (blockEntity.getLevel() == null) {
             return;
         }
+        int vaneLight = LegacyBlockEntityRenderSupport.blockLight(
+                blockEntity.getLevel(), blockEntity.getBlockPos().below()
+        );
         WindChimeColors colors = blockEntity.getColors();
         long time = blockEntity.getLevel().getGameTime();
         MotionProfile profile = MotionProfile.create(blockEntity.getBlockPos().asLong());
@@ -99,7 +102,7 @@ public class WindChimeBlockEntityRenderer implements BlockEntityRenderer<WindChi
                 blockEntity.getBlockState(), poseStack, buffer, packedLight, packedOverlay);
         LegacyBlockEntityRenderSupport.renderStandalone(
                 blockRenderer, WindChimeColors.blockVaneModelId(colors.vane()),
-                blockEntity.getBlockState(), poseStack, buffer, packedLight, packedOverlay);
+                blockEntity.getBlockState(), poseStack, buffer, vaneLight, packedOverlay);
         poseStack.popPose();
     }
 

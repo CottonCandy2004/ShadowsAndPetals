@@ -90,6 +90,23 @@ public final class BlockModelRegistry {
             .model(WindChimeColors::blockVaneModelId)
             .register();
 
+    public static final StandaloneBlockModel WIND_CHIME_ITEM_BODY = ClientModelRegistry
+            .blockState("wind_chime_item_body")
+            .model(WindChimeColors.itemBodyModelId())
+            .register();
+
+    public static final StandaloneBlockModelSet<DyeColor> WIND_CHIME_ITEM_RIBBON = ClientModelRegistry
+            .enumBlockStateSet("wind_chime_item_ribbon", DyeColor.class)
+            .keyPath(DyeColor::getName)
+            .model(WindChimeColors::itemRibbonModelId)
+            .register();
+
+    public static final StandaloneBlockModelSet<DyeColor> WIND_CHIME_ITEM_VANE = ClientModelRegistry
+            .enumBlockStateSet("wind_chime_item_vane", DyeColor.class)
+            .keyPath(DyeColor::getName)
+            .model(WindChimeColors::itemVaneModelId)
+            .register();
+
     public static final StandaloneBlockModel COPPER_TEAPOT_LID = ClientModelRegistry
             .blockState("copper_teapot_lid")
             .model(ShadowsAndPetals.asResource("block/teapot/copper/lid"))

@@ -36,7 +36,7 @@ final class LegacyBlockEntityRenderSupport {
     static void renderStandalone(
             BlockRenderDispatcher dispatcher,
             ResourceLocation modelId,
-            @Nullable BlockState tintState,
+            BlockState tintState,
             PoseStack poseStack,
             MultiBufferSource buffers,
             int light,
@@ -47,12 +47,7 @@ final class LegacyBlockEntityRenderSupport {
         if (model == Minecraft.getInstance().getModelManager().getMissingModel()) {
             return;
         }
-        VertexConsumer consumer = buffers.getBuffer(RenderType.cutout());
-        dispatcher.getModelRenderer().renderModel(
-                poseStack.last(), consumer, tintState, model,
-                1.0F, 1.0F, 1.0F, light, overlay,
-                ModelData.EMPTY, RenderType.cutout()
-        );
+        renderModel(dispatcher, model, tintState, poseStack, buffers, light, overlay);
     }
 
     static void renderModel(

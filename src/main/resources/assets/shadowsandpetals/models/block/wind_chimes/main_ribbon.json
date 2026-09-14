@@ -1,6 +1,7 @@
 {
 	"format_version": "1.9.0",
 	"credit": "Made with Blockbench",
+	"render_type": "cutout",
 	"textures": {
 		"2": "shadowsandpetals:block/wind_chime/ribbon/pink",
 		"particle": "shadowsandpetals:block/wind_chime/ribbon/pink"
