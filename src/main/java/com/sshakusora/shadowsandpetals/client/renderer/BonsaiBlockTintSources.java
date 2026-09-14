@@ -18,18 +18,22 @@ import org.jetbrains.annotations.Nullable;
 
 /** Legacy block-color bridge for the tint indices assigned to bonsai quads. */
 public final class BonsaiBlockTintSources {
-    private static final BlockColor TRUNK = new LayerColor(true);
-    private static final BlockColor LEAVES = new LayerColor(false);
+    /**
+     * 1.21.1 stores one block-color provider per block, not one provider per
+     * tint index.  The provider therefore has to dispatch the two bonsai
+     * layers itself; registering two providers for the same block would make
+     * the second registration replace the first one.
+     */
+    private static final BlockColor BONSAI = new LayerColor();
 
     private BonsaiBlockTintSources() {
     }
 
     public static void register(RegisterColorHandlersEvent.Block event) {
-        event.register(TRUNK, BlockRegistry.BONSAI.get());
-        event.register(LEAVES, BlockRegistry.BONSAI.get());
+        event.register(BONSAI, BlockRegistry.BONSAI.get());
     }
 
-    private record LayerColor(boolean trunk) implements BlockColor {
+    private record LayerColor() implements BlockColor {
         @Override
         public int getColor(
                 BlockState state,
@@ -37,6 +41,11 @@ public final class BonsaiBlockTintSources {
                 @Nullable BlockPos pos,
                 int tintIndex
         ) {
+            boolean trunk = tintIndex == BonsaiTreeGeometryCache.TRUNK_TINT_INDEX;
+            boolean leaves = tintIndex == BonsaiTreeGeometryCache.LEAVES_TINT_INDEX;
+            if (!trunk && !leaves) {
+                return 0xFFFFFFFF;
+            }
             if (level == null || pos == null) {
                 return 0xFFFFFFFF;
             }
@@ -46,7 +55,7 @@ public final class BonsaiBlockTintSources {
             }
             BonsaiBlockEntity.RenderData data = bonsai.getModelData()
                     .get(BonsaiBlockEntity.RENDER_DATA);
-            if (data == null || !data.planted() || (!trunk && data.dead())) {
+            if (data == null || !data.planted() || (leaves && data.dead())) {
                 return 0xFFFFFFFF;
             }
             ResourceLocation blockId = trunk ? data.trunkBlockId() : data.leavesBlockId();

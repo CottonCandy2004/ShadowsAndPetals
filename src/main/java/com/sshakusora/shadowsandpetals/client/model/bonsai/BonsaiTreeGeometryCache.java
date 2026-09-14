@@ -31,7 +31,7 @@ public final class BonsaiTreeGeometryCache {
     public static final int TRUNK_TINT_INDEX = 0;
     public static final int LEAVES_TINT_INDEX = 1;
 
-    private static final Map<BonsaiPartCacheKey, List<BakedQuad>> PART_CACHE =
+    private static final Map<BonsaiPartCacheKey, TreeQuads> PART_CACHE =
             new ConcurrentHashMap<>();
     private static final Map<ResourceLocation, Integer> TARGET_TINT_INDICES =
             new ConcurrentHashMap<>();
@@ -48,6 +48,20 @@ public final class BonsaiTreeGeometryCache {
             BonsaiBlockEntity.RenderData renderData,
             @Nullable RenderType renderType
     ) {
+        return getTreeParts(model, state, data, renderData).all();
+    }
+
+    /**
+     * Returns tree quads split by material layer.  The split is retained even
+     * when a target model has no tint index, because 1.21.1 carries render
+     * layers at model level rather than in {@link BakedQuad}.
+     */
+    public static TreeQuads getTreeParts(
+            BakedModel model,
+            BlockState state,
+            ModelData data,
+            BonsaiBlockEntity.RenderData renderData
+    ) {
         BonsaiPartCacheKey key = BonsaiPartCacheKey.forState(
                 renderData.shape(),
                 renderData.planted(),
@@ -55,56 +69,56 @@ public final class BonsaiTreeGeometryCache {
                 renderData.trunkBlockId(),
                 renderData.leavesBlockId()
         );
-        return PART_CACHE.computeIfAbsent(key, ignored -> buildTreeQuads(model, state, data, renderData, renderType));
+        return PART_CACHE.computeIfAbsent(
+                key,
+                ignored -> buildTreeQuads(model, state, data, renderData)
+        );
     }
 
-    private static List<BakedQuad> buildTreeQuads(
+    private static TreeQuads buildTreeQuads(
             BakedModel model,
             BlockState state,
             ModelData data,
-            BonsaiBlockEntity.RenderData renderData,
-            @Nullable RenderType renderType
+            BonsaiBlockEntity.RenderData renderData
     ) {
         List<BakedQuad> source = new ArrayList<>();
         RandomSource random = RandomSource.create(0x534150L);
         for (Direction direction : Direction.values()) {
             source.addAll(BakedModelSupport.getQuads(
-                    model, state, direction, random, data, renderType));
+                    model, state, direction, random, data, null));
         }
-        source.addAll(BakedModelSupport.getQuads(model, state, null, random, data, renderType));
+        source.addAll(BakedModelSupport.getQuads(model, state, null, random, data, null));
 
         TextureAtlasSprite logSprite = getBaseLogSprite();
         TextureAtlasSprite leavesSprite = getBaseLeavesSprite();
         TextureAtlasSprite trunkTarget = targetSprite(renderData.trunkBlockId());
         TextureAtlasSprite leavesTarget = renderData.dead()
                 ? null : targetSprite(renderData.leavesBlockId());
+        int trunkTintIndex = getTargetTintIndex(renderData.trunkBlockId());
+        int leavesTintIndex = getTargetTintIndex(renderData.leavesBlockId());
 
-        List<BakedQuad> result = new ArrayList<>(source.size());
+        List<BakedQuad> trunk = new ArrayList<>();
+        List<BakedQuad> leaves = new ArrayList<>();
         for (BakedQuad quad : source) {
-            BakedQuad remapped = remapQuad(
-                    quad, logSprite, trunkTarget, leavesSprite, leavesTarget);
-            result.add(remapped);
+            if (spritesMatch(quad.getSprite(), logSprite) && trunkTarget != null) {
+                trunk.add(remapQuad(
+                        quad, logSprite, trunkTarget, trunkTintIndex, TRUNK_TINT_INDEX));
+            } else if (spritesMatch(quad.getSprite(), leavesSprite) && leavesTarget != null) {
+                leaves.add(remapQuad(
+                        quad, leavesSprite, leavesTarget, leavesTintIndex, LEAVES_TINT_INDEX));
+            }
         }
-        return List.copyOf(result);
+        return new TreeQuads(List.copyOf(trunk), List.copyOf(leaves));
     }
 
     private static BakedQuad remapQuad(
             BakedQuad quad,
             TextureAtlasSprite sourceLog,
             @Nullable TextureAtlasSprite targetLog,
-            TextureAtlasSprite sourceLeaves,
-            @Nullable TextureAtlasSprite targetLeaves
+            int targetTintIndex,
+            int layerTintIndex
     ) {
-        TextureAtlasSprite source = quad.getSprite();
-        TextureAtlasSprite target;
-        int tintIndex;
-        if (spritesMatch(source, sourceLog) && targetLog != null) {
-            target = targetLog;
-            tintIndex = TRUNK_TINT_INDEX;
-        } else if (spritesMatch(source, sourceLeaves) && targetLeaves != null) {
-            target = targetLeaves;
-            tintIndex = LEAVES_TINT_INDEX;
-        } else {
+        if (targetLog == null) {
             return quad;
         }
 
@@ -113,13 +127,39 @@ public final class BonsaiTreeGeometryCache {
             int offset = vertex * 8;
             float u = Float.intBitsToFloat(vertices[offset + 4]);
             float v = Float.intBitsToFloat(vertices[offset + 5]);
-            float localU = normalized(u, source.getU0(), source.getU1());
-            float localV = normalized(v, source.getV0(), source.getV1());
-            vertices[offset + 4] = Float.floatToRawIntBits(target.getU(localU));
-            vertices[offset + 5] = Float.floatToRawIntBits(target.getV(localV));
+            float localU = normalized(u, sourceLog.getU0(), sourceLog.getU1());
+            float localV = normalized(v, sourceLog.getV0(), sourceLog.getV1());
+            vertices[offset + 4] = Float.floatToRawIntBits(targetLog.getU(localU));
+            vertices[offset + 5] = Float.floatToRawIntBits(targetLog.getV(localV));
         }
-        return new BakedQuad(vertices, tintIndex, quad.getDirection(), target,
+        // Keep the trunk/leaves layer identity for RenderType filtering.  The
+        // color provider returns white when the target model has no tint, so a
+        // non-tinted target remains visually uncolored while still retaining
+        // enough metadata to select its render layer.
+        int tintIndex = targetTintIndex >= 0 ? layerTintIndex : -1;
+        return new BakedQuad(vertices, tintIndex, quad.getDirection(), targetLog,
                 quad.isShade(), quad.hasAmbientOcclusion());
+    }
+
+    /** Immutable tree geometry split into trunk and foliage quads. */
+    public record TreeQuads(List<BakedQuad> trunk, List<BakedQuad> leaves) {
+        public TreeQuads {
+            trunk = List.copyOf(trunk);
+            leaves = List.copyOf(leaves);
+        }
+
+        public List<BakedQuad> all() {
+            if (leaves.isEmpty()) {
+                return trunk;
+            }
+            if (trunk.isEmpty()) {
+                return leaves;
+            }
+            List<BakedQuad> result = new ArrayList<>(trunk.size() + leaves.size());
+            result.addAll(trunk);
+            result.addAll(leaves);
+            return List.copyOf(result);
+        }
     }
 
     public static List<BakedQuad> rotateQuads(List<BakedQuad> source, int rotationSegment) {
@@ -155,15 +195,18 @@ public final class BonsaiTreeGeometryCache {
         BakedModel model = Minecraft.getInstance().getModelManager().getModel(
                 BlockModelShaper.stateToModelLocation(state));
         RandomSource random = RandomSource.create(0x534150C0L);
+        TextureAtlasSprite particle = model.getParticleIcon();
         for (Direction direction : Direction.values()) {
-            for (BakedQuad quad : model.getQuads(state, direction, random)) {
-                if (quad.getTintIndex() >= 0) {
+            for (BakedQuad quad : BakedModelSupport.getQuads(
+                    model, state, direction, random, ModelData.EMPTY, null)) {
+                if (spritesMatch(quad.getSprite(), particle) && quad.getTintIndex() >= 0) {
                     return quad.getTintIndex();
                 }
             }
         }
-        for (BakedQuad quad : model.getQuads(state, null, random)) {
-            if (quad.getTintIndex() >= 0) {
+        for (BakedQuad quad : BakedModelSupport.getQuads(
+                model, state, null, random, ModelData.EMPTY, null)) {
+            if (spritesMatch(quad.getSprite(), particle) && quad.getTintIndex() >= 0) {
                 return quad.getTintIndex();
             }
         }
