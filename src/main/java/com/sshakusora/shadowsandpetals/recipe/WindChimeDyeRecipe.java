@@ -74,7 +74,7 @@ public class WindChimeDyeRecipe extends CustomRecipe {
 
     @Override
     public boolean canCraftInDimensions(int width, int height) {
-        return width >= 1 && height >= 1;
+        return width >= 1 && height >= (target == Target.BOTH ? 3 : 2);
     }
 
     @Override

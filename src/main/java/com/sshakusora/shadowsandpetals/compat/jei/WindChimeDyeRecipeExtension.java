@@ -11,11 +11,13 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.category.extensions.vanilla.crafting.ICraftingCategoryExtension;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.neoforged.neoforge.common.Tags;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /** JEI's 1.21.1 crafting extension for the custom wind-chime recipe. */
@@ -33,31 +35,20 @@ final class WindChimeDyeRecipeExtension implements ICraftingCategoryExtension<Wi
             IFocusGroup focuses
     ) {
         WindChimeDyeRecipe.Target target = holder.value().target();
-        List<Ingredient> ingredients = new ArrayList<>(List.of(
-                Ingredient.EMPTY, Ingredient.EMPTY, Ingredient.EMPTY,
-                Ingredient.EMPTY, Ingredient.EMPTY, Ingredient.EMPTY,
-                Ingredient.EMPTY, Ingredient.EMPTY, Ingredient.EMPTY
-        ));
-        int center = 4;
-        ingredients.set(center, Ingredient.of(BlockRegistry.WIND_CHIME.get().asItem()));
-        if (target != WindChimeDyeRecipe.Target.VANE) {
-            ingredients.set(1, Ingredient.of(Items.RED_DYE));
-        }
-        if (target != WindChimeDyeRecipe.Target.RIBBON) {
-            ingredients.set(7, Ingredient.of(Items.BLUE_DYE));
-        }
-        craftingGridHelper.createAndSetIngredients(builder, ingredients, 3, 3);
-
-        WindChimeColors colors = WindChimeColors.DEFAULT;
-        if (target != WindChimeDyeRecipe.Target.VANE) {
-            colors = colors.withRibbon(DyeColor.RED);
-        }
-        if (target != WindChimeDyeRecipe.Target.RIBBON) {
-            colors = colors.withVane(DyeColor.BLUE);
-        }
-        ItemStack output = new ItemStack(BlockRegistry.WIND_CHIME.get().asItem());
-        colors.applyToStack(output);
-        craftingGridHelper.createAndSetOutputs(builder, List.of(output));
+        Ingredient dye = Ingredient.of(Tags.Items.DYES);
+        Ingredient windChime = Ingredient.of(BlockRegistry.WIND_CHIME.get().asItem());
+        List<Ingredient> ingredients = switch (target) {
+            case RIBBON -> List.of(dye, windChime);
+            case VANE -> List.of(windChime, dye);
+            case BOTH -> List.of(dye, windChime, dye);
+        };
+        craftingGridHelper.createAndSetIngredients(
+                builder,
+                ingredients,
+                1,
+                target == WindChimeDyeRecipe.Target.BOTH ? 3 : 2
+        );
+        craftingGridHelper.createAndSetOutputs(builder, displayResults(target));
     }
 
     @Override
@@ -66,6 +57,11 @@ final class WindChimeDyeRecipeExtension implements ICraftingCategoryExtension<Wi
             List<IRecipeSlotDrawable> recipeSlots,
             IFocusGroup focuses
     ) {
+        var outputSlot = recipeSlots.stream()
+                .filter(slot -> slot.getRole() == RecipeIngredientRole.OUTPUT)
+                .findFirst();
+        outputSlot.ifPresent(IRecipeSlotDrawable::clearDisplayOverrides);
+
         ItemStack windChime = recipeSlots.stream()
                 .filter(slot -> slot.getRole() == RecipeIngredientRole.INPUT)
                 .map(slot -> slot.getDisplayedItemStack().orElse(ItemStack.EMPTY))
@@ -76,30 +72,67 @@ final class WindChimeDyeRecipeExtension implements ICraftingCategoryExtension<Wi
             return;
         }
 
-        List<DyeColor> dyes = recipeSlots.stream()
+        List<IRecipeSlotDrawable> dyeSlots = recipeSlots.stream()
                 .filter(slot -> slot.getRole() == RecipeIngredientRole.INPUT)
-                .map(slot -> slot.getDisplayedItemStack().orElse(ItemStack.EMPTY))
-                .map(DyeColor::getColor)
-                .filter(java.util.Objects::nonNull)
+                .filter(slot -> displayedDye(slot) != null)
+                .sorted(Comparator.comparingInt(slot -> slot.getAreaIncludingBackground().getY()))
                 .toList();
         WindChimeDyeRecipe.Target target = holder.value().target();
-        if (dyes.size() < (target == WindChimeDyeRecipe.Target.BOTH ? 2 : 1)) {
+        int expectedDyeCount = target == WindChimeDyeRecipe.Target.BOTH ? 2 : 1;
+        if (dyeSlots.size() != expectedDyeCount) {
             return;
         }
 
+        DyeColor firstDye = displayedDye(dyeSlots.getFirst());
+        if (firstDye == null) {
+            return;
+        }
         WindChimeColors colors = WindChimeColors.fromStack(windChime);
         if (target != WindChimeDyeRecipe.Target.VANE) {
-            colors = colors.withRibbon(dyes.getFirst());
+            colors = colors.withRibbon(firstDye);
         }
         if (target != WindChimeDyeRecipe.Target.RIBBON) {
-            colors = colors.withVane(target == WindChimeDyeRecipe.Target.BOTH ? dyes.get(1) : dyes.getFirst());
+            DyeColor vaneDye = target == WindChimeDyeRecipe.Target.BOTH
+                    ? displayedDye(dyeSlots.get(1))
+                    : firstDye;
+            if (vaneDye == null) {
+                return;
+            }
+            colors = colors.withVane(vaneDye);
         }
 
         ItemStack output = windChime.copyWithCount(1);
         colors.applyToStack(output);
-        recipeSlots.stream()
-                .filter(slot -> slot.getRole() == RecipeIngredientRole.OUTPUT)
-                .findFirst()
-                .ifPresent(slot -> slot.createDisplayOverrides().addItemStack(output));
+        outputSlot.ifPresent(slot -> slot.createDisplayOverrides().addItemStack(output));
+    }
+
+    private static @Nullable DyeColor displayedDye(IRecipeSlotDrawable slot) {
+        return slot.getDisplayedItemStack().map(DyeColor::getColor).orElse(null);
+    }
+
+    private static List<ItemStack> displayResults(WindChimeDyeRecipe.Target target) {
+        if (target == WindChimeDyeRecipe.Target.BOTH) {
+            List<ItemStack> results = new ArrayList<>(DyeColor.values().length * DyeColor.values().length);
+            for (DyeColor ribbon : DyeColor.values()) {
+                for (DyeColor vane : DyeColor.values()) {
+                    results.add(displayResult(ribbon, vane));
+                }
+            }
+            return results;
+        }
+
+        List<ItemStack> results = new ArrayList<>(DyeColor.values().length);
+        for (DyeColor color : DyeColor.values()) {
+            results.add(target == WindChimeDyeRecipe.Target.RIBBON
+                    ? displayResult(color, WindChimeColors.DEFAULT_COLOR)
+                    : displayResult(WindChimeColors.DEFAULT_COLOR, color));
+        }
+        return results;
+    }
+
+    private static ItemStack displayResult(DyeColor ribbon, DyeColor vane) {
+        ItemStack result = new ItemStack(BlockRegistry.WIND_CHIME.get().asItem());
+        new WindChimeColors(ribbon, vane).applyToStack(result);
+        return result;
     }
 }
