@@ -18,6 +18,7 @@ import com.sshakusora.shadowsandpetals.client.tooltip.RockeryTooltipComponent;
 import com.sshakusora.shadowsandpetals.item.hammer.HammerClientExtensions;
 import com.sshakusora.shadowsandpetals.item.harrow.HarrowClientExtensions;
 import com.sshakusora.shadowsandpetals.registries.*;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.neoforged.api.distmarker.Dist;
@@ -25,6 +26,8 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
+import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.neoforged.neoforge.client.model.DynamicFluidContainerModel;
 
 @EventBusSubscriber(modid = ShadowsAndPetals.MOD_ID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
 @SuppressWarnings({"removal"})
@@ -70,6 +73,32 @@ public final class ClientEvents {
         event.registerItem(new HarrowClientExtensions(), ItemRegistry.HARROW.get());
         event.registerItem(new WindChimeItemModel(), BlockRegistry.WIND_CHIME.get().asItem());
         event.registerItem(new WoodenBarrelItemModel(), BlockRegistry.WOODEN_BARREL.get().asItem());
+        event.registerFluidType(new IClientFluidTypeExtensions() {
+            @Override
+            public ResourceLocation getStillTexture() {
+                return ResourceLocation.withDefaultNamespace("block/water_still");
+            }
+
+            @Override
+            public ResourceLocation getFlowingTexture() {
+                return ResourceLocation.withDefaultNamespace("block/water_flow");
+            }
+
+            @Override
+            public ResourceLocation getOverlayTexture() {
+                return ResourceLocation.withDefaultNamespace("block/water_overlay");
+            }
+
+            @Override
+            public int getTintColor() {
+                return 0xFFCCC957;
+            }
+        }, FluidRegistry.TEA_TYPE.get());
+    }
+
+    @SubscribeEvent
+    public static void registerItemColors(RegisterColorHandlersEvent.Item event) {
+        event.register(new DynamicFluidContainerModel.Colors(), ItemRegistry.TEA_BUCKET.get());
     }
 
     @SubscribeEvent

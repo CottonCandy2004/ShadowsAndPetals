@@ -35,9 +35,6 @@ public class CopperTeapotBlockEntityRenderer implements BlockEntityRenderer<Copp
                        MultiBufferSource buffer, int packedLight, int packedOverlay) {
         BlockState state = blockEntity.getBlockState();
         float progress = easeOutCubic(blockEntity.getLidProgress(partialTick));
-        if (progress <= 0.0F && !(state.getBlock() instanceof IroriGrillCopperTeapotBlock)) {
-            return;
-        }
 
         poseStack.pushPose();
         poseStack.translate(0.5D, 0.0D, 0.5D);

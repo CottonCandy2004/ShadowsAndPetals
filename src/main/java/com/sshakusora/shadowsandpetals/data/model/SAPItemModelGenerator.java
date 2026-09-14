@@ -1,12 +1,14 @@
 package com.sshakusora.shadowsandpetals.data.model;
 
 import com.sshakusora.shadowsandpetals.ShadowsAndPetals;
+import com.sshakusora.shadowsandpetals.registries.FluidRegistry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.neoforged.neoforge.client.model.generators.ItemModelBuilder;
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
+import net.neoforged.neoforge.client.model.generators.loaders.DynamicFluidContainerModelBuilder;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
@@ -70,6 +72,16 @@ public class SAPItemModelGenerator {
         if (customClientType == null) {
             return;
         }
+        if (name.equals("tea_bucket")) {
+            ItemModelBuilder builder = provider.getBuilder(name)
+                    .texture("base", ResourceLocation.withDefaultNamespace("item/bucket"))
+                    .texture("fluid", ResourceLocation.fromNamespaceAndPath(
+                            "neoforge", "item/mask/bucket_fluid"));
+            builder.customLoader(DynamicFluidContainerModelBuilder::begin)
+                    .fluid(FluidRegistry.TEA.get())
+                    .end();
+            return;
+        }
         if (name.equals("wind_chime") || name.equals("wooden_barrel")) {
             // 1.21.1 still dispatches custom item rendering through the
             // builtin/entity baked model.  The 26.x item-model type field does
@@ -82,7 +94,6 @@ public class SAPItemModelGenerator {
             return;
         }
         ResourceLocation fallback = switch (name) {
-            case "tea_bucket" -> ResourceLocation.parse("minecraft:item/bucket");
             case "wind_chime" -> ShadowsAndPetals.asResource("item/wind_chime_body");
             case "wooden_barrel" -> ShadowsAndPetals.asResource("block/wooden_barrel/wooden_barrel");
             default -> ResourceLocation.parse("minecraft:item/generated");

@@ -156,6 +156,7 @@ public final class RockeryRecipeCategory implements IRecipeCategory<RockeryInfoR
                             dimensions,
                             RockeryPreviewState.Content.STONE_STRUCTURE,
                             yawDegrees,
+                            false,
                             hitTestStone(mouseX, mouseY)
                     ),
                     INPUT_PIP_X,
@@ -169,6 +170,7 @@ public final class RockeryRecipeCategory implements IRecipeCategory<RockeryInfoR
                             dimensions,
                             RockeryPreviewState.Content.ROCKERY,
                             yawDegrees,
+                            false,
                             -1
                     ),
                     OUTPUT_PIP_X,

@@ -37,7 +37,18 @@ public final class RockeryPreviewRenderer {
      */
     private static final float PITCH_DEGREES = 30.0F;
     private static final float BASE_YAW_DEGREES = -45.0F;
+    private static final long ROTATE_DURATION_NANOS = 1_550_000_000L;
+    private static final long RESET_GAP_NANOS = 1_000_000_000L;
     private static final double OUTLINE_OFFSET = 0.0025D;
+
+    /*
+     * The direct 1.21.1 renderer is stateless per draw call, while tooltip
+     * components may be recreated as the tooltip is gathered. Keep the animation
+     * clock here so recreation of a client component cannot restart the animation
+     * every frame.
+     */
+    private static long animationStartNanos = -1L;
+    private static long lastRenderNanos = -1L;
 
     private RockeryPreviewRenderer() {
     }
@@ -51,10 +62,11 @@ public final class RockeryPreviewRenderer {
         float scale = RockeryPreviewState.scaleFor(dimensions, size, size);
         BlockRenderDispatcher blockRenderer = Minecraft.getInstance().getBlockRenderer();
         PoseStack poseStack = graphics.pose();
+        float yawDegrees = state.yawDegrees() + (state.animate() ? animatedYaw() : 0.0F);
         poseStack.pushPose();
         poseStack.translate(x + size * 0.5F, y + size * 0.5F, 100.0F);
         poseStack.scale(scale, -scale, scale);
-        poseStack.mulPose(previewRotation(state.yawDegrees()));
+        poseStack.mulPose(previewRotation(yawDegrees));
         poseStack.translate(-dimensions.width() * 0.5F, -dimensions.height() * 0.5F, -dimensions.depth() * 0.5F);
 
         for (int part = 0; part < dimensions.partCount(); part++) {
@@ -91,6 +103,19 @@ public final class RockeryPreviewRenderer {
         return new Matrix4f()
                 .rotateX((float) Math.toRadians(PITCH_DEGREES))
                 .rotateY((float) Math.toRadians(BASE_YAW_DEGREES + yawDegrees));
+    }
+
+    private static float animatedYaw() {
+        long now = System.nanoTime();
+        if (animationStartNanos < 0L
+                || lastRenderNanos < 0L
+                || now - lastRenderNanos > RESET_GAP_NANOS) {
+            animationStartNanos = now;
+        }
+
+        lastRenderNanos = now;
+        long elapsed = Math.max(0L, now - animationStartNanos);
+        return elapsed * 90.0F / ROTATE_DURATION_NANOS;
     }
 
     /**

@@ -9,6 +9,7 @@ import com.sshakusora.shadowsandpetals.blockentity.irori.IroriBlockEntity;
 import com.sshakusora.shadowsandpetals.blockentity.irori.IroriComponentTopology;
 import com.sshakusora.shadowsandpetals.client.effect.IroriClientEffects;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
@@ -63,7 +64,7 @@ public class IroriBlockEntityRenderer implements BlockEntityRenderer<IroriBlockE
                        MultiBufferSource buffer, int packedLight, int packedOverlay) {
         if (blockEntity.shouldRenderFirewood() && blockEntity.getFirewoodModel() != null) {
             renderFirewood(blockEntity, partialTick, poseStack, buffer, packedLight, packedOverlay);
-            renderBurningOverlay(blockEntity, poseStack, buffer, packedLight);
+            renderBurningOverlay(blockEntity, partialTick, poseStack, buffer);
         }
 
         for (IroriBlockEntity.CookingRenderItem item : blockEntity.getCookingRenderItems()) {
@@ -131,9 +132,9 @@ public class IroriBlockEntityRenderer implements BlockEntityRenderer<IroriBlockE
 
     private static void renderBurningOverlay(
             IroriBlockEntity blockEntity,
+            float partialTick,
             PoseStack poseStack,
-            MultiBufferSource buffer,
-            int packedLight
+            MultiBufferSource buffer
     ) {
         if (blockEntity.getBurnTime() <= 0
                 || blockEntity.getLevel() == null
@@ -147,17 +148,12 @@ public class IroriBlockEntityRenderer implements BlockEntityRenderer<IroriBlockE
                 ShadowsAndPetals.asResource("block/irori/firewood/burning")
         );
         long gameTime = blockEntity.getLevel().getGameTime();
-        float phase = (gameTime % 60L) / 60.0F;
+        float phase = (Math.floorMod(gameTime, 60L) + partialTick) / 60.0F;
         float breath = (float) ((Math.sin(phase * Math.PI * 2.0D) + 1.0D) * 0.5D);
-        int light = ClientFluidRenderInfo.applyLightEmission(
-                packedLight, 5 + Math.round(8.0F * breath)
-        );
+        int light = LightTexture.pack((int) (5.0F + 8.0F * breath), 0);
         var offset = blockEntity.getFirewoodRenderOffset();
         poseStack.pushPose();
         poseStack.translate(offset.x(), BURNING_OVERLAY_Y, offset.z());
-        poseStack.translate(0.5D, 0.0D, 0.5D);
-        poseStack.mulPose(Axis.YP.rotationDegrees(getFirewoodRotation(blockEntity)));
-        poseStack.translate(-0.5D, 0.0D, -0.5D);
         VertexConsumer consumer = buffer.getBuffer(RenderType.translucent());
         addBurningVertex(consumer, poseStack.last(), sprite, 0.0F, 0.0F, 0.0F, 0.0F, light);
         addBurningVertex(consumer, poseStack.last(), sprite, 0.0F, 0.0F, 1.0F, 0.0F, light);

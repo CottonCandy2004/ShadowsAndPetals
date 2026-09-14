@@ -13,6 +13,7 @@ import com.sshakusora.shadowsandpetals.block.nature.RockeryBlock;
  *
  * @param content      which block model fills the W×H×D footprint
  * @param yawDegrees   extra yaw applied around the vertical axis
+ * @param animate      whether the renderer adds its automatic preview rotation
  * @param selectedPart part index highlighted by the renderer, or {@code -1}
  */
 public record RockeryPreviewState(
@@ -20,6 +21,7 @@ public record RockeryPreviewState(
         RockeryDimensions dimensions,
         Content content,
         float yawDegrees,
+        boolean animate,
         int selectedPart
 ) {
     /** Block model drawn for every footprint position. */
@@ -31,7 +33,21 @@ public record RockeryPreviewState(
     }
 
     public RockeryPreviewState(RockeryBlock block, RockeryDimensions dimensions) {
-        this(block, dimensions, Content.ROCKERY, 0.0F, -1);
+        this(block, dimensions, Content.ROCKERY, 0.0F, true, -1);
+    }
+
+    /**
+     * Creates a non-animated preview with an explicit yaw. This keeps the compact
+     * constructor used by interactive previews such as JEI from changing behavior.
+     */
+    public RockeryPreviewState(
+            RockeryBlock block,
+            RockeryDimensions dimensions,
+            Content content,
+            float yawDegrees,
+            int selectedPart
+    ) {
+        this(block, dimensions, content, yawDegrees, false, selectedPart);
     }
 
     /**
