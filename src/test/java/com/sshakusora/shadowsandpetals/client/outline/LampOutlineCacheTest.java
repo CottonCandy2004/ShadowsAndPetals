@@ -29,7 +29,10 @@ class LampOutlineCacheTest {
         );
         for (Map.Entry<String, Integer> entry : expectedElementCounts.entrySet()) {
             String name = entry.getKey();
-            String resourceName = "assets/shadowsandpetals/models/block/" + name + "/off.json";
+            // The migrated OBJ lamp families keep their original element
+            // model under lamp_geometry/ so that the 1.21.1 OBJ wrapper does
+            // not feed 26.1.2 fields to the vanilla model deserializer.
+            String resourceName = "assets/shadowsandpetals/lamp_geometry/" + name + "/off.json";
             JsonObject model;
             try (InputStream stream = getClass().getClassLoader().getResourceAsStream(resourceName)) {
                 assertNotNull(stream, resourceName);
@@ -44,6 +47,91 @@ class LampOutlineCacheTest {
             assertTrue(geometry.lines().stream().noneMatch(line ->
                     line.from().distanceToSqr(line.to()) <= EPSILON * EPSILON
             ), resourceName);
+        }
+    }
+
+    @Test
+    void migratedLampModelsUseObjWrappersAndKeepEmissiveOnFaces() throws IOException {
+        Map<String, String[]> variants = Map.of(
+                "bedroom_lamp", new String[]{"off", "on"},
+                "desk_lamp", new String[]{"off", "on"},
+                "emergency_lamp", new String[]{"off", "on"},
+                "recessed_lamp", new String[]{"down_off", "down_on", "up_off", "up_on"},
+                "wall_lamp", new String[]{"off", "on"}
+        );
+
+        for (Map.Entry<String, String[]> entry : variants.entrySet()) {
+            for (String variant : entry.getValue()) {
+                String base = "assets/shadowsandpetals/models/block/"
+                        + entry.getKey() + "/" + variant;
+                JsonObject wrapper;
+                try (InputStream stream = getClass().getClassLoader().getResourceAsStream(base + ".json")) {
+                    assertNotNull(stream, base + ".json");
+                    wrapper = JsonParser.parseReader(new InputStreamReader(stream, StandardCharsets.UTF_8))
+                            .getAsJsonObject();
+                }
+                assertEquals("neoforge:obj", wrapper.get("loader").getAsString(), base);
+                assertFalse(wrapper.has("elements"), base);
+
+                try (InputStream stream = getClass().getClassLoader().getResourceAsStream(base + ".obj")) {
+                    assertNotNull(stream, base + ".obj");
+                    String obj = new String(stream.readAllBytes(), StandardCharsets.UTF_8);
+                    assertTrue(obj.contains("usemtl "), base);
+                    if (variant.endsWith("_on") || variant.equals("on")) {
+                        assertTrue(obj.contains("_glow"), base);
+                    }
+                }
+                try (InputStream stream = getClass().getClassLoader().getResourceAsStream(base + ".mtl")) {
+                    assertNotNull(stream, base + ".mtl");
+                    String mtl = new String(stream.readAllBytes(), StandardCharsets.UTF_8);
+                    assertTrue(mtl.contains("Ka 1 1 1"), base);
+                }
+            }
+        }
+    }
+
+    @Test
+    void blockstatesAndItemParentsResolveToMigratedObjModels() throws IOException {
+        for (String family : new String[]{"bedroom_lamp", "desk_lamp", "emergency_lamp", "recessed_lamp", "wall_lamp"}) {
+            JsonObject blockstate = loadJson("assets/shadowsandpetals/blockstates/" + family + ".json");
+            for (Map.Entry<String, com.google.gson.JsonElement> variant
+                    : blockstate.getAsJsonObject("variants").entrySet()) {
+                JsonObject state = variant.getValue().getAsJsonObject();
+                String modelId = state.get("model").getAsString();
+                JsonObject model = loadJson(modelResource(modelId));
+                if (model.has("loader")) {
+                    assertEquals("neoforge:obj", model.get("loader").getAsString(), variant.getKey());
+                } else {
+                    assertTrue(model.has("parent"), variant.getKey());
+                    assertTrue(model.get("parent").getAsString().startsWith(
+                            "shadowsandpetals:block/recessed_lamp/"), variant.getKey());
+                    double expectedSlabOffset = modelId.contains("down_slab") ? -0.5D : 0.5D;
+                    assertEquals(expectedSlabOffset,
+                            model.getAsJsonObject("transform").getAsJsonArray("translation").get(1).getAsDouble(),
+                            variant.getKey());
+                }
+            }
+
+            JsonObject item = loadJson("assets/shadowsandpetals/models/item/" + family + ".json");
+            String parentId = item.get("parent").getAsString();
+            JsonObject parent = loadJson(modelResource(parentId));
+            assertEquals("neoforge:obj", parent.get("loader").getAsString(), family + " item");
+        }
+    }
+
+    private static String modelResource(String modelId) {
+        int separator = modelId.indexOf(':');
+        assertTrue(separator > 0, modelId);
+        return "assets/" + modelId.substring(0, separator) + "/models/"
+                + modelId.substring(separator + 1) + ".json";
+    }
+
+    private static JsonObject loadJson(String resourceName) throws IOException {
+        try (InputStream stream = LampOutlineCacheTest.class.getClassLoader()
+                .getResourceAsStream(resourceName)) {
+            assertNotNull(stream, resourceName);
+            return JsonParser.parseReader(new InputStreamReader(stream, StandardCharsets.UTF_8))
+                    .getAsJsonObject();
         }
     }
 

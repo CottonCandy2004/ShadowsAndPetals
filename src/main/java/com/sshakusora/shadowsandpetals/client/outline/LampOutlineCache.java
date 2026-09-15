@@ -30,7 +30,7 @@ import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.function.UnaryOperator;
 
-/** Reloadable selection geometry for the four lamp model families. */
+/** Reloadable selection geometry for the registered lamp model families. */
 public final class LampOutlineCache extends SimplePreparableReloadListener<LampOutlineCache.Prepared> {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final ResourceLocation RELOAD_ID = ShadowsAndPetals.asResource("lamp_outlines");
@@ -78,7 +78,11 @@ public final class LampOutlineCache extends SimplePreparableReloadListener<LampO
 
     private static void add(Map<Block, Definition> definitions, Block block, String modelName, Orientation orientation) {
         definitions.put(block, new Definition(block,
-                ShadowsAndPetals.asResource("models/block/" + modelName + "/off.json"), orientation));
+                // Keep the 26.1.2 element JSON outside models/.  The 1.21.1
+                // extended model deserializer parses elements before it
+                // dispatches to neoforge:obj, while the outline parser still
+                // understands the sidecar format directly.
+                ShadowsAndPetals.asResource("lamp_geometry/" + modelName + "/off.json"), orientation));
     }
 
     private static OutlineGeometry load(ResourceManager manager, Definition definition) {
