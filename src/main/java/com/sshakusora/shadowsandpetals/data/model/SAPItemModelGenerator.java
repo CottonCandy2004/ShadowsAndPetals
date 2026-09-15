@@ -80,6 +80,7 @@ public class SAPItemModelGenerator {
             builder.customLoader(DynamicFluidContainerModelBuilder::begin)
                     .fluid(FluidRegistry.TEA.get())
                     .end();
+            addVanillaGeneratedDisplayTransforms(builder);
             return;
         }
         if (name.equals("wind_chime") || name.equals("wooden_barrel")) {
@@ -99,6 +100,23 @@ public class SAPItemModelGenerator {
             default -> ResourceLocation.parse("minecraft:item/generated");
         };
         provider.withExistingParent(name, fallback);
+    }
+
+    private static void addVanillaGeneratedDisplayTransforms(ItemModelBuilder builder) {
+        var transforms = builder.transforms();
+        transforms.transform(ItemDisplayContext.GROUND)
+                .translation(0.0F, 2.0F, 0.0F).scale(0.5F).end();
+        transforms.transform(ItemDisplayContext.HEAD)
+                .rotation(0.0F, 180.0F, 0.0F)
+                .translation(0.0F, 13.0F, 7.0F).end();
+        transforms.transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND)
+                .translation(0.0F, 3.0F, 1.0F).scale(0.55F).end();
+        transforms.transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND)
+                .rotation(0.0F, -90.0F, 25.0F)
+                .translation(1.13F, 3.2F, 1.13F).scale(0.68F).end();
+        transforms.transform(ItemDisplayContext.FIXED)
+                .rotation(0.0F, 180.0F, 0.0F).end();
+        transforms.end();
     }
 
     private static void addDisplayTransforms(ItemModelBuilder builder, String name) {
