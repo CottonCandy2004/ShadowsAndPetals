@@ -21,7 +21,6 @@ import net.neoforged.neoforge.client.model.generators.BlockModelBuilder;
 import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
 
-/** 1.21.1 compatibility callbacks for the 26.x model generator. */
 public final class NatureBlockModels {
     private NatureBlockModels() {}
     public static void sandExcavation(BlockModelContext<? extends SandExcavationBlock> context, SAPBlockModelGenerator generator) {

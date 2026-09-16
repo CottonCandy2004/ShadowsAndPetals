@@ -1,7 +1,10 @@
 package com.sshakusora.shadowsandpetals.compat.transfer.transaction;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public final class Transaction implements TransactionContext, AutoCloseable {
-    private final java.util.List<Runnable> rollbackActions = new java.util.ArrayList<>();
+    private final List<Runnable> rollbackActions = new ArrayList<>();
     private boolean committed;
     private boolean closed;
     private Transaction() {}

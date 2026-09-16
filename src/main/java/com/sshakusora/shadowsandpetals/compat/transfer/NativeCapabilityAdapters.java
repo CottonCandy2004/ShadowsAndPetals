@@ -9,10 +9,6 @@ import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
 import net.neoforged.neoforge.items.IItemHandler;
 
-/**
- * Adapters between the small transfer abstraction used by the port and the
- * native NeoForge 1.21.1 capability interfaces.
- */
 public final class NativeCapabilityAdapters {
     private NativeCapabilityAdapters() {}
 

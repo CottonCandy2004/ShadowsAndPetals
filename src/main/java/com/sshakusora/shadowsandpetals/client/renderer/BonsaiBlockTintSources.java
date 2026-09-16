@@ -16,14 +16,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import org.jetbrains.annotations.Nullable;
 
-/** Legacy block-color bridge for the tint indices assigned to bonsai quads. */
+/** Supplies block colors for the tint indices assigned to bonsai quads. */
 public final class BonsaiBlockTintSources {
-    /**
-     * 1.21.1 stores one block-color provider per block, not one provider per
-     * tint index.  The provider therefore has to dispatch the two bonsai
-     * layers itself; registering two providers for the same block would make
-     * the second registration replace the first one.
-     */
     private static final BlockColor BONSAI = new LayerColor();
 
     private BonsaiBlockTintSources() {

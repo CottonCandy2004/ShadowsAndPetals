@@ -7,8 +7,10 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidActionResult;
 import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 
@@ -60,8 +62,8 @@ public final class FluidUtil {
     }
     public static FluidStack tryPickupFluid(ResourceHandler<FluidResource> destination,Player p,Level l,InteractionHand hand,BlockPos pos,Direction side){
         var source = l.getFluidState(pos).getType();
-        if (source == net.minecraft.world.level.material.Fluids.EMPTY) return FluidStack.EMPTY;
+        if (source == Fluids.EMPTY) return FluidStack.EMPTY;
         FluidActionResult result=net.neoforged.neoforge.fluids.FluidUtil.tryPickUpFluid(p.getItemInHand(hand),p,l,pos,side);
-        return result.isSuccess()?new FluidStack(source,net.neoforged.neoforge.fluids.FluidType.BUCKET_VOLUME):FluidStack.EMPTY;
+        return result.isSuccess()?new FluidStack(source,FluidType.BUCKET_VOLUME):FluidStack.EMPTY;
     }
 }

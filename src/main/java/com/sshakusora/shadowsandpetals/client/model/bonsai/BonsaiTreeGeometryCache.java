@@ -1,6 +1,7 @@
 package com.sshakusora.shadowsandpetals.client.model.bonsai;
 
 import com.sshakusora.shadowsandpetals.ShadowsAndPetals;
+import com.sshakusora.shadowsandpetals.block.decoration.bonsai.BonsaiModelTransform;
 import com.sshakusora.shadowsandpetals.blockentity.BonsaiBlockEntity;
 import com.sshakusora.shadowsandpetals.client.model.BakedModelSupport;
 import com.sshakusora.shadowsandpetals.client.renderer.BonsaiPartCacheKey;
@@ -51,11 +52,7 @@ public final class BonsaiTreeGeometryCache {
         return getTreeParts(model, state, data, renderData).all();
     }
 
-    /**
-     * Returns tree quads split by material layer.  The split is retained even
-     * when a target model has no tint index, because 1.21.1 carries render
-     * layers at model level rather than in {@link BakedQuad}.
-     */
+    /** Returns tree quads split by material layer. */
     public static TreeQuads getTreeParts(
             BakedModel model,
             BlockState state,
@@ -167,7 +164,7 @@ public final class BonsaiTreeGeometryCache {
             return source;
         }
         double angle = Math.toRadians(
-                com.sshakusora.shadowsandpetals.block.decoration.bonsai.BonsaiModelTransform
+                BonsaiModelTransform
                         .rotationDegrees(rotationSegment));
         double sin = Math.sin(angle);
         double cos = Math.cos(angle);

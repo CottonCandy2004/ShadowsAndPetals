@@ -13,9 +13,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
-/**
- * 1.21.1 compatibility facade for item model callbacks.
- */
 public class SAPItemModelGenerator {
     private final @Nullable ItemModelProvider provider;
 
@@ -84,11 +81,6 @@ public class SAPItemModelGenerator {
             return;
         }
         if (name.equals("wind_chime") || name.equals("wooden_barrel")) {
-            // 1.21.1 still dispatches custom item rendering through the
-            // builtin/entity baked model.  The 26.x item-model type field does
-            // not exist in this renderer, so retain the display transforms on
-            // the compatibility model and expose the renderer through
-            // IClientItemExtensions.
             ItemModelBuilder builder = provider.getBuilder(name).parent(new ModelFile.UncheckedModelFile(
                     ResourceLocation.withDefaultNamespace("builtin/entity")));
             addDisplayTransforms(builder, name);

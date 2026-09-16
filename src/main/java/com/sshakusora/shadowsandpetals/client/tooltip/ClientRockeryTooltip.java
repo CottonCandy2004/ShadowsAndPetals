@@ -14,11 +14,10 @@ import net.minecraft.network.chat.MutableComponent;
 import org.joml.Matrix4f;
 
 /**
- * 1.21.1 client tooltip component for rockery blocks.
+ * Client tooltip component for rockery blocks.
  *
  * <p>Holding Shift expands the compact hint into a block-item footprint preview
- * and a colour-coded dimension label. The later picture-in-picture renderer is
- * intentionally not referenced because it is absent from the 1.21.1 client API.</p>
+ * and a colour-coded dimension label.</p>
  */
 public final class ClientRockeryTooltip implements ClientTooltipComponent {
     private static final int LINE_HEIGHT = 9;

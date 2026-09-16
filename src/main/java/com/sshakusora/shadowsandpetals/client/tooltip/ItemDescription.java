@@ -56,11 +56,6 @@ public record ItemDescription(List<Component> baseline, List<Component> onShift,
     /**
      * Returns the translation prefix used by the generated item tooltip data.
      *
-     * <p>In 1.21.1, {@code BlockItem#getDescriptionId()} delegates to its block
-     * and therefore returns a {@code block.*} key. Tooltip data is intentionally
-     * generated under the item namespace for both ordinary items and block
-     * items, so the registry id must be used here instead of the display name
-     * description id.</p>
      */
     @Nullable
     static String tooltipTranslationPrefix(Item item) {

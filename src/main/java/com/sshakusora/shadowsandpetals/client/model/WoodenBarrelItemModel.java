@@ -18,7 +18,6 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.fluids.FluidStack;
 
-/** 1.21.1 custom item renderer for a wooden barrel and its stored fluid. */
 public final class WoodenBarrelItemModel implements IClientItemExtensions {
     private final BlockEntityWithoutLevelRenderer renderer;
 

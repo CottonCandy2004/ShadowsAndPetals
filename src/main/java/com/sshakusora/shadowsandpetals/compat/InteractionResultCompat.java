@@ -3,7 +3,7 @@ package com.sshakusora.shadowsandpetals.compat;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
 
-/** Bridges the 1.21.1 split between block/item interaction result types. */
+/** Bridges the split between block/item interaction result types. */
 public final class InteractionResultCompat {
     private InteractionResultCompat() {}
 

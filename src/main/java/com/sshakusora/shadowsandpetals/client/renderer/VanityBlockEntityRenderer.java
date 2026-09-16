@@ -16,7 +16,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
-/** 1.21.1 implementation of the animated vanity drawer renderer. */
 public class VanityBlockEntityRenderer implements BlockEntityRenderer<VanityBlockEntity> {
     private final BlockRenderDispatcher blockRenderer;
 

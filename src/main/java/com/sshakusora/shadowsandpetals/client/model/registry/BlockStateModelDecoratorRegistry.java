@@ -8,14 +8,12 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.event.ModelEvent;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.BiFunction;
 
 /** Client-only registry for decorators applied to baked block-state models. */
 public final class BlockStateModelDecoratorRegistry {
-    private static final java.util.List<Decorator> DECORATORS = new java.util.ArrayList<>();
+    private static final List<Decorator> DECORATORS = new ArrayList<>();
 
     private BlockStateModelDecoratorRegistry() {
     }

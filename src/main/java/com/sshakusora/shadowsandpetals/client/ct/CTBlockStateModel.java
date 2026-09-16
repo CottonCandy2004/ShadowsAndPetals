@@ -24,14 +24,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Runtime connected-texture wrapper for the 1.21.1 baked-model API.
- *
- * <p>The old 26.1.2 implementation stored a geometry key in the newer model
- * dispatcher.  1.21.1 exposes the same per-position data through
- * {@link ModelData}, so the wrapper computes the six face selections there and
- * remaps only quads that use the registered base sprite.</p>
- */
+/** Runtime connected-texture wrapper for baked block-state models. */
 public final class CTBlockStateModel extends BakedModelWrapper<BakedModel> implements IDynamicBakedModel {
     private static final ModelProperty<CTData> CT_DATA = new ModelProperty<>();
     private static final int BLOCK_VERTEX_STRIDE = 8;

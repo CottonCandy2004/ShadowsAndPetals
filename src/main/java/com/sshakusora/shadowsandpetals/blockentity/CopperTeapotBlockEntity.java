@@ -109,12 +109,6 @@ public class CopperTeapotBlockEntity extends RandomizableContainerBlockEntity {
     private float lidProgress;
     private float lidProgressOld;
 
-    /**
-     * 1.21.1 no longer exposes the old block removal callback that ran after
-     * neighbor updates. A teapot block entity is removed exactly when its
-     * block is replaced or removed, so use this lifecycle boundary to preserve
-     * the composite grill cleanup semantics for non-player removals as well.
-     */
     @Override
     public void setRemoved() {
         cleanupInstalledGrillAfterRemoval();

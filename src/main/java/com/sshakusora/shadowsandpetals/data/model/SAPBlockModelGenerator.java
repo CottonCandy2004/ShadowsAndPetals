@@ -19,13 +19,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * 1.21.1 compatibility facade for the 26.x model generator.
- *
- * <p>The 26.x client model graph does not exist in the 1.21.1 datagen API. This
- * facade exposes the small set of operations needed by the migrated callbacks,
- * backed by NeoForge's 1.21.1 model builders.</p>
- */
 public class SAPBlockModelGenerator {
     private final @Nullable BlockStateProvider provider;
     private final Set<String> createdModelPaths = new HashSet<>();

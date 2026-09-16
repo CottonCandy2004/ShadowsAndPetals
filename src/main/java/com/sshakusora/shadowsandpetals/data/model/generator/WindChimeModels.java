@@ -13,7 +13,6 @@ import net.minecraft.world.item.Item;
 
 import java.util.Map;
 
-/** 1.21.1 compatibility callbacks for the wind-chime model. */
 public final class WindChimeModels {
     private WindChimeModels() {}
     public static void block(BlockModelContext<? extends WindChimeBlock> context, SAPBlockModelGenerator generator) {

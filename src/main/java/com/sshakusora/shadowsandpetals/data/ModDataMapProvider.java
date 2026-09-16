@@ -10,14 +10,6 @@ import net.neoforged.neoforge.common.data.DataMapProvider;
 
 import java.util.concurrent.CompletableFuture;
 
-/**
- * Generates the 1.21.1 data-map JSON consumed by sand excavation.
- *
- * <p>The 26.1.2 provider used the newer data-generation API.  NeoForge
- * 1.21.1 exposes the equivalent {@link DataMapProvider} surface, so the
- * entries are rebuilt here instead of being left as static compatibility
- * resources only.</p>
- */
 public final class ModDataMapProvider extends DataMapProvider {
     public ModDataMapProvider(
             PackOutput output,

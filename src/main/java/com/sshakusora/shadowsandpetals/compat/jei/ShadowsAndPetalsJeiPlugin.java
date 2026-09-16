@@ -14,6 +14,7 @@ import mezz.jei.api.ingredients.subtypes.UidContext;
 import mezz.jei.api.registration.*;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 
 import java.util.List;
@@ -30,7 +31,7 @@ public final class ShadowsAndPetalsJeiPlugin implements IModPlugin {
     public void registerItemSubtypes(ISubtypeRegistration registration) {
         registration.registerSubtypeInterpreter(
                 BlockRegistry.WIND_CHIME.get().asItem(),
-                (IIngredientSubtypeInterpreter<net.minecraft.world.item.ItemStack>) (stack, context) ->
+                (IIngredientSubtypeInterpreter<ItemStack>) (stack, context) ->
                         context == UidContext.Recipe
                                 ? IIngredientSubtypeInterpreter.NONE
                                 : WindChimeColors.fromStack(stack).ribbon().getName()
@@ -38,7 +39,7 @@ public final class ShadowsAndPetalsJeiPlugin implements IModPlugin {
         );
         registration.registerSubtypeInterpreter(
                 BlockRegistry.WOODEN_BARREL.get().asItem(),
-                (IIngredientSubtypeInterpreter<net.minecraft.world.item.ItemStack>) (stack, context) -> {
+                (IIngredientSubtypeInterpreter<ItemStack>) (stack, context) -> {
                     if (context == UidContext.Recipe) {
                         return IIngredientSubtypeInterpreter.NONE;
                     }

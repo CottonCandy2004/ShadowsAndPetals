@@ -14,14 +14,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-/**
- * Baked block geometry bound to the bones of one SAP animation rig.
- *
- * <p>The 26.x renderer submitted {@code BlockStateModelPart} instances through
- * the render-state collector.  1.21.1 exposes the same geometry as
- * {@link BakedModel}, so the compatibility layer applies each bone's parent
- * transform and submits the model directly through the block model renderer.</p>
- */
+/** Baked block geometry bound to the bones of one SAP animation rig. */
 public final class AnimatedBlockModel {
     private final AnimationResourceRef.Rig rig;
     private final List<Binding> bindings;

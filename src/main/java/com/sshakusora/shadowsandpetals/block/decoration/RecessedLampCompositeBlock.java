@@ -310,7 +310,7 @@ public final class RecessedLampCompositeBlock extends BaseEntityBlock implements
                 ? TOP_SLAB_SHAPE
                 : BOTTOM_SLAB_SHAPE;
         return !Shapes.joinIsNotEmpty(
-                slabState.getOcclusionShape(net.minecraft.world.level.EmptyBlockGetter.INSTANCE, BlockPos.ZERO),
+                slabState.getOcclusionShape(EmptyBlockGetter.INSTANCE, BlockPos.ZERO),
                 expectedShape,
                 BooleanOp.NOT_SAME
         );

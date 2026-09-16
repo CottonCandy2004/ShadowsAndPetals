@@ -13,7 +13,6 @@ import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.SlabType;
 import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
 
-/** Block-state callbacks for decoration blocks on NeoForge 1.21.1. */
 public final class DecorationBlockModels {
     private DecorationBlockModels() {}
 

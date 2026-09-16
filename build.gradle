@@ -196,7 +196,6 @@ dependencies {
     // Serene Seasons compatibility runtime
     runtimeOnly "com.github.glitchfiend:SereneSeasons-neoforge:1.21.1-10.1.0.9"
 
-    // Shader development runtime (compatible 1.21.1 pair)
     runtimeOnly "maven.modrinth:sodium:mc1.21.1-0.6.13-neoforge"
     runtimeOnly "maven.modrinth:iris:1.8.12+1.21.1-neoforge"
 

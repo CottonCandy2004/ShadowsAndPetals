@@ -3,14 +3,12 @@ package com.sshakusora.shadowsandpetals.compat.sereneseasons;
 import com.sshakusora.shadowsandpetals.world.excavation.SandExcavationChanceRules;
 import com.sshakusora.shadowsandpetals.world.excavation.SandExcavationSeasonModifier;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.Level;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Locale;
 
-/**
- * Reflective Serene Seasons bridge so the base 1.21.1 jar has no hard
- * dependency on the optional mod.
- */
 public final class SereneSeasonsSeasonModifier implements SandExcavationSeasonModifier {
     private static final float SPRING_MULTIPLIER = 1.00F;
     private static final float SUMMER_MULTIPLIER = 1.15F;
@@ -23,7 +21,7 @@ public final class SereneSeasonsSeasonModifier implements SandExcavationSeasonMo
     public SereneSeasonsSeasonModifier() {
         try {
             Class<?> helper = Class.forName("sereneseasons.api.season.SeasonHelper");
-            this.getSeasonState = helper.getMethod("getSeasonState", net.minecraft.world.level.Level.class);
+            this.getSeasonState = helper.getMethod("getSeasonState", Level.class);
             Class<?> stateType = Class.forName("sereneseasons.api.season.SeasonState");
             this.getSeason = stateType.getMethod("getSeason");
         } catch (ReflectiveOperationException exception) {
@@ -43,7 +41,7 @@ public final class SereneSeasonsSeasonModifier implements SandExcavationSeasonMo
     }
 
     static float getMultiplier(String seasonName) {
-        return switch (seasonName.toUpperCase(java.util.Locale.ROOT)) {
+        return switch (seasonName.toUpperCase(Locale.ROOT)) {
             case "SPRING" -> SPRING_MULTIPLIER;
             case "SUMMER" -> SUMMER_MULTIPLIER;
             case "AUTUMN", "FALL" -> AUTUMN_MULTIPLIER;

@@ -408,11 +408,6 @@ public class PrefabTreeFeature extends Feature<PrefabTreeConfiguration> {
         return pos.getY() >= level.getMinBuildHeight() && pos.getY() < level.getMaxBuildHeight();
     }
 
-    /**
-     * Local copy of the 1.21.1 vanilla leaf-distance propagation routine.
-     * TreeFeature keeps this helper private, so a prefab feature must retain its
-     * own copy when it wants the same post-placement behaviour.
-     */
     private static DiscreteVoxelShape updateLeavesCompat(
             LevelAccessor level,
             BoundingBox bounds,

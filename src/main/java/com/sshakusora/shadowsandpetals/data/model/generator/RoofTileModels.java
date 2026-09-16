@@ -9,6 +9,7 @@ import com.sshakusora.shadowsandpetals.data.model.SAPBlockModelGenerator;
 import com.sshakusora.shadowsandpetals.registries.BlockRegistry;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.StairBlock;
@@ -21,7 +22,6 @@ import net.neoforged.neoforge.client.model.generators.ModelFile;
 
 import java.util.Map;
 
-/** 1.21.1 implementation of the colored roof-tile model graph. */
 public final class RoofTileModels {
     private RoofTileModels() {}
 
@@ -40,7 +40,7 @@ public final class RoofTileModels {
 
 
     public static void shapes(BlockModelContext context, SAPBlockModelGenerator generator,
-                             net.minecraft.world.item.DyeColor color) {
+                             DyeColor color) {
         Block base = BlockRegistry.ROOF_TILES.get(color).get();
         RoofTileSlabBlock slab = (RoofTileSlabBlock) context.get();
         RoofTileVerticalSlabBlock vertical = BlockRegistry.ROOF_TILE_VERTICAL_SLABS.get(color).get();

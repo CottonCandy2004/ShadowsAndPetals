@@ -9,6 +9,7 @@ import com.sshakusora.shadowsandpetals.client.model.BlockModelRegistry;
 import com.sshakusora.shadowsandpetals.client.model.registry.StandaloneBlockModelSet;
 import com.sshakusora.shadowsandpetals.registries.BlockRegistry;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -106,7 +107,7 @@ public class CurtainBlockEntityRenderer implements BlockEntityRenderer<CurtainBl
             BakedModel model = modelSet.get(new BlockModelRegistry.CurtainBoneKey(color, bone));
             if (model != null) {
                 bindings.add(new AnimatedBlockModel.Binding(
-                        rig, bone, model, net.minecraft.client.renderer.RenderType.cutout(), false));
+                        rig, bone, model, RenderType.cutout(), false));
             }
         }
         AnimatedBlockModel result = bindings.isEmpty() ? null : new AnimatedBlockModel(rig, bindings);

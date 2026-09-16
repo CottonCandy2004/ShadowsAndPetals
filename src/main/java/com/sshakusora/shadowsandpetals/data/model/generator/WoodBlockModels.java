@@ -14,7 +14,8 @@ import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
 import net.neoforged.neoforge.client.model.generators.ModelBuilder;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
 
-/** 1.21.1 compatibility callbacks for the 26.x model generator. */
+import java.util.Map;
+
 public final class WoodBlockModels {
     private WoodBlockModels() {}
     public static void woodSet(BlockModelContext<? extends Block> context, SAPBlockModelGenerator generator,
@@ -86,7 +87,7 @@ public final class WoodBlockModels {
                                         ResourceLocation side, ResourceLocation end,
                                         float fromY, float toY, boolean includeDisplayTransforms) {
         BlockModelBuilder builder = (BlockModelBuilder) generator.createModel(path, null,
-                java.util.Map.of("side", side, "end", end, "particle", side), null);
+                Map.of("side", side, "end", end, "particle", side), null);
         if (includeDisplayTransforms) {
             addDisplayTransforms(builder);
         }
@@ -143,7 +144,7 @@ public final class WoodBlockModels {
         }
         BlockModelBuilder builder = (BlockModelBuilder) generator.createModel(path,
                 ResourceLocation.withDefaultNamespace("block/block"),
-                java.util.Map.of("all", texture, "particle", texture), "cutout");
+                Map.of("all", texture, "particle", texture), "cutout");
         float fromY = upper ? 10 : 0;
         float toY = upper ? 16 : 6;
         float originY = upper ? 18 : 8;

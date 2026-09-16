@@ -9,6 +9,7 @@ import com.sshakusora.shadowsandpetals.util.VoxelShapeUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -170,7 +171,7 @@ public class WoodenBarrelBlock extends BaseEntityBlock implements SimpleWaterlog
 
         drops.forEach(stack -> {
             if (stack.is(this.asItem())) {
-                barrelData.putString("id", net.minecraft.core.registries.BuiltInRegistries.BLOCK_ENTITY_TYPE
+                barrelData.putString("id", BuiltInRegistries.BLOCK_ENTITY_TYPE
                         .getKey(BlockEntityRegistry.WOODEN_BARREL.get()).toString());
                 stack.set(DataComponents.BLOCK_ENTITY_DATA, CustomData.of(barrelData));
             }

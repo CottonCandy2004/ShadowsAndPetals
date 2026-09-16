@@ -1,5 +1,6 @@
 package com.sshakusora.shadowsandpetals.client.outline;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.sshakusora.shadowsandpetals.api.outline.OutlineGeometry;
@@ -29,9 +30,6 @@ class LampOutlineCacheTest {
         );
         for (Map.Entry<String, Integer> entry : expectedElementCounts.entrySet()) {
             String name = entry.getKey();
-            // The migrated OBJ lamp families keep their original element
-            // model under lamp_geometry/ so that the 1.21.1 OBJ wrapper does
-            // not feed 26.1.2 fields to the vanilla model deserializer.
             String resourceName = "assets/shadowsandpetals/lamp_geometry/" + name + "/off.json";
             JsonObject model;
             try (InputStream stream = getClass().getClassLoader().getResourceAsStream(resourceName)) {
@@ -94,7 +92,7 @@ class LampOutlineCacheTest {
     void blockstatesAndItemParentsResolveToMigratedObjModels() throws IOException {
         for (String family : new String[]{"bedroom_lamp", "desk_lamp", "emergency_lamp", "recessed_lamp", "wall_lamp"}) {
             JsonObject blockstate = loadJson("assets/shadowsandpetals/blockstates/" + family + ".json");
-            for (Map.Entry<String, com.google.gson.JsonElement> variant
+            for (Map.Entry<String, JsonElement> variant
                     : blockstate.getAsJsonObject("variants").entrySet()) {
                 JsonObject state = variant.getValue().getAsJsonObject();
                 String modelId = state.get("model").getAsString();

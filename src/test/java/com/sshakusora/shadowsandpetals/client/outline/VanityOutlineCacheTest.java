@@ -22,7 +22,7 @@ class VanityOutlineCacheTest {
     @Test
     void bothVanityHalfModelsProduceNonDegenerateModelOutlines() throws IOException {
         Map<String, Integer> expectedElementCounts = Map.of(
-                "vanity_lower", 46,
+                "vanity_lower", 42,
                 "vanity_upper", 21
         );
 

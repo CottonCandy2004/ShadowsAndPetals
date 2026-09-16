@@ -23,7 +23,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Baked 1.21.1 wrapper for the rotated pot and its block-entity tree mesh. */
 public final class BonsaiPotBlockStateModel extends BakedModelWrapper<BakedModel>
         implements IDynamicBakedModel {
     private final Block expectedBlock;

@@ -17,7 +17,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-/** Resolves fluid sprites and colors using the 1.21.1 client fluid extension API. */
 public final class ClientFluidRenderInfo {
     private static final int STREAM_ALPHA = 208;
 

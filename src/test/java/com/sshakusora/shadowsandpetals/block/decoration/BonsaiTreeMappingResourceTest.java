@@ -85,9 +85,6 @@ class BonsaiTreeMappingResourceTest {
         try (InputStream stream = classLoader.getResourceAsStream("META-INF/accesstransformer.cfg")) {
             assertNotNull(stream);
             String accessTransformer = new String(stream.readAllBytes(), StandardCharsets.UTF_8);
-            // 1.21.1 keeps the grower fields accessible through the normal
-            // runtime model; the only project-owned AT entry is the vanilla
-            // double-plant drop hook used by the bonsai placement path.
             assertTrue(accessTransformer.contains(
                     "public net.minecraft.world.level.block.DoublePlantBlock preventDropFromBottomPart"));
         }

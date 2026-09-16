@@ -9,7 +9,6 @@ import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
 
-/** 1.21.1 compatibility callbacks for the 26.x model generator. */
 public final class LargeCurtainModels {
     private LargeCurtainModels() {}
     public static void block(BlockModelContext<? extends LargeCurtainBlock> context, SAPBlockModelGenerator generator) {

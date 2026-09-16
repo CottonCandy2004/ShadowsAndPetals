@@ -3,13 +3,15 @@ package com.sshakusora.shadowsandpetals.event;
 import com.sshakusora.shadowsandpetals.ShadowsAndPetals;
 import com.sshakusora.shadowsandpetals.block.WoodSetList;
 import com.sshakusora.shadowsandpetals.registries.BlockRegistry;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.event.furnace.FurnaceFuelBurnTimeEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
+import net.neoforged.neoforge.registries.DeferredBlock;
 
-/** Restores the 1.21.1 equivalents of the newer wood data maps. */
 @EventBusSubscriber(modid = ShadowsAndPetals.MOD_ID)
 public final class WoodCompatibilityEvents {
     private WoodCompatibilityEvents() {
@@ -63,17 +65,17 @@ public final class WoodCompatibilityEvents {
         }
     }
 
-    private static net.minecraft.world.level.block.state.BlockState strippedState(
-            net.minecraft.world.level.block.state.BlockState state,
-            net.minecraft.world.level.block.Block source,
-            net.minecraft.world.level.block.Block stripped
+    private static BlockState strippedState(
+            BlockState state,
+            Block source,
+            Block stripped
     ) {
         return state.is(source) ? stripped.withPropertiesOf(state) : null;
     }
 
     private static boolean isItem(
             FurnaceFuelBurnTimeEvent event,
-            net.neoforged.neoforge.registries.DeferredBlock<?> block
+            DeferredBlock<?> block
     ) {
         return event.getItemStack().is(block.asItem());
     }

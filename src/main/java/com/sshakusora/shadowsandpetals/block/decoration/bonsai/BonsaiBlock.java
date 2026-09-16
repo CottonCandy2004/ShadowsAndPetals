@@ -18,6 +18,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -190,8 +191,8 @@ public final class BonsaiBlock extends BaseEntityBlock implements BlockOutlinePr
                     }
                 }
                 stack.hurtAndBreak(1, player, hand == InteractionHand.MAIN_HAND
-                        ? net.minecraft.world.entity.EquipmentSlot.MAINHAND
-                        : net.minecraft.world.entity.EquipmentSlot.OFFHAND);
+                        ? EquipmentSlot.MAINHAND
+                        : EquipmentSlot.OFFHAND);
                 level.playSound(null, pos, SoundEvents.SHEEP_SHEAR, SoundSource.BLOCKS, 1.0F, 1.0F);
                 return InteractionResult.SUCCESS;
             }

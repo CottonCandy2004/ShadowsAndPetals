@@ -6,13 +6,15 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.neoforged.neoforge.fluids.FluidStack;
 
+import java.util.Arrays;
+
 public abstract class FluidStacksResourceHandler implements ResourceHandler<FluidResource> {
     public static final String VALUE_IO_KEY = "Stacks";
     protected final FluidStack[] stacks;
     protected final int capacity;
     protected FluidStacksResourceHandler(int size, int capacity) {
         this.stacks = new FluidStack[size];
-        java.util.Arrays.fill(this.stacks, FluidStack.EMPTY);
+        Arrays.fill(this.stacks, FluidStack.EMPTY);
         this.capacity = capacity;
     }
     protected void onContentsChanged(int index, FluidStack previousContents) {}

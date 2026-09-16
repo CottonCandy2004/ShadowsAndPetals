@@ -16,6 +16,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -453,8 +454,8 @@ public class IroriBlock extends BaseEntityBlock implements SimpleWaterloggedBloc
         level.gameEvent(player, GameEvent.BLOCK_CHANGE, interactionPos);
         if (flintAndSteel) {
             stack.hurtAndBreak(1, player, hand == InteractionHand.MAIN_HAND
-                    ? net.minecraft.world.entity.EquipmentSlot.MAINHAND
-                    : net.minecraft.world.entity.EquipmentSlot.OFFHAND);
+                    ? EquipmentSlot.MAINHAND
+                    : EquipmentSlot.OFFHAND);
         } else if (!player.isCreative()) {
             stack.shrink(1);
         }

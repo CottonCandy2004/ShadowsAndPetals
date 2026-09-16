@@ -37,9 +37,6 @@ public final class BlockTagRegistry {
     }
 
     private static void addDefaultIncludedTags() {
-        // 1.21.1 has no vanilla minecraft:lanterns block tag. Add the two
-        // vanilla lantern blocks directly so hanging connections retain the
-        // 26.1.2 behavior without referencing a missing tag.
         add(WOOD_POST_HANGING_CONNECTIONS, Blocks.LANTERN);
         add(WOOD_POST_HANGING_CONNECTIONS, Blocks.SOUL_LANTERN);
         include(WOOD_POST_HANGING_CONNECTIONS, BlockTags.CEILING_HANGING_SIGNS);

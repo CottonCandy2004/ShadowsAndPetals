@@ -5,13 +5,13 @@ import net.minecraft.util.RandomSource;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/** Compatibility tests for the 1.21.1 baked-model dispatch boundary. */
 class DynamicBlockStateModelSafetyTest {
     @Test
     void legacyBakedModelDelegateReceivesTheThreeArgumentCall() {
@@ -59,7 +59,7 @@ class DynamicBlockStateModelSafetyTest {
         assertTrue(called.get());
     }
 
-    private static BakedModel proxyModel(java.lang.reflect.InvocationHandler handler) {
+    private static BakedModel proxyModel(InvocationHandler handler) {
         return (BakedModel) Proxy.newProxyInstance(
                 BakedModel.class.getClassLoader(),
                 new Class<?>[]{BakedModel.class},

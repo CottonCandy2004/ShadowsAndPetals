@@ -9,12 +9,12 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.StairBlock;
+import net.neoforged.neoforge.client.model.generators.BlockModelBuilder;
 import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
 
 import java.util.Map;
 
-/** Common block model callbacks backed by NeoForge's 1.21.1 model API. */
 public final class StandardBlockModels {
     private StandardBlockModels() {}
 
@@ -103,9 +103,9 @@ public final class StandardBlockModels {
         var top = models.slabTop(context.name() + "_top", texture, texture, texture);
         var full = models.cubeAll(context.name() + "_double", texture);
         if (cutoutMipped) {
-            ((net.neoforged.neoforge.client.model.generators.BlockModelBuilder) bottom).renderType("cutout_mipped");
-            ((net.neoforged.neoforge.client.model.generators.BlockModelBuilder) top).renderType("cutout_mipped");
-            ((net.neoforged.neoforge.client.model.generators.BlockModelBuilder) full).renderType("cutout_mipped");
+            ((BlockModelBuilder) bottom).renderType("cutout_mipped");
+            ((BlockModelBuilder) top).renderType("cutout_mipped");
+            ((BlockModelBuilder) full).renderType("cutout_mipped");
         }
         generator.provider().slabBlock(block, bottom, top, full);
         parentBlockItem(block, generator, generator.modLoc("block/" + context.name()));
@@ -120,9 +120,9 @@ public final class StandardBlockModels {
         var inner = models.stairsInner(context.name() + "_inner", texture, texture, texture);
         var outer = models.stairsOuter(context.name() + "_outer", texture, texture, texture);
         if (cutoutMipped) {
-            ((net.neoforged.neoforge.client.model.generators.BlockModelBuilder) straight).renderType("cutout_mipped");
-            ((net.neoforged.neoforge.client.model.generators.BlockModelBuilder) inner).renderType("cutout_mipped");
-            ((net.neoforged.neoforge.client.model.generators.BlockModelBuilder) outer).renderType("cutout_mipped");
+            ((BlockModelBuilder) straight).renderType("cutout_mipped");
+            ((BlockModelBuilder) inner).renderType("cutout_mipped");
+            ((BlockModelBuilder) outer).renderType("cutout_mipped");
         }
         generator.provider().stairsBlock(block, straight, inner, outer);
         parentBlockItem(block, generator, generator.modLoc("block/" + context.name()));

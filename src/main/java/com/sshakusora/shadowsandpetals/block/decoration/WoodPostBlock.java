@@ -44,8 +44,6 @@ public class WoodPostBlock extends Block implements SimpleWaterloggedBlock {
     private static final double INNER_MIN = 6.0D;
     private static final double INNER_MAX = 10.0D;
     private static final VoxelShape CORE_SHAPE = Block.box(INNER_MIN, INNER_MIN, INNER_MIN, INNER_MAX, INNER_MAX, INNER_MAX);
-    // 26.1.2's Block.column(2, 0, 1) is a 2x2-pixel column touching the
-    // bottom face. Block.box is the equivalent helper in the 1.21.1 target.
     private static final VoxelShape HANGING_SUPPORT_SHAPE = Block.box(7.0D, 0.0D, 7.0D, 9.0D, 1.0D, 9.0D);
     private static final VoxelShape[] ARM_SHAPES = new VoxelShape[]{
             Block.box(INNER_MIN, 0.0D, INNER_MIN, INNER_MAX, INNER_MAX, INNER_MAX),
@@ -221,10 +219,6 @@ public class WoodPostBlock extends Block implements SimpleWaterloggedBlock {
     public enum ConnectionType implements StringRepresentable {
         NONE("none"),
         IRON_CHAIN("iron_chain", ResourceLocation.withDefaultNamespace("block/chain")),
-        // Copper chains are newer than the 1.21.1 target and do not exist in
-        // its vanilla registries/textures. Keep their serialized names for
-        // forward-compatible saves, but do not treat them as renderable
-        // connection types in this version.
         COPPER_CHAIN("copper_chain"),
         EXPOSED_COPPER_CHAIN("exposed_copper_chain"),
         WEATHERED_COPPER_CHAIN("weathered_copper_chain"),

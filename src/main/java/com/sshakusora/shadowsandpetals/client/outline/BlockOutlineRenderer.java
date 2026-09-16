@@ -9,7 +9,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
-/** Draws model-unit outline geometry through the legacy 1.21.1 line buffer. */
 public final class BlockOutlineRenderer {
     private static final float MODEL_UNIT_TO_BLOCK_UNIT = 1.0F / 16.0F;
 

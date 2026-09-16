@@ -4,15 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.HumanoidArm;
 
-/**
- * 1.21.1 first-person compatibility facade.
- *
- * <p>The 26.x implementation submitted hand and item nodes through the newer
- * render-state collector.  In 1.21.1 the vanilla hand renderer owns that
- * submission, while {@link UseAnimationPlayer} owns the arm/item pose hook.
- * This facade keeps the old conceptual entry point available and delegates to
- * the target-era pose pipeline.</p>
- */
+/** Binds first-person arm and item poses for use animations. */
 public final class FirstPersonRigBinder {
     private FirstPersonRigBinder() {
     }

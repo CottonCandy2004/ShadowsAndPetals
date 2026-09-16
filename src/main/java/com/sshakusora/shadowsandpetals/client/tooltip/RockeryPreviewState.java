@@ -4,12 +4,7 @@ import com.sshakusora.shadowsandpetals.block.RockeryDimensions;
 import com.sshakusora.shadowsandpetals.block.nature.RockeryBlock;
 
 /**
- * Immutable state used by the 1.21.1 preview renderer.
- *
- * <p>The newer source tree renders this state through NeoForge's picture-in-picture
- * pipeline. That pipeline does not exist in 1.21.1, so the state is deliberately
- * independent of GUI renderer internals and can be drawn directly by
- * {@link RockeryPreviewRenderer}.</p>
+ * Immutable state used by the preview renderer.
  *
  * @param content      which block model fills the W×H×D footprint
  * @param yawDegrees   extra yaw applied around the vertical axis

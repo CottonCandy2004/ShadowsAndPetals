@@ -3,11 +3,11 @@ package com.sshakusora.shadowsandpetals.data.model.generator;
 import com.sshakusora.shadowsandpetals.data.model.BlockModelContext;
 import com.sshakusora.shadowsandpetals.data.model.SAPBlockModelGenerator;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
 
-/** 1.21.1 compatibility callbacks for the 26.x model generator. */
 public final class AxisAlignedPillarBlockModels {
     private AxisAlignedPillarBlockModels() {}
     public static void withItem(BlockModelContext<? extends Block> context, SAPBlockModelGenerator generator) {
@@ -16,7 +16,7 @@ public final class AxisAlignedPillarBlockModels {
 
     public static void withItem(BlockModelContext<? extends Block> context,
                                 SAPBlockModelGenerator generator,
-                                net.minecraft.resources.ResourceLocation model) {
+                                ResourceLocation model) {
         Block block = context.get();
         generator.provider().getVariantBuilder(block).forAllStates(state -> {
             Direction.Axis axis = state.getValue(BlockStateProperties.AXIS);

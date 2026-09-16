@@ -2,6 +2,7 @@ package com.sshakusora.shadowsandpetals.client.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import com.sshakusora.shadowsandpetals.block.decoration.WindChimeBlock;
 import com.sshakusora.shadowsandpetals.blockentity.WindChimeBlockEntity;
 import com.sshakusora.shadowsandpetals.item.chime.WindChimeColors;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -78,7 +79,7 @@ public class WindChimeBlockEntityRenderer implements BlockEntityRenderer<WindChi
                 * 3.0F * profile.mainAmplitude;
 
         float axisRotation = blockEntity.getBlockState().getValue(
-                com.sshakusora.shadowsandpetals.block.decoration.WindChimeBlock.HORIZONTAL_AXIS
+                WindChimeBlock.HORIZONTAL_AXIS
         ) == Direction.Axis.X ? 90.0F : 0.0F;
 
         poseStack.pushPose();

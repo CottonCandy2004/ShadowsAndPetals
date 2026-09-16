@@ -1,5 +1,6 @@
 package com.sshakusora.shadowsandpetals.client.model;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.BlockModelShaper;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -14,7 +15,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-/** Small compatibility helpers shared by the 1.21.1 baked-model wrappers. */
 public final class BakedModelSupport {
     private BakedModelSupport() {
     }
@@ -34,6 +34,6 @@ public final class BakedModelSupport {
 
     public static BakedModel blockModel(BlockState state) {
         ModelResourceLocation location = BlockModelShaper.stateToModelLocation(state);
-        return net.minecraft.client.Minecraft.getInstance().getModelManager().getModel(location);
+        return Minecraft.getInstance().getModelManager().getModel(location);
     }
 }

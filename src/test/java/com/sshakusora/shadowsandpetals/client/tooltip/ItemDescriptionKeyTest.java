@@ -18,8 +18,6 @@ class ItemDescriptionKeyTest {
 
     @Test
     void usesItemNamespaceForBlockItems() {
-        // BlockItem#getDescriptionId() is block.minecraft.stone in 1.21.1;
-        // the registry-id based prefix must still use the item namespace.
         assertEquals(
                 "item.minecraft.stone.tooltip",
                 ItemDescription.tooltipTranslationPrefix(

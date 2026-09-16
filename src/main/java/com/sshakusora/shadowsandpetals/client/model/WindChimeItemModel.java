@@ -15,7 +15,6 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import org.jetbrains.annotations.Nullable;
 
-/** 1.21.1 custom item renderer for independently dyeable wind chimes. */
 public final class WindChimeItemModel implements IClientItemExtensions {
     private final BlockEntityWithoutLevelRenderer renderer;
 

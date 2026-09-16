@@ -78,10 +78,6 @@ public final class LampOutlineCache extends SimplePreparableReloadListener<LampO
 
     private static void add(Map<Block, Definition> definitions, Block block, String modelName, Orientation orientation) {
         definitions.put(block, new Definition(block,
-                // Keep the 26.1.2 element JSON outside models/.  The 1.21.1
-                // extended model deserializer parses elements before it
-                // dispatches to neoforge:obj, while the outline parser still
-                // understands the sidecar format directly.
                 ShadowsAndPetals.asResource("lamp_geometry/" + modelName + "/off.json"), orientation));
     }
 

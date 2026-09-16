@@ -2,6 +2,7 @@ package com.sshakusora.shadowsandpetals.client.model.registry;
 
 import com.sshakusora.shadowsandpetals.client.model.builder.RegStandaloneBlockModelBuilder;
 import com.sshakusora.shadowsandpetals.client.model.builder.RegStandaloneBlockModelSetBuilder;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.neoforged.neoforge.client.event.ModelEvent;
 
 import java.util.ArrayList;
@@ -41,7 +42,7 @@ public final class ClientModelRegistry {
     }
 
     public static void registerAdditionalModels(ModelEvent.RegisterAdditional event) {
-        Set<net.minecraft.client.resources.model.ModelResourceLocation> registeredIds = new HashSet<>();
+        Set<ModelResourceLocation> registeredIds = new HashSet<>();
         for (ClientModelEntry entry : ENTRIES) {
             entry.registerModels(event, registeredIds);
         }

@@ -4,11 +4,14 @@ import com.sshakusora.shadowsandpetals.block.WoodBlockList;
 import com.sshakusora.shadowsandpetals.block.decoration.WoodPillarBlock;
 import com.sshakusora.shadowsandpetals.data.model.BlockModelContext;
 import com.sshakusora.shadowsandpetals.data.model.SAPBlockModelGenerator;
+import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
 
-/** 1.21.1 compatibility callbacks for the 26.x model generator. */
+import java.util.Map;
+
 public final class WoodPillarBlockModels {
     private WoodPillarBlockModels() {}
     public static void strippedWoodPillar(BlockModelContext<? extends WoodPillarBlock> context,
@@ -21,11 +24,11 @@ public final class WoodPillarBlockModels {
         ResourceLocation top = side.withSuffix("_top");
         generator.createObjModel(blockModel.getPath(), generator.modLoc("block/template/wood_pillar"),
                 generator.modLoc("models/block/wood_pillar/stripped_wood_pillar.obj"),
-                java.util.Map.of("top", top, "side", side, "particle", side), true);
+                Map.of("top", top, "side", side, "particle", side), true);
         generator.provider().getVariantBuilder(context.get()).forAllStates(state -> {
-            var axis = state.getValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.AXIS);
-            int x = axis == net.minecraft.core.Direction.Axis.Y ? 0 : 90;
-            int y = axis == net.minecraft.core.Direction.Axis.X ? 90 : 0;
+            var axis = state.getValue(BlockStateProperties.AXIS);
+            int x = axis == Direction.Axis.Y ? 0 : 90;
+            int y = axis == Direction.Axis.X ? 90 : 0;
             return ConfiguredModel.builder().modelFile(generator.uncheckedModel(blockModel))
                     .rotationX(x).rotationY(y).uvLock(true).build();
         });

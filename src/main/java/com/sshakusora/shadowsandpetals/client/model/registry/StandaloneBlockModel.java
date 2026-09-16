@@ -80,7 +80,6 @@ public final class StandaloneBlockModel implements ClientModelEntry {
                 ? raw : new RotatedBakedModel(raw, rotation);
     }
 
-    /** Legacy 1.21.1 replacement for the removed model-state transform hook. */
     private static final class RotatedBakedModel extends BakedModelWrapper<BakedModel>
             implements IDynamicBakedModel {
         private final StandaloneModelRotation rotation;

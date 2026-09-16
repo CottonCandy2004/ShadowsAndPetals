@@ -20,15 +20,7 @@ import net.neoforged.neoforge.client.model.data.ModelData;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
-/**
- * Direct 1.21.1 renderer for the rockery previews used by the block tooltip and
- * the JEI carving page.
- *
- * <p>1.21.1 has no picture-in-picture GUI render state API, so the preview uses
- * the normal baked block renderer against the GUI's buffer source. This
- * preserves the old angled, multi-part preview without depending on the later
- * render-state pipeline.</p>
- */
+/** Renders rockery previews used by the block tooltip and the JEI carving page. */
 public final class RockeryPreviewRenderer {
     /**
      * Pitch of the preview camera. Positive because the pose mirrors the vertical
@@ -42,8 +34,7 @@ public final class RockeryPreviewRenderer {
     private static final double OUTLINE_OFFSET = 0.0025D;
 
     /*
-     * The direct 1.21.1 renderer is stateless per draw call, while tooltip
-     * components may be recreated as the tooltip is gathered. Keep the animation
+     * Tooltip components may be recreated as the tooltip is gathered. Keep the animation
      * clock here so recreation of a client component cannot restart the animation
      * every frame.
      */

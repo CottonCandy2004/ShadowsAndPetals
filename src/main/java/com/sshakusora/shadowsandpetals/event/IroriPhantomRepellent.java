@@ -120,9 +120,6 @@ public final class IroriPhantomRepellent {
                 center.z + z / horizontalDistance * ESCAPE_ANCHOR_DISTANCE
         );
 
-        // The target's movement controller owns its internal anchor fields in 1.21.1.
-        // Apply an outward impulse instead, preserving the repellent behaviour without
-        // reaching into package-private vanilla state.
         Vec3 direction = Vec3.atCenterOf(escapeAnchor).subtract(phantom.position()).normalize();
         phantom.setDeltaMovement(direction.scale(0.5D).add(0.0D, 0.2D, 0.0D));
     }

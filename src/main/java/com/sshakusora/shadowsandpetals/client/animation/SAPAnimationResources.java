@@ -28,8 +28,7 @@ import java.util.stream.Collectors;
 /**
  * Reloadable registry for the small rig/controller layer used by Shadows & Petals.
  *
- * <p>1.21.1 exposes entity animation clips through {@link AnimationLoader}, while
- * the mod-specific rig and controller metadata is owned by this listener. The
+ * <p>The mod-specific rig and controller metadata is owned by this listener. The
  * listeners are deliberately kept separate so NeoForge remains responsible for
  * parsing its entity-animation JSON.</p>
  */

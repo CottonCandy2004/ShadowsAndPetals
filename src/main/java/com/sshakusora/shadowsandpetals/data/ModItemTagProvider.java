@@ -11,6 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 import java.util.concurrent.CompletableFuture;
@@ -20,7 +21,7 @@ public final class ModItemTagProvider extends ItemTagsProvider {
     public ModItemTagProvider(
             PackOutput output,
             CompletableFuture<HolderLookup.Provider> lookupProvider,
-            CompletableFuture<TagsProvider.TagLookup<net.minecraft.world.level.block.Block>> blockTags,
+            CompletableFuture<TagsProvider.TagLookup<Block>> blockTags,
             ExistingFileHelper existingFileHelper
     ) {
         super(output, lookupProvider, blockTags, ShadowsAndPetals.MOD_ID, existingFileHelper);

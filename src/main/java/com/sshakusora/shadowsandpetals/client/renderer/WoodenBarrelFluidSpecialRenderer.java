@@ -11,7 +11,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 
-/** Shared 1.21.1 implementation for the barrel's item fluid layer. */
 public final class WoodenBarrelFluidSpecialRenderer {
     private WoodenBarrelFluidSpecialRenderer() {
     }

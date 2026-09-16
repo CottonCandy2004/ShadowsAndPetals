@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-/** JEI's 1.21.1 crafting extension for the custom wind-chime recipe. */
 final class WindChimeDyeRecipeExtension implements ICraftingCategoryExtension<WindChimeDyeRecipe> {
     static final WindChimeDyeRecipeExtension INSTANCE = new WindChimeDyeRecipeExtension();
 

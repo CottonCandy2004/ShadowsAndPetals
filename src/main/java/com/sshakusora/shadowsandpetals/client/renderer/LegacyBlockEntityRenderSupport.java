@@ -3,6 +3,7 @@ package com.sshakusora.shadowsandpetals.client.renderer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
@@ -20,15 +21,7 @@ import net.neoforged.neoforge.client.RenderTypeHelper;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import org.jetbrains.annotations.Nullable;
 
-/**
- * Small rendering bridge for the 1.21.1 renderer API.
- *
- * <p>The 26.x branch submits block-model parts through the render-state
- * pipeline.  1.21.1 still exposes the same baked geometry through
- * {@link BlockRenderDispatcher} and {@link BakedModel}, so block-entity
- * renderers can keep their own animation math while sharing this bridge for
- * model lookup and submission.</p>
- */
+/** Shared rendering helpers for animated block entities. */
 final class LegacyBlockEntityRenderSupport {
     private LegacyBlockEntityRenderSupport() {
     }
@@ -109,6 +102,6 @@ final class LegacyBlockEntityRenderSupport {
         if (level == null) {
             return 0xF000F0;
         }
-        return net.minecraft.client.renderer.LevelRenderer.getLightColor(level, pos);
+        return LevelRenderer.getLightColor(level, pos);
     }
 }
