@@ -8,7 +8,6 @@ public final class HarrowArmPoseEnumExtensions {
     public static final EnumProxy<HumanoidModel.ArmPose> SHADOWSANDPETALS_HARROW_DIGGING = new EnumProxy<>(
             HumanoidModel.ArmPose.class,
             false,
-            false,
             (IArmPoseTransformer) HarrowClientExtensions::applyThirdPersonHarrowPose
     );
 

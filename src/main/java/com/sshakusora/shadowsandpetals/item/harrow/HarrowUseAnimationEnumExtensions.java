@@ -6,6 +6,6 @@ public final class HarrowUseAnimationEnumExtensions {
     private HarrowUseAnimationEnumExtensions() {}
 
     public static UseAnim getHarrowDigging() {
-        return UseAnim.BRUSH;
+        return UseAnim.CUSTOM;
     }
 }

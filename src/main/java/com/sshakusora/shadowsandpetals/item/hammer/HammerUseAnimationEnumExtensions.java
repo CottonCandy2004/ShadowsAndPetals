@@ -6,6 +6,6 @@ public final class HammerUseAnimationEnumExtensions {
     private HammerUseAnimationEnumExtensions() {}
 
     public static UseAnim getHammerAndChisel() {
-        return UseAnim.BOW;
+        return UseAnim.CUSTOM;
     }
 }

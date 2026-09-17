@@ -8,7 +8,6 @@ public final class HammerArmPoseEnumExtensions {
     public static final EnumProxy<HumanoidModel.ArmPose> SHADOWSANDPETALS_HAMMER_AND_CHISEL = new EnumProxy<>(
             HumanoidModel.ArmPose.class,
             false,
-            true,
             (IArmPoseTransformer) HammerClientExtensions::applyThirdPersonHammerPose);
 
     private HammerArmPoseEnumExtensions() {}
