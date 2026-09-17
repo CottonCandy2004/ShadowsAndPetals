@@ -1,9 +1,6 @@
 package com.sshakusora.shadowsandpetals.blockentity;
 
-import com.sshakusora.shadowsandpetals.compat.transfer.ResourceHandler;
-import com.sshakusora.shadowsandpetals.compat.transfer.item.ItemResource;
-import com.sshakusora.shadowsandpetals.compat.transfer.item.ItemStackResourceHandler;
-import com.sshakusora.shadowsandpetals.compat.transfer.transaction.TransactionContext;
+import com.sshakusora.shadowsandpetals.block.decoration.bonsai.BonsaiTreeResolver;
 import com.sshakusora.shadowsandpetals.registries.BlockEntityRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
@@ -14,6 +11,7 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -24,6 +22,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.client.model.data.ModelProperty;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -148,7 +148,7 @@ public final class BonsaiBlockEntity extends BlockEntity {
         return plantStorage.getStoredStack();
     }
 
-    public ResourceHandler<ItemResource> getPlantStorage() {
+    public IItemHandler getPlantStorage() {
         return plantStorage;
     }
 
@@ -292,46 +292,87 @@ public final class BonsaiBlockEntity extends BlockEntity {
         return block == Blocks.AIR ? null : block.defaultBlockState();
     }
 
-    private static final class BonsaiPlantStorage extends ItemStackResourceHandler {
-        private ItemStack storedStack = ItemStack.EMPTY;
+    private final class BonsaiPlantStorage extends ItemStackHandler {
+        private boolean internalMutation;
 
         private ItemStack getStoredStack() {
-            return storedStack.copy();
+            return getStackInSlot(0).copy();
         }
 
         private void setStoredStack(ItemStack stack) {
-            storedStack = stack.isEmpty() ? ItemStack.EMPTY : stack.copyWithCount(1);
+            internalMutation = true;
+            try {
+                setStackInSlot(0, stack.isEmpty() ? ItemStack.EMPTY : stack.copyWithCount(1));
+            } finally {
+                internalMutation = false;
+            }
         }
 
         @Override
-        protected ItemStack getStack() {
-            return storedStack;
+        public int getSlotLimit(int slot) {
+            return slot == 0 ? 1 : 0;
         }
 
         @Override
-        protected void setStack(ItemStack stack) {
-            setStoredStack(stack);
+        public boolean isItemValid(int slot, ItemStack stack) {
+            return slot == 0 && isSupportedPlant(stack);
         }
 
         @Override
-        protected boolean isValid(ItemResource resource) {
-            return isSupportedPlant(resource.toStack(1));
+        public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+            if (slot != 0 || stack.isEmpty() || !isSupportedPlant(stack)) {
+                return stack;
+            }
+            if (resolvePlant(stack) == null) {
+                return stack;
+            }
+            return super.insertItem(slot, stack, simulate);
         }
 
         @Override
-        protected int getCapacity(ItemResource resource) {
-            return 1;
+        protected void onContentsChanged(int slot) {
+            if (!internalMutation) {
+                onPlantStorageChanged();
+            }
         }
 
-        @Override
-        public int insert(int index, ItemResource resource, int amount, TransactionContext transaction) {
-            return super.insert(index, resource, amount, transaction);
+        private void onPlantStorageChanged() {
+            ItemStack stored = getStoredStack();
+            if (stored.isEmpty()) {
+                dead = false;
+                trunkBlockId = null;
+                leavesBlockId = null;
+                shape = Shape.SEMI_CASCADE;
+            } else {
+                BonsaiTreeResolver.Result resolved = isSupportedPlant(stored) ? resolvePlant(stored) : null;
+                if (resolved == null) {
+                    setStoredStack(ItemStack.EMPTY);
+                    dead = false;
+                    trunkBlockId = null;
+                    leavesBlockId = null;
+                    shape = Shape.SEMI_CASCADE;
+                } else {
+                    trunkBlockId = BuiltInRegistries.BLOCK.getKey(resolved.trunkBlock());
+                    leavesBlockId = BuiltInRegistries.BLOCK.getKey(resolved.leavesBlock());
+                    dead = stored.is(Items.DEAD_BUSH);
+                    shape = Shape.SEMI_CASCADE;
+                }
+            }
+            setChangedAndSync();
         }
+    }
 
-        @Override
-        public int extract(int index, ItemResource resource, int amount, TransactionContext transaction) {
-            return super.extract(index, resource, amount, transaction);
+    private @Nullable BonsaiTreeResolver.Result resolvePlant(ItemStack stack) {
+        if (stack.is(Items.DEAD_BUSH)) {
+            return new BonsaiTreeResolver.Result(Blocks.OAK_LOG, Blocks.OAK_LEAVES);
         }
+        Block block = Block.byItem(stack.getItem());
+        if (!(block instanceof SaplingBlock)) {
+            return null;
+        }
+        return level instanceof ServerLevel serverLevel
+                ? BonsaiTreeResolver.resolve(serverLevel, worldPosition, block)
+                : BonsaiTreeResolver.resolve(block);
     }
 
     private static boolean isRegisteredBlock(ResourceLocation id) {

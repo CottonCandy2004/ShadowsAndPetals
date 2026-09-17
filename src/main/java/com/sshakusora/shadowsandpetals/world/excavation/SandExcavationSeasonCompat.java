@@ -3,13 +3,14 @@ package com.sshakusora.shadowsandpetals.world.excavation;
 import com.mojang.logging.LogUtils;
 import com.sshakusora.shadowsandpetals.compat.CompatManager;
 import net.minecraft.server.level.ServerLevel;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 public final class SandExcavationSeasonCompat {
     private static final String SERENE_SEASONS_MODIFIER_CLASS = "com.sshakusora.shadowsandpetals.compat.sereneseasons.SereneSeasonsSeasonModifier";
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final SandExcavationSeasonModifier NO_OP = (level, currentChance) -> currentChance;
-    private static volatile SandExcavationSeasonModifier loadedModifier;
+    private static volatile @Nullable SandExcavationSeasonModifier loadedModifier;
 
     private SandExcavationSeasonCompat() {
     }

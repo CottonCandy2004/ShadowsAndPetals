@@ -3,7 +3,6 @@ package com.sshakusora.shadowsandpetals.client.renderer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.sshakusora.shadowsandpetals.block.decoration.WoodenBarrelBlock;
 import com.sshakusora.shadowsandpetals.blockentity.WoodenBarrelBlockEntity;
-import com.sshakusora.shadowsandpetals.compat.transfer.fluid.FluidResource;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -13,6 +12,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
+import net.neoforged.neoforge.fluids.FluidStack;
 
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -35,9 +35,9 @@ public class WoodenBarrelBlockEntityRenderer implements BlockEntityRenderer<Wood
         if (blockEntity.getLevel() == null) {
             return;
         }
-        FluidResource resource = blockEntity.getFluidTank().getResource(0);
-        int amount = blockEntity.getFluidTank().getAmountAsInt(0);
-        Fluid fluid = resource.isEmpty() || amount <= 0 ? Fluids.EMPTY : resource.getFluid();
+        FluidStack fluidStack = blockEntity.getFluidTank().getFluid();
+        int amount = fluidStack.getAmount();
+        Fluid fluid = fluidStack.isEmpty() || amount <= 0 ? Fluids.EMPTY : fluidStack.getFluid();
         double currentTime = blockEntity.getLevel().getGameTime() + partialTick;
         FluidLevelAnimation animation = fluidLevelAnimations.computeIfAbsent(
                 blockEntity,

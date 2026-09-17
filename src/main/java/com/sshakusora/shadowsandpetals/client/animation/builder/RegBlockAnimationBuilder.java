@@ -5,6 +5,7 @@ import com.sshakusora.shadowsandpetals.client.animation.AnimationResourceRef;
 import com.sshakusora.shadowsandpetals.client.animation.BlockAnimationDefinition;
 import com.sshakusora.shadowsandpetals.client.animation.SAPAnimationRegistry;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedHashSet;
 import java.util.Objects;
@@ -13,10 +14,10 @@ import java.util.Set;
 /** Fluent registration builder for resource-driven block-entity animations. */
 public final class RegBlockAnimationBuilder {
     private final ResourceLocation animationId;
-    private AnimationResourceRef.Rig rig;
-    private AnimationResourceRef.Controller controller;
+    private @Nullable AnimationResourceRef.Rig rig;
+    private @Nullable AnimationResourceRef.Controller controller;
     private final Set<AnimationResourceRef.Clip> clips = new LinkedHashSet<>();
-    private String defaultState;
+    private @Nullable String defaultState;
     private boolean registered;
 
     public RegBlockAnimationBuilder(ResourceLocation animationId) {

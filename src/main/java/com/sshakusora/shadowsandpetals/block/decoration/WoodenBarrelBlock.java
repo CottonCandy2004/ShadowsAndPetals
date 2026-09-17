@@ -3,7 +3,6 @@ package com.sshakusora.shadowsandpetals.block.decoration;
 import com.mojang.serialization.MapCodec;
 import com.sshakusora.shadowsandpetals.blockentity.WoodenBarrelBlockEntity;
 import com.sshakusora.shadowsandpetals.compat.InteractionResultCompat;
-import com.sshakusora.shadowsandpetals.compat.transfer.fluid.FluidUtil;
 import com.sshakusora.shadowsandpetals.registries.BlockEntityRegistry;
 import com.sshakusora.shadowsandpetals.util.VoxelShapeUtils;
 import net.minecraft.core.BlockPos;
@@ -45,6 +44,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.neoforged.neoforge.fluids.FluidUtil;
 
 import java.util.EnumMap;
 import java.util.List;

@@ -7,6 +7,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.event.ModelEvent;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.BiFunction;
@@ -51,8 +52,8 @@ public final class BlockStateModelDecoratorRegistry {
 
     public static final class Builder<B extends Block> {
         private final Class<B> blockType;
-        private BiFunction<? super B, ? super BakedModel, ? extends BakedModel> wrapper;
-        private StateAwareWrapper<B> stateAwareWrapper;
+        private @Nullable BiFunction<? super B, ? super BakedModel, ? extends BakedModel> wrapper;
+        private @Nullable StateAwareWrapper<B> stateAwareWrapper;
 
         private Builder(Class<B> blockType) {
             this.blockType = Objects.requireNonNull(blockType, "blockType");
@@ -91,8 +92,8 @@ public final class BlockStateModelDecoratorRegistry {
 
     private record TypedDecorator<B extends Block>(
             Class<B> blockType,
-            BiFunction<? super B, ? super BakedModel, ? extends BakedModel> wrapper,
-            StateAwareWrapper<B> stateAwareWrapper
+            @Nullable BiFunction<? super B, ? super BakedModel, ? extends BakedModel> wrapper,
+            @Nullable StateAwareWrapper<B> stateAwareWrapper
     ) implements Decorator {
         @Override
         public boolean matches(Block block) {

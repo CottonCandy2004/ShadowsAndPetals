@@ -3,10 +3,6 @@ package com.sshakusora.shadowsandpetals.blockentity;
 import com.sshakusora.shadowsandpetals.api.shishiOdoshi.ShishiOdoshiFluidRegistry;
 import com.sshakusora.shadowsandpetals.block.decoration.ShishiOdoshiBlock;
 import com.sshakusora.shadowsandpetals.block.decoration.ShishiOdoshiPipeBlock;
-import com.sshakusora.shadowsandpetals.compat.transfer.ResourceHandler;
-import com.sshakusora.shadowsandpetals.compat.transfer.TransferPreconditions;
-import com.sshakusora.shadowsandpetals.compat.transfer.fluid.FluidResource;
-import com.sshakusora.shadowsandpetals.compat.transfer.transaction.TransactionContext;
 import com.sshakusora.shadowsandpetals.registries.BlockEntityRegistry;
 import com.sshakusora.shadowsandpetals.registries.SoundRegistry;
 import com.sshakusora.shadowsandpetals.registries.TriggerRegistry;
@@ -31,6 +27,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
@@ -380,7 +378,7 @@ public class ShishiOdoshiBlockEntity extends BlockEntity {
         BOUNCING
     }
 
-    public static class FluidHandler implements ResourceHandler<FluidResource> {
+    public static class FluidHandler implements IFluidHandler {
         private static final int CAPACITY_MB = WATER_CAPACITY;
 
         private final ShishiOdoshiBlockEntity blockEntity;
@@ -390,76 +388,84 @@ public class ShishiOdoshiBlockEntity extends BlockEntity {
         }
 
         @Override
-        public int size() {
+        public int getTanks() {
             return 1;
         }
 
         @Override
-        public FluidResource getResource(int index) {
+        public FluidStack getFluidInTank(int index) {
             if (index != 0 || blockEntity.getWaterAmount() <= 0) {
-                return FluidResource.EMPTY;
+                return FluidStack.EMPTY;
             }
-            return FluidResource.of(blockEntity.getFluid());
+            return new FluidStack(blockEntity.getFluid(), blockEntity.getWaterAmount());
         }
 
         @Override
-        public long getAmountAsLong(int index) {
-            if (index != 0) return 0;
-            return blockEntity.getWaterAmount();
+        public int getTankCapacity(int index) {
+            return index == 0 ? CAPACITY_MB : 0;
         }
 
         @Override
-        public long getCapacityAsLong(int index, FluidResource resource) {
-            if (index != 0) return 0;
-            return CAPACITY_MB;
-        }
-
-        @Override
-        public boolean isValid(int index, FluidResource resource) {
+        public boolean isFluidValid(int index, FluidStack resource) {
             return index == 0
                     && resource != null
                     && !resource.isEmpty()
+                    && resource.getComponents().isEmpty()
                     && (blockEntity.getWaterAmount() == 0 || resource.is(blockEntity.getFluid()));
         }
 
         @Override
-        public int insert(int index, FluidResource resource, int amount, TransactionContext transaction) {
-            TransferPreconditions.checkNonEmptyNonNegative(resource, amount);
-            if (!isValid(index, resource) || blockEntity.animationPhase != AnimationPhase.FILLING) {
+        public int fill(FluidStack resource, FluidAction action) {
+            if (resource == null || resource.isEmpty()
+                    || !isFluidValid(0, resource)
+                    || blockEntity.animationPhase != AnimationPhase.FILLING) {
                 return 0;
             }
 
-            int inserted = Math.min(amount, CAPACITY_MB - blockEntity.fluidAmount);
+            int inserted = Math.min(resource.getAmount(), CAPACITY_MB - blockEntity.fluidAmount);
             if (inserted <= 0) {
                 return 0;
             }
-            if (blockEntity.fluidAmount == 0) {
-                blockEntity.fluid = resource.getFluid();
+
+            if (action.execute()) {
+                if (blockEntity.fluidAmount == 0) {
+                    blockEntity.fluid = resource.getFluid();
+                }
+                blockEntity.fluidAmount += inserted;
+                blockEntity.setChanged();
+                blockEntity.syncToClient();
             }
-            blockEntity.fluidAmount += inserted;
-            blockEntity.setChanged();
-            blockEntity.syncToClient();
             return inserted;
         }
 
         @Override
-        public int extract(int index, FluidResource resource, int amount, TransactionContext transaction) {
-            TransferPreconditions.checkNonEmptyNonNegative(resource, amount);
-            if (index != 0 || blockEntity.fluidAmount <= 0
-                    || !resource.is(blockEntity.fluid)) {
-                return 0;
+        public FluidStack drain(FluidStack resource, FluidAction action) {
+            if (resource == null || resource.isEmpty() || resource.getComponents().isEmpty() == false
+                    || blockEntity.fluidAmount <= 0 || !resource.is(blockEntity.fluid)) {
+                return FluidStack.EMPTY;
+            }
+            return drain(resource.getAmount(), action);
+        }
+
+        @Override
+        public FluidStack drain(int maxDrain, FluidAction action) {
+            if (maxDrain <= 0 || blockEntity.fluidAmount <= 0) {
+                return FluidStack.EMPTY;
             }
 
-            int extracted = Math.min(amount, blockEntity.fluidAmount);
-            blockEntity.fluidAmount -= extracted;
-            if (blockEntity.fluidAmount == 0) {
-                blockEntity.animationPhase = AnimationPhase.FILLING;
-                blockEntity.animationTick = 0.0F;
-                blockEntity.pourTick = -1.0F;
+            int extracted = Math.min(maxDrain, blockEntity.fluidAmount);
+            FluidStack result = new FluidStack(blockEntity.fluid, extracted);
+            if (action.execute()) {
+                blockEntity.fluidAmount -= extracted;
+                if (blockEntity.fluidAmount == 0) {
+                    blockEntity.animationPhase = AnimationPhase.FILLING;
+                    blockEntity.animationTick = 0.0F;
+                    blockEntity.pourTick = -1.0F;
+                }
+                blockEntity.setChanged();
+                blockEntity.syncToClient();
             }
-            blockEntity.setChanged();
-            blockEntity.syncToClient();
-            return extracted;
+            return result;
         }
     }
 }

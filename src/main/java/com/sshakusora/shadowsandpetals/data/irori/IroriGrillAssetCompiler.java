@@ -2,6 +2,7 @@ package com.sshakusora.shadowsandpetals.data.irori;
 
 import com.google.gson.*;
 import com.sshakusora.shadowsandpetals.block.decoration.irori.IroriGrillPart;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -131,7 +132,7 @@ public final class IroriGrillAssetCompiler {
         return result;
     }
 
-    private static JsonObject clipElement(JsonObject source, IroriGrillPart part, boolean lower) {
+    private static @Nullable JsonObject clipElement(JsonObject source, IroriGrillPart part, boolean lower) {
         double[] from = vector(source.getAsJsonArray("from"));
         double[] to = vector(source.getAsJsonArray("to"));
         double x0;

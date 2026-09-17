@@ -175,8 +175,8 @@ public record ItemDescription(List<Component> baseline, List<Component> onShift,
     /** Adds the locale-aware description and refreshes it after a language change. */
     public static final class Modifier implements TooltipModifier {
         private final Supplier<Item> itemSupplier;
-        private Item cachedItem;
-        private String cachedLocale;
+        private @Nullable Item cachedItem;
+        private @Nullable String cachedLocale;
         @Nullable
         private ItemDescription description;
 

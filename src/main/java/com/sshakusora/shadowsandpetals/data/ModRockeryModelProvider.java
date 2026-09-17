@@ -11,6 +11,7 @@ import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -108,7 +109,7 @@ public class ModRockeryModelProvider implements DataProvider {
         }
     }
 
-    private SourceModel sourceModel(Path path) {
+    private @Nullable SourceModel sourceModel(Path path) {
         Matcher matcher = SOURCE_MODEL_NAME.matcher(path.getFileName().toString());
         if (!matcher.matches()) {
             return null;
@@ -342,7 +343,7 @@ public class ModRockeryModelProvider implements DataProvider {
         return new TextureSize(16, 16);
     }
 
-    private JsonObject convertBlockbenchElement(JsonObject source, String textureKey, TextureSize textureSize, double xOffset, double zOffset) {
+    private @Nullable JsonObject convertBlockbenchElement(JsonObject source, String textureKey, TextureSize textureSize, double xOffset, double zOffset) {
         if (source.has("export") && !source.get("export").getAsBoolean()) {
             return null;
         }
@@ -463,7 +464,7 @@ public class ModRockeryModelProvider implements DataProvider {
         textures.addProperty("particle", PARTICLE_TEXTURE);
     }
 
-    private JsonObject cutElement(JsonObject source, Bounds cell) {
+    private @Nullable JsonObject cutElement(JsonObject source, Bounds cell) {
         Bounds bounds = Bounds.fromElement(source);
         Bounds clipped = bounds.intersection(cell);
         if (clipped == null) {
@@ -636,7 +637,7 @@ public class ModRockeryModelProvider implements DataProvider {
             );
         }
 
-        private Bounds intersection(Bounds other) {
+        private @Nullable Bounds intersection(Bounds other) {
             Bounds intersection = new Bounds(
                     Math.max(this.minX, other.minX),
                     Math.max(this.minY, other.minY),

@@ -1,5 +1,7 @@
 package com.sshakusora.shadowsandpetals.data.rockery.obj;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -100,7 +102,7 @@ public final class ObjModelCutter {
         }
     }
 
-    private static Bounds objectBounds(ObjObject object) {
+    private static @Nullable Bounds objectBounds(ObjObject object) {
         if (object.positions().isEmpty()) {
             return null;
         }

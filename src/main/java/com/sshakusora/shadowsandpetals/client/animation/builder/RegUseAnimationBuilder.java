@@ -4,6 +4,7 @@ import com.sshakusora.shadowsandpetals.ShadowsAndPetals;
 import com.sshakusora.shadowsandpetals.client.animation.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.HumanoidArm;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -17,15 +18,15 @@ import java.util.function.Consumer;
  */
 public final class RegUseAnimationBuilder {
     private final ResourceLocation profileId;
-    private AnimationResourceRef.Rig rig;
-    private AnimationResourceRef.Controller controller;
+    private @Nullable AnimationResourceRef.Rig rig;
+    private @Nullable AnimationResourceRef.Controller controller;
     private final Set<AnimationResourceRef.Clip> clips = new LinkedHashSet<>();
-    private String defaultState;
-    private String introState;
-    private String loopState;
-    private String outroState;
-    private FirstPersonBindingBuilder firstPerson;
-    private ThirdPersonBindingBuilder thirdPerson;
+    private @Nullable String defaultState;
+    private @Nullable String introState;
+    private @Nullable String loopState;
+    private @Nullable String outroState;
+    private @Nullable FirstPersonBindingBuilder firstPerson;
+    private @Nullable ThirdPersonBindingBuilder thirdPerson;
     private boolean registered;
 
     public RegUseAnimationBuilder(ResourceLocation profileId) {

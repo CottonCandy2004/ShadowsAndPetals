@@ -5,14 +5,6 @@ import com.sshakusora.shadowsandpetals.block.decoration.irori.IroriGrillBlock;
 import com.sshakusora.shadowsandpetals.block.decoration.irori.IroriGrillCopperTeapotBlock;
 import com.sshakusora.shadowsandpetals.block.decoration.irori.IroriGrillPartHolder;
 import com.sshakusora.shadowsandpetals.blockentity.irori.IroriBlockEntity;
-import com.sshakusora.shadowsandpetals.compat.transfer.ResourceHandler;
-import com.sshakusora.shadowsandpetals.compat.transfer.ResourceHandlerUtil;
-import com.sshakusora.shadowsandpetals.compat.transfer.access.ItemAccess;
-import com.sshakusora.shadowsandpetals.compat.transfer.fluid.FluidResource;
-import com.sshakusora.shadowsandpetals.compat.transfer.fluid.FluidStacksResourceHandler;
-import com.sshakusora.shadowsandpetals.compat.transfer.item.ItemResource;
-import com.sshakusora.shadowsandpetals.compat.transfer.item.VanillaContainerWrapper;
-import com.sshakusora.shadowsandpetals.compat.transfer.transaction.Transaction;
 import com.sshakusora.shadowsandpetals.data.BuiltinLanguageKeys;
 import com.sshakusora.shadowsandpetals.menu.TeapotMenu;
 import com.sshakusora.shadowsandpetals.recipe.TeapotRecipe;
@@ -40,8 +32,13 @@ import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.fluids.FluidActionResult;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
+import net.neoforged.neoforge.fluids.FluidUtil;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
+import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import org.jetbrains.annotations.Nullable;
 
 public class CopperTeapotBlockEntity extends RandomizableContainerBlockEntity {
@@ -64,8 +61,8 @@ public class CopperTeapotBlockEntity extends RandomizableContainerBlockEntity {
         @Override
         public int get(int index) {
             return switch (index) {
-                case 0 -> BuiltInRegistries.FLUID.getId(fluidTank.getResource(0).getFluid());
-                case 1 -> (int) fluidTank.getAmountAsLong(0);
+                case 0 -> BuiltInRegistries.FLUID.getId(fluidTank.getFluid().getFluid());
+                case 1 -> fluidTank.getFluidAmount();
                 default -> 0;
             };
         }
@@ -166,13 +163,13 @@ public class CopperTeapotBlockEntity extends RandomizableContainerBlockEntity {
         return lidProgressOld + (lidProgress - lidProgressOld) * partialTick;
     }
 
-    public FluidStacksResourceHandler getFluidTank() {
+    public FluidTank getFluidTank() {
         return fluidTank;
     }
 
     public static boolean isFluidContainer(ItemStack stack) {
         return !stack.isEmpty()
-                && ItemAccess.forStack(stack).oneByOne().getCapability(Capabilities.FluidHandler.ITEM) != null;
+                && stack.copyWithCount(1).getCapability(Capabilities.FluidHandler.ITEM) != null;
     }
 
     public ContainerData getDataAccess() {
@@ -192,7 +189,7 @@ public class CopperTeapotBlockEntity extends RandomizableContainerBlockEntity {
         if (!tryLoadLootTable(input)) {
             ContainerHelper.loadAllItems(input, items, registries);
         }
-        fluidTank.deserialize(input, registries);
+        fluidTank.readFromNBT(registries, input);
         brewProgress = Math.max(0, input.getInt(BREW_PROGRESS_KEY));
         ResourceLocation parsedRecipe = ResourceLocation.tryParse(input.getString(ACTIVE_RECIPE_KEY));
         activeRecipeId = parsedRecipe;
@@ -207,7 +204,7 @@ public class CopperTeapotBlockEntity extends RandomizableContainerBlockEntity {
         if (!trySaveLootTable(output)) {
             ContainerHelper.saveAllItems(output, items, registries);
         }
-        fluidTank.serialize(output, registries);
+        fluidTank.writeToNBT(registries, output);
         if (brewProgress > 0 && activeRecipeId != null) {
             output.putInt(BREW_PROGRESS_KEY, brewProgress);
             output.putString(ACTIVE_RECIPE_KEY, activeRecipeId.toString());
@@ -251,30 +248,38 @@ public class CopperTeapotBlockEntity extends RandomizableContainerBlockEntity {
             return;
         }
 
-        ResourceHandler<ItemResource> itemHandler = VanillaContainerWrapper.of(this);
-        ItemAccess containerAccess = ItemAccess
-                .forHandlerIndexStrict(itemHandler, FLUID_CONTAINER_SLOT)
-                .oneByOne();
-        ResourceHandler<FluidResource> containerTank =
-                containerAccess.getCapability(Capabilities.FluidHandler.ITEM);
-        if (containerTank == null) {
+        ItemStack container = getItem(FLUID_CONTAINER_SLOT);
+        if (container.getCount() != 1) {
             return;
         }
 
-        if (hasFluid(containerTank)) {
-            if (fluidTank.getAmountAsLong(0) == 0) {
-                ResourceHandlerUtil.moveFirst(
-                        containerTank, fluidTank, resource -> true, FLUID_CAPACITY, null);
-            }
-        } else if (fluidTank.getAmountAsLong(0) > 0) {
-            ResourceHandlerUtil.moveFirst(
-                    fluidTank, containerTank, resource -> true, FLUID_CAPACITY, null);
+        IFluidHandlerItem containerHandler = container.getCapability(Capabilities.FluidHandler.ITEM);
+        if (containerHandler == null) {
+            return;
+        }
+
+        FluidActionResult result;
+        if (hasFluid(containerHandler) && fluidTank.getFluidAmount() == 0) {
+            result = FluidUtil.tryEmptyContainer(container, fluidTank, FLUID_CAPACITY, null, true);
+        } else if (!hasFluid(containerHandler) && fluidTank.getFluidAmount() > 0) {
+            result = FluidUtil.tryFillContainer(container, fluidTank, FLUID_CAPACITY, null, true);
+        } else {
+            return;
+        }
+
+        if (result.isSuccess()) {
+            setContainerSlotWithoutTransfer(result.getResult());
         }
     }
 
-    private static boolean hasFluid(ResourceHandler<FluidResource> handler) {
-        for (int index = 0; index < handler.size(); index++) {
-            if (!handler.getResource(index).isEmpty() && handler.getAmountAsLong(index) > 0) {
+    private void setContainerSlotWithoutTransfer(ItemStack stack) {
+        items.set(FLUID_CONTAINER_SLOT, stack);
+        setChanged();
+    }
+
+    private static boolean hasFluid(IFluidHandler handler) {
+        for (int index = 0; index < handler.getTanks(); index++) {
+            if (!handler.getFluidInTank(index).isEmpty()) {
                 return true;
             }
         }
@@ -283,15 +288,15 @@ public class CopperTeapotBlockEntity extends RandomizableContainerBlockEntity {
 
     private void tryBrew(ServerLevel level) {
         ItemStack ingredientStack = getItem(TEA_SLOT);
-        FluidResource fluidResource = fluidTank.getResource(0);
-        int fluidAmount = fluidTank.getAmountAsInt(0);
-        if (ingredientStack.isEmpty() || fluidResource.isEmpty() || fluidAmount == 0) {
+        FluidStack fluid = fluidTank.getFluid();
+        int fluidAmount = fluidTank.getFluidAmount();
+        if (ingredientStack.isEmpty() || fluid.isEmpty() || fluidAmount == 0) {
             resetBrewProgress();
             return;
         }
 
         TeapotRecipeInput input = new TeapotRecipeInput(
-                fluidResource.toStack(fluidAmount), ingredientStack);
+                fluid.copy(), ingredientStack);
         var recipeHolder = level.getRecipeManager()
                 .getRecipeFor(RecipeSerializerRegistry.TEAPOT_BREWING_TYPE.get(), input, level);
         if (recipeHolder.isEmpty()) {
@@ -339,44 +344,40 @@ public class CopperTeapotBlockEntity extends RandomizableContainerBlockEntity {
 
     private boolean applyRecipe(TeapotRecipe recipe) {
         int inputAmount = recipe.fluid().amount();
-        FluidResource inputFluid = fluidTank.getResource(0);
+        FluidStack inputFluid = fluidTank.getFluid();
         FluidStack resultFluid = recipe.result().copy();
         ItemStack ingredientStack = getItem(TEA_SLOT);
-        ResourceHandler<ItemResource> itemHandler = VanillaContainerWrapper.of(this);
 
-        try (Transaction transaction = Transaction.openRoot()) {
-            int extracted = fluidTank.extract(
-                    0,
-                    inputFluid,
-                    inputAmount,
-                    transaction
-            );
-            if (extracted != inputAmount) {
-                return false;
-            }
-
-            int consumed = itemHandler.extract(
-                    TEA_SLOT,
-                    ItemResource.of(ingredientStack),
-                    1,
-                    transaction
-            );
-            if (consumed != 1) {
-                return false;
-            }
-
-            int inserted = fluidTank.insert(
-                    0,
-                    FluidResource.of(resultFluid),
-                    resultFluid.getAmount(),
-                    transaction
-            );
-            if (inserted == resultFluid.getAmount()) {
-                transaction.commit();
-                return true;
-            }
+        if (inputFluid.isEmpty()
+                || inputFluid.getAmount() < inputAmount
+                || !recipe.fluid().test(inputFluid)
+                || !recipe.ingredient().test(ingredientStack)
+                || resultFluid.isEmpty()
+                || resultFluid.getAmount() <= 0) {
+            return false;
         }
-        return false;
+
+        int remainingAmount = inputFluid.getAmount() - inputAmount;
+        if (remainingAmount > 0
+                && !FluidStack.isSameFluidSameComponents(inputFluid, resultFluid)) {
+            return false;
+        }
+
+        long finalAmount = (long) remainingAmount + resultFluid.getAmount();
+        if (finalAmount > FLUID_CAPACITY) {
+            return false;
+        }
+
+        FluidStack finalFluid = FluidStack.isSameFluidSameComponents(inputFluid, resultFluid)
+                ? inputFluid.copyWithAmount((int) finalAmount)
+                : resultFluid.copy();
+        ItemStack remainingIngredient = ingredientStack.copy();
+        remainingIngredient.shrink(1);
+
+        items.set(TEA_SLOT, remainingIngredient);
+        fluidTank.setFluid(finalFluid);
+        setChanged();
+        return true;
     }
 
     @Override
@@ -418,19 +419,19 @@ public class CopperTeapotBlockEntity extends RandomizableContainerBlockEntity {
         return super.triggerEvent(id, type);
     }
 
-    private class TeapotFluidTank extends FluidStacksResourceHandler {
+    private class TeapotFluidTank extends FluidTank {
         private TeapotFluidTank() {
-            super(1, FLUID_CAPACITY);
+            super(FLUID_CAPACITY);
         }
 
         @Override
-        protected void onContentsChanged(int index, FluidStack previousContents) {
+        protected void onContentsChanged() {
             CopperTeapotBlockEntity.this.setChanged();
         }
 
         @Override
-        public boolean isValid(int index, FluidResource resource) {
-            return index == 0 && !resource.isEmpty();
+        public boolean isFluidValid(int index, FluidStack resource) {
+            return index == 0 && resource != null && !resource.isEmpty();
         }
     }
 }

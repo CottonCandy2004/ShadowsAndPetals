@@ -38,19 +38,19 @@ public class RegItemBuilder<I extends Item> {
     private final DeferredRegister.Items registry;
     private final String name;
     private Item.Properties properties = new Item.Properties();
-    private Function<Item.Properties, I> itemFactory;
+    private @Nullable Function<Item.Properties, I> itemFactory;
     private final Map<String, String> langNames = new LinkedHashMap<>();
-    private BiConsumer<ModRecipeProvider, DeferredItem<I>> recipeGenerator;
-    private Supplier<? extends ItemModelCallback<I>> itemModelGenerator;
-    private Function<DeferredItem<I>, ResourceLocation> clientItemModelFactory;
-    private Function<DeferredItem<I>, ResourceLocation> customClientItemTypeFactory;
+    private @Nullable BiConsumer<ModRecipeProvider, DeferredItem<I>> recipeGenerator;
+    private @Nullable Supplier<? extends ItemModelCallback<I>> itemModelGenerator;
+    private @Nullable Function<DeferredItem<I>, ResourceLocation> clientItemModelFactory;
+    private @Nullable Function<DeferredItem<I>, ResourceLocation> customClientItemTypeFactory;
     private final List<CreativeTabKey> creativeTabs = new ArrayList<>();
     private final Map<CreativeTabKey, CreativeTabOrder> creativeTabOrders = new EnumMap<>(CreativeTabKey.class);
     private final List<ResourceLocation> aliases = new ArrayList<>();
     private boolean hasTooltipDescription;
-    private Consumer<TooltipLangBuilder> tooltipDescriptionGenerator;
-    private TooltipModifier tooltipModifier;
-    private BiFunction<I, ItemStack, @Nullable TooltipComponent> tooltipComponentFactory;
+    private @Nullable Consumer<TooltipLangBuilder> tooltipDescriptionGenerator;
+    private @Nullable TooltipModifier tooltipModifier;
+    private @Nullable BiFunction<I, ItemStack, @Nullable TooltipComponent> tooltipComponentFactory;
     private int tooltipComponentMinimumWidth;
 
     public RegItemBuilder(DeferredRegister.Items registry, String name) {
@@ -324,11 +324,11 @@ public class RegItemBuilder<I extends Item> {
     public static class BlockItemBuilder {
         private final DeferredRegister.Items registry;
         private final String name;
-        private Supplier<? extends Block> blockSupplier;
-        private DeferredBlock<? extends Block> deferredBlock;
+        private @Nullable Supplier<? extends Block> blockSupplier;
+        private @Nullable DeferredBlock<? extends Block> deferredBlock;
         private Item.Properties properties = new Item.Properties();
         private final Map<String, String> langNames = new LinkedHashMap<>();
-        private Function<DeferredItem<BlockItem>, ResourceLocation> clientItemModelFactory;
+        private @Nullable Function<DeferredItem<BlockItem>, ResourceLocation> clientItemModelFactory;
         private final List<CreativeTabKey> creativeTabs = new ArrayList<>();
         private final Map<CreativeTabKey, CreativeTabOrder> creativeTabOrders = new EnumMap<>(CreativeTabKey.class);
         private final List<ResourceLocation> aliases = new ArrayList<>();

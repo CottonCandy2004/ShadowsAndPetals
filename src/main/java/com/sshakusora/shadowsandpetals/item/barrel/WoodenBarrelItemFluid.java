@@ -1,7 +1,5 @@
 package com.sshakusora.shadowsandpetals.item.barrel;
 
-import com.sshakusora.shadowsandpetals.compat.transfer.fluid.FluidResource;
-import com.sshakusora.shadowsandpetals.compat.transfer.item.ItemResource;
 import com.sshakusora.shadowsandpetals.registries.BlockEntityRegistry;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponents;
@@ -29,35 +27,10 @@ public final class WoodenBarrelItemFluid {
         return stack;
     }
 
-    /**
-     * Returns the fluid stored in an item resource. Item capabilities receive an
-     * {@link ItemResource} rather than an {@link ItemStack}, so this overload keeps
-     * all barrel-content decoding in one place.
-     */
-    public static Optional<FluidStack> read(ItemResource resource) {
-        return read(resource.toStack());
-    }
-
-    /**
-     * Returns an item resource with the supplied fluid stored in its barrel data.
-     */
-    public static ItemResource withFluid(ItemResource resource, FluidStack fluid) {
-        return resource.withMergedPatch(fluidComponents(fluid));
-    }
-
-    /**
-     * Returns an item resource with the supplied NeoForge fluid resource and
-     * amount stored in its barrel data.
-     */
-    public static ItemResource withFluid(ItemResource resource, FluidResource fluid, int amount) {
-        return withFluid(resource, fluid.toStack(amount));
-    }
-
-    /**
-     * Returns an item resource representing an empty wooden barrel.
-     */
-    public static ItemResource withoutFluid(ItemResource resource) {
-        return resource.without(DataComponents.BLOCK_ENTITY_DATA);
+    /** Removes the stored block-entity data, returning an empty barrel. */
+    public static ItemStack withoutFluid(ItemStack stack) {
+        stack.remove(DataComponents.BLOCK_ENTITY_DATA);
+        return stack;
     }
 
     /**

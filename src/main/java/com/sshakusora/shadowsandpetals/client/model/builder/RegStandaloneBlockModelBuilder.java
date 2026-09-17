@@ -5,13 +5,14 @@ import com.sshakusora.shadowsandpetals.client.model.registry.ClientModelRegistry
 import com.sshakusora.shadowsandpetals.client.model.registry.StandaloneBlockModel;
 import com.sshakusora.shadowsandpetals.client.model.registry.StandaloneModelRotation;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
 /** Fluent builder for one additional standalone model. */
 public final class RegStandaloneBlockModelBuilder {
     private final String name;
-    private ResourceLocation modelId;
+    private @Nullable ResourceLocation modelId;
     private StandaloneModelRotation rotation = StandaloneModelRotation.IDENTITY;
 
     public RegStandaloneBlockModelBuilder(String name) {

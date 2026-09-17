@@ -1,74 +1,104 @@
 package com.sshakusora.shadowsandpetals.item.barrel;
 
 import com.sshakusora.shadowsandpetals.blockentity.WoodenBarrelBlockEntity;
-import com.sshakusora.shadowsandpetals.compat.transfer.ItemAccessResourceHandler;
-import com.sshakusora.shadowsandpetals.compat.transfer.access.ItemAccess;
-import com.sshakusora.shadowsandpetals.compat.transfer.fluid.FluidResource;
-import com.sshakusora.shadowsandpetals.compat.transfer.item.ItemResource;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
 
 /**
  * NeoForge fluid capability for a wooden barrel item.
  *
  * <p>The item uses the same typed block-entity component as a dropped barrel
- * block, which means transfer operations and block placement share one format.</p>
+ * block, which means fluid operations and block placement share one format.</p>
  */
-public final class WoodenBarrelItemFluidHandler extends ItemAccessResourceHandler<FluidResource> {
-    private final Item validItem;
+public final class WoodenBarrelItemFluidHandler implements IFluidHandlerItem {
+    private final ItemStack container;
 
-    public WoodenBarrelItemFluidHandler(ItemAccess itemAccess) {
-        super(itemAccess, 1);
-        this.validItem = itemAccess.getResource().getItem();
+    public WoodenBarrelItemFluidHandler(ItemStack container) {
+        this.container = container;
     }
 
     @Override
-    protected FluidResource getResourceFrom(ItemResource accessResource, int index) {
-        if (index != 0 || !accessResource.is(validItem)) {
-            return FluidResource.EMPTY;
+    public ItemStack getContainer() {
+        return container;
+    }
+
+    @Override
+    public int getTanks() {
+        return 1;
+    }
+
+    @Override
+    public FluidStack getFluidInTank(int tank) {
+        return tank == 0
+                ? WoodenBarrelItemFluid.read(container).orElse(FluidStack.EMPTY)
+                : FluidStack.EMPTY;
+    }
+
+    @Override
+    public int getTankCapacity(int tank) {
+        return tank == 0 ? WoodenBarrelBlockEntity.FLUID_CAPACITY : 0;
+    }
+
+    @Override
+    public boolean isFluidValid(int tank, FluidStack resource) {
+        if (tank != 0 || resource == null || resource.isEmpty() || container.getCount() != 1) {
+            return false;
         }
-
-        return WoodenBarrelItemFluid.read(accessResource)
-                .map(FluidResource::of)
-                .orElse(FluidResource.EMPTY);
+        FluidStack current = getFluidInTank(0);
+        return current.isEmpty() || FluidStack.isSameFluidSameComponents(current, resource);
     }
 
     @Override
-    protected int getAmountFrom(ItemResource accessResource, int index) {
-        if (index != 0 || !accessResource.is(validItem)) {
+    public int fill(FluidStack resource, FluidAction action) {
+        if (container.getCount() != 1 || resource == null || resource.isEmpty()
+                || !isFluidValid(0, resource)) {
             return 0;
         }
 
-        return WoodenBarrelItemFluid.read(accessResource)
-                .map(FluidStack::getAmount)
-                .orElse(0);
+        FluidStack current = getFluidInTank(0);
+        int amount = Math.min(
+                resource.getAmount(),
+                Math.max(0, WoodenBarrelBlockEntity.FLUID_CAPACITY - current.getAmount())
+        );
+        if (amount > 0 && action.execute()) {
+            FluidStack updated = current.isEmpty()
+                    ? resource.copyWithAmount(amount)
+                    : current.copyWithAmount(current.getAmount() + amount);
+            WoodenBarrelItemFluid.write(container, updated);
+        }
+        return amount;
     }
 
     @Override
-    protected ItemResource update(ItemResource accessResource, int index, FluidResource newResource, int newAmount) {
-        if (index != 0 || !accessResource.is(validItem)) {
-            return ItemResource.EMPTY;
+    public FluidStack drain(FluidStack resource, FluidAction action) {
+        if (resource == null || resource.isEmpty()
+                || !FluidStack.isSameFluidSameComponents(resource, getFluidInTank(0))) {
+            return FluidStack.EMPTY;
         }
-
-        if (newAmount == 0) {
-            return WoodenBarrelItemFluid.withoutFluid(accessResource);
-        }
-
-        return WoodenBarrelItemFluid.withFluid(accessResource, newResource, newAmount);
+        return drain(resource.getAmount(), action);
     }
 
     @Override
-    public boolean isValid(int index, FluidResource resource) {
-        if (index != 0 || resource.isEmpty() || !itemAccess.getResource().is(validItem)) {
-            return false;
+    public FluidStack drain(int maxDrain, FluidAction action) {
+        if (container.getCount() != 1 || maxDrain <= 0) {
+            return FluidStack.EMPTY;
         }
 
-        FluidResource current = getResource(index);
-        return current.isEmpty() || current.equals(resource);
-    }
+        FluidStack current = getFluidInTank(0);
+        if (current.isEmpty()) {
+            return FluidStack.EMPTY;
+        }
 
-    @Override
-    protected int getCapacity(int index, FluidResource resource) {
-        return WoodenBarrelBlockEntity.FLUID_CAPACITY;
+        int amount = Math.min(maxDrain, current.getAmount());
+        FluidStack drained = current.copyWithAmount(amount);
+        if (action.execute()) {
+            if (amount == current.getAmount()) {
+                WoodenBarrelItemFluid.withoutFluid(container);
+            } else {
+                WoodenBarrelItemFluid.write(container, current.copyWithAmount(current.getAmount() - amount));
+            }
+        }
+        return drained;
     }
 }

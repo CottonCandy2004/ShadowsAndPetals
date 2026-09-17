@@ -6,6 +6,7 @@ import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,7 @@ import java.util.function.Supplier;
 public class RegParticleBuilder<P extends ParticleType<?>> {
     private final DeferredRegister<ParticleType<?>> registry;
     private final String name;
-    private Supplier<P> particleFactory;
+    private @Nullable Supplier<P> particleFactory;
     private boolean overrideLimiter;
     private final List<ResourceLocation> aliases = new ArrayList<>();
 

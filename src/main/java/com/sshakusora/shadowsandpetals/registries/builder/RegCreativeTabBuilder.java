@@ -10,6 +10,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -29,7 +30,7 @@ public class RegCreativeTabBuilder {
     private Supplier<ItemLike> iconSupplier = () -> Items.BARRIER;
     private final List<ItemStack> items = new ArrayList<>();
     private final List<Consumer<CreativeModeTab.Output>> simpleDisplayGenerators = new ArrayList<>();
-    private CreativeModeTab.DisplayItemsGenerator fullGenerator;
+    private @Nullable CreativeModeTab.DisplayItemsGenerator fullGenerator;
     private final List<ResourceLocation> aliases = new ArrayList<>();
     private final List<ResourceLocation> tabsBefore = new ArrayList<>();
     private final List<ResourceLocation> tabsAfter = new ArrayList<>();

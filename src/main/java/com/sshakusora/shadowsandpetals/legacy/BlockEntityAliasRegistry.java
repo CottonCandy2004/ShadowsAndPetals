@@ -16,6 +16,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.level.ChunkEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -93,9 +94,9 @@ public final class BlockEntityAliasRegistry {
     public static final class Builder {
         private final DeferredRegister<BlockEntityType<?>> registry;
         private final String name;
-        private ResourceLocation aliasId;
+        private @Nullable ResourceLocation aliasId;
         private final List<Supplier<? extends Block>> validBlocks = new ArrayList<>();
-        private Supplier<BlockEntityType<?>> targetType;
+        private @Nullable Supplier<BlockEntityType<?>> targetType;
         private LegacyDataConverter converter = (oldTag, state, pos) -> oldTag;
 
         private Builder(DeferredRegister<BlockEntityType<?>> registry, String name) {

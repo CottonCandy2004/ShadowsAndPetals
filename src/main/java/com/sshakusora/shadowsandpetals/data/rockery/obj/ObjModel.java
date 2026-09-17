@@ -1,5 +1,7 @@
 package com.sshakusora.shadowsandpetals.data.rockery.obj;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -61,7 +63,7 @@ public record ObjModel(
         return new ObjModel(translatedFaces, translatedObjects, materials);
     }
 
-    public record ObjVertex(ObjVector3 position, ObjVector2 uv, ObjVector3 normal) {
+    public record ObjVertex(ObjVector3 position, @Nullable ObjVector2 uv, @Nullable ObjVector3 normal) {
         public ObjVertex withPosition(ObjVector3 value) {
             return new ObjVertex(value, uv, normal);
         }
@@ -143,7 +145,7 @@ public record ObjModel(
             double maxY,
             double maxZ
     ) {
-        public Bounds intersection(Bounds other) {
+        public @Nullable Bounds intersection(Bounds other) {
             Bounds result = new Bounds(
                     Math.max(minX, other.minX),
                     Math.max(minY, other.minY),

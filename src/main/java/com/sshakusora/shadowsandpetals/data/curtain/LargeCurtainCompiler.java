@@ -3,6 +3,7 @@ package com.sshakusora.shadowsandpetals.data.curtain;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -283,7 +284,7 @@ final class LargeCurtainCompiler {
         }
     }
 
-    private static JsonObject matchingBakedElement(
+    private static @Nullable JsonObject matchingBakedElement(
             JsonArray bakedElements, JsonObject actual, String side, String half
     ) {
         for (JsonElement candidate : bakedElements) {

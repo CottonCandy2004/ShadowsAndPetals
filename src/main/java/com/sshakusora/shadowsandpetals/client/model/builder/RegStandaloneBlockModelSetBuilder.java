@@ -4,6 +4,7 @@ import com.sshakusora.shadowsandpetals.client.model.registry.ClientModelRegistry
 import com.sshakusora.shadowsandpetals.client.model.registry.StandaloneBlockModelSet;
 import com.sshakusora.shadowsandpetals.client.model.registry.StandaloneModelRotation;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 import java.util.function.Function;
@@ -12,9 +13,9 @@ import java.util.function.Supplier;
 /** Fluent builder for a keyed family of additional standalone models. */
 public final class RegStandaloneBlockModelSetBuilder<K> {
     private final String name;
-    private Supplier<? extends Iterable<K>> keys;
-    private Function<? super K, String> keyPathFactory;
-    private Function<? super K, ResourceLocation> modelFactory;
+    private @Nullable Supplier<? extends Iterable<K>> keys;
+    private @Nullable Function<? super K, String> keyPathFactory;
+    private @Nullable Function<? super K, ResourceLocation> modelFactory;
     private Function<? super K, StandaloneModelRotation> rotationFactory =
             key -> StandaloneModelRotation.IDENTITY;
 

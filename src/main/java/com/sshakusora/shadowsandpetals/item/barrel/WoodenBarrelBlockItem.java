@@ -1,10 +1,6 @@
 package com.sshakusora.shadowsandpetals.item.barrel;
 
 import com.sshakusora.shadowsandpetals.blockentity.WoodenBarrelBlockEntity;
-import com.sshakusora.shadowsandpetals.compat.transfer.ResourceHandler;
-import com.sshakusora.shadowsandpetals.compat.transfer.access.ItemAccess;
-import com.sshakusora.shadowsandpetals.compat.transfer.fluid.FluidResource;
-import com.sshakusora.shadowsandpetals.compat.transfer.fluid.FluidUtil;
 import com.sshakusora.shadowsandpetals.registries.BlockRegistry;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
@@ -29,9 +25,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.fluids.FluidActionResult;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
+import net.neoforged.neoforge.fluids.FluidUtil;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -126,29 +123,27 @@ public class WoodenBarrelBlockItem extends BlockItem {
             return InteractionResult.FAIL;
         }
 
-        FluidResource resource = FluidResource.of(storedFluid);
         BlockState clickedState = level.getBlockState(clickedPos);
         BlockPos destination = clickedState.getBlock() instanceof LiquidBlockContainer container
-                && container.canPlaceLiquid(player, level, clickedPos, clickedState, resource.getFluid())
+                && container.canPlaceLiquid(player, level, clickedPos, clickedState, storedFluid.getFluid())
                 ? clickedPos
                 : adjacentPos;
 
         ItemStack usedStack = stack.copy();
-        boolean placed;
-        if (player.hasInfiniteMaterials()) {
-            placed = FluidUtil.tryPlaceFluid(resource, player, level, hand, destination);
-        } else {
-            ItemAccess itemAccess = ItemAccess.forPlayerInteraction(player, hand).oneByOne();
-            ResourceHandler<FluidResource> handler = itemAccess.getCapability(Capabilities.FluidHandler.ITEM);
-            placed = handler != null
-                    && FluidUtil.tryPlaceFluid(handler, player, level, hand, destination);
-        }
-
-        if (!placed) {
+        FluidActionResult result = FluidUtil.tryPlaceFluid(
+                player,
+                level,
+                hand,
+                destination,
+                stack,
+                storedFluid
+        );
+        if (!result.isSuccess()) {
             return InteractionResult.FAIL;
         }
 
         if (!level.isClientSide()) {
+            applyContainerResult(player, hand, stack, result.getResult());
             player.awardStat(Stats.ITEM_USED.get(this));
             if (player instanceof ServerPlayer serverPlayer) {
                 CriteriaTriggers.PLACED_BLOCK.trigger(serverPlayer, destination, usedStack);
@@ -180,14 +175,14 @@ public class WoodenBarrelBlockItem extends BlockItem {
             return InteractionResult.FAIL;
         }
 
-        ItemAccess itemAccess = ItemAccess.forPlayerInteraction(player, hand).oneByOne();
-        ResourceHandler<FluidResource> handler = itemAccess.getCapability(Capabilities.FluidHandler.ITEM);
-        if (handler == null) {
-            return InteractionResult.FAIL;
-        }
-
-        var pickedUp = FluidUtil.tryPickupFluid(handler, player, level, hand, sourcePos, side);
-        if (pickedUp.isEmpty()) {
+        FluidActionResult result = FluidUtil.tryPickUpFluid(
+                stack,
+                player,
+                level,
+                sourcePos,
+                side
+        );
+        if (!result.isSuccess()) {
             // The SOURCE_ONLY ray hit a fluid, but this particular source could
             // not be transferred into a barrel. Match the bucket's no-op result
             // instead of placing a barrel into the source by accident.
@@ -195,21 +190,41 @@ public class WoodenBarrelBlockItem extends BlockItem {
         }
 
         if (!level.isClientSide()) {
+            applyContainerResult(player, hand, stack, result.getResult());
             player.awardStat(Stats.ITEM_USED.get(this));
             if (player instanceof ServerPlayer serverPlayer) {
-                CriteriaTriggers.FILLED_BUCKET.trigger(serverPlayer, WoodenBarrelItemFluid.write(
-                        new ItemStack(this), pickedUp
-                ));
+                CriteriaTriggers.FILLED_BUCKET.trigger(serverPlayer, result.getResult());
             }
         }
 
         return InteractionResult.SUCCESS;
     }
 
+    private static void applyContainerResult(
+            Player player,
+            InteractionHand hand,
+            ItemStack original,
+            ItemStack result
+    ) {
+        if (player.hasInfiniteMaterials()) {
+            return;
+        }
+
+        if (original.getCount() == 1) {
+            player.setItemInHand(hand, result);
+            return;
+        }
+
+        original.shrink(1);
+        if (!player.getInventory().add(result)) {
+            player.drop(result, false);
+        }
+    }
+
     public static ItemStack filledWoodenBarrel(Fluid fluid) {
         return WoodenBarrelItemFluid.write(
                 new ItemStack(BlockRegistry.WOODEN_BARREL.get()),
-                FluidResource.of(fluid).toStack(WoodenBarrelBlockEntity.FLUID_CAPACITY)
+                new FluidStack(fluid, WoodenBarrelBlockEntity.FLUID_CAPACITY)
         );
     }
 }

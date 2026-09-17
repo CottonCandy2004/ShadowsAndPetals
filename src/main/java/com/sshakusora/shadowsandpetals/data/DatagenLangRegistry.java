@@ -1,5 +1,7 @@
 package com.sshakusora.shadowsandpetals.data;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -28,11 +30,11 @@ public final class DatagenLangRegistry {
         FALLBACKS.putIfAbsent(key, path);
     }
 
-    public static String get(String key) {
+    public static @Nullable String get(String key) {
         return get(DEFAULT_LOCALE, key);
     }
 
-    public static String get(String locale, String key) {
+    public static @Nullable String get(String locale, String key) {
         Map<String, String> translations = TRANSLATIONS.get(locale);
         return translations != null ? translations.get(key) : null;
     }

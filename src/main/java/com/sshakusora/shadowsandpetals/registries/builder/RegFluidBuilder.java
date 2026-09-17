@@ -16,6 +16,7 @@ import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Function;
@@ -38,9 +39,9 @@ public final class RegFluidBuilder {
             BaseFlowingFluid.Source::new;
     private Function<BaseFlowingFluid.Properties, BaseFlowingFluid.Flowing> flowingFactory =
             BaseFlowingFluid.Flowing::new;
-    private UnaryOperator<BlockBehaviour.Properties> liquidBlockProperties;
-    private ResourceLocation stillTexture;
-    private ResourceLocation flowingTexture;
+    private @Nullable UnaryOperator<BlockBehaviour.Properties> liquidBlockProperties;
+    private @Nullable ResourceLocation stillTexture;
+    private @Nullable ResourceLocation flowingTexture;
     private Optional<ResourceLocation> overlayTexture = Optional.empty();
     private int tintColor;
     private final Map<String, String> langNames = new LinkedHashMap<>();
@@ -225,7 +226,7 @@ public final class RegFluidBuilder {
         private DeferredHolder<FluidType, FluidType> type;
         private DeferredHolder<Fluid, BaseFlowingFluid.Source> source;
         private DeferredHolder<Fluid, BaseFlowingFluid.Flowing> flowing;
-        private DeferredBlock<LiquidBlock> block;
+        private @Nullable DeferredBlock<LiquidBlock> block;
     }
 
     public record RegisteredFluid(

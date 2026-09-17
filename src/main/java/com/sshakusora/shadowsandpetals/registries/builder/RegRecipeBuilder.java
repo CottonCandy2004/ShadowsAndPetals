@@ -9,6 +9,7 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -24,8 +25,8 @@ public final class RegRecipeBuilder<R extends Recipe<?>> {
     private final DeferredRegister<RecipeSerializer<?>> serializerRegistry;
     private final DeferredRegister<RecipeType<?>> typeRegistry;
     private final String name;
-    private Supplier<? extends RecipeSerializer<R>> serializerFactory;
-    private Supplier<? extends RecipeType<R>> typeFactory;
+    private @Nullable Supplier<? extends RecipeSerializer<R>> serializerFactory;
+    private @Nullable Supplier<? extends RecipeType<R>> typeFactory;
     private final Map<ResourceLocation, Function<ModRecipeProvider, R>> datagenRecipes = new LinkedHashMap<>();
 
     public RegRecipeBuilder(

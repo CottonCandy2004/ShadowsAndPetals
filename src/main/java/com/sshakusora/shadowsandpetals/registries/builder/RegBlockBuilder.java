@@ -49,21 +49,21 @@ public class RegBlockBuilder<B extends Block> {
     private final DeferredRegister.Blocks registry;
     private final String name;
     private Supplier<BlockBehaviour.Properties> propertiesFactory = BlockBehaviour.Properties::of;
-    private Function<BlockBehaviour.Properties, B> blockFactory;
+    private @Nullable Function<BlockBehaviour.Properties, B> blockFactory;
     private boolean withItem;
-    private Item.Properties itemProperties;
-    private BiFunction<Block, Item.Properties, ? extends BlockItem> itemFactory;
+    private @Nullable Item.Properties itemProperties;
+    private @Nullable BiFunction<Block, Item.Properties, ? extends BlockItem> itemFactory;
     private final Map<String, String> langNames = new LinkedHashMap<>();
-    private Supplier<? extends BlockModelCallback<B>> blockStateGenerator;
-    private BiConsumer<ModBlockLootProvider, DeferredBlock<B>> blockLootGenerator;
-    private BiConsumer<ModRecipeProvider, DeferredBlock<B>> recipeGenerator;
-    private Supplier<? extends ItemModelCallback<BlockItem>> itemModelGenerator;
-    private Function<DeferredBlock<B>, ResourceLocation> clientItemModelFactory;
-    private Function<DeferredBlock<B>, ResourceLocation> customClientItemTypeFactory;
-    private Function<DeferredBlock<B>, ResourceLocation> ctBaseTextureFactory;
-    private Function<DeferredBlock<B>, List<ResourceLocation>> ctConnectedTexturesFactory;
-    private CTTextureSelector ctTextureSelector;
-    private CTTextureType ctTextureType;
+    private @Nullable Supplier<? extends BlockModelCallback<B>> blockStateGenerator;
+    private @Nullable BiConsumer<ModBlockLootProvider, DeferredBlock<B>> blockLootGenerator;
+    private @Nullable BiConsumer<ModRecipeProvider, DeferredBlock<B>> recipeGenerator;
+    private @Nullable Supplier<? extends ItemModelCallback<BlockItem>> itemModelGenerator;
+    private @Nullable Function<DeferredBlock<B>, ResourceLocation> clientItemModelFactory;
+    private @Nullable Function<DeferredBlock<B>, ResourceLocation> customClientItemTypeFactory;
+    private @Nullable Function<DeferredBlock<B>, ResourceLocation> ctBaseTextureFactory;
+    private @Nullable Function<DeferredBlock<B>, List<ResourceLocation>> ctConnectedTexturesFactory;
+    private @Nullable CTTextureSelector ctTextureSelector;
+    private @Nullable CTTextureType ctTextureType;
     private int ctPadding;
     private final List<CreativeTabKey> creativeTabs = new ArrayList<>();
     private final Map<CreativeTabKey, CreativeTabOrder> creativeTabOrders = new EnumMap<>(CreativeTabKey.class);
@@ -71,9 +71,9 @@ public class RegBlockBuilder<B extends Block> {
     private final List<StateAliasSpec<?>> stateAliases = new ArrayList<>();
     private final List<TagKey<Block>> blockTags = new ArrayList<>();
     private boolean hasTooltipDescription;
-    private Consumer<TooltipLangBuilder> tooltipDescriptionGenerator;
-    private TooltipModifier tooltipModifier;
-    private BiFunction<B, ItemStack, @Nullable TooltipComponent> tooltipComponentFactory;
+    private @Nullable Consumer<TooltipLangBuilder> tooltipDescriptionGenerator;
+    private @Nullable TooltipModifier tooltipModifier;
+    private @Nullable BiFunction<B, ItemStack, @Nullable TooltipComponent> tooltipComponentFactory;
     private int tooltipComponentMinimumWidth;
 
     public RegBlockBuilder(DeferredRegister.Blocks registry, String name) {

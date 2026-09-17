@@ -11,6 +11,7 @@ import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.event.furnace.FurnaceFuelBurnTimeEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.registries.DeferredBlock;
+import org.jetbrains.annotations.Nullable;
 
 @EventBusSubscriber(modid = ShadowsAndPetals.MOD_ID)
 public final class WoodCompatibilityEvents {
@@ -65,7 +66,7 @@ public final class WoodCompatibilityEvents {
         }
     }
 
-    private static BlockState strippedState(
+    private static @Nullable BlockState strippedState(
             BlockState state,
             Block source,
             Block stripped

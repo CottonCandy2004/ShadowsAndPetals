@@ -11,6 +11,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,7 +31,7 @@ import java.util.function.Supplier;
 public class RegBlockEntityBuilder<T extends BlockEntity> {
     private final DeferredRegister<BlockEntityType<?>> registry;
     private final String name;
-    private BiFunction<BlockPos, BlockState, T> factory;
+    private @Nullable BiFunction<BlockPos, BlockState, T> factory;
     private final List<Supplier<? extends Block>> validBlocks = new ArrayList<>();
     private final List<ResourceLocation> aliases = new ArrayList<>();
     private final List<BlockEntityAliasSpec> dataAliases = new ArrayList<>();

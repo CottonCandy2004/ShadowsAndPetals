@@ -1,8 +1,5 @@
 package com.sshakusora.shadowsandpetals.blockentity;
 
-import com.sshakusora.shadowsandpetals.compat.transfer.fluid.FluidResource;
-import com.sshakusora.shadowsandpetals.compat.transfer.fluid.FluidStacksResourceHandler;
-import com.sshakusora.shadowsandpetals.compat.transfer.transaction.Transaction;
 import com.sshakusora.shadowsandpetals.registries.BlockEntityRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
@@ -15,12 +12,14 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import org.jetbrains.annotations.Nullable;
 
 import static net.minecraft.world.level.material.Fluids.WATER;
 
 /**
- * Stores the barrel's fluid contents using NeoForge's current transfer API.
+ * Stores the barrel's fluid contents using NeoForge's fluid capability API.
  */
 public class WoodenBarrelBlockEntity extends BlockEntity {
     public static final int FLUID_CAPACITY = FluidType.BUCKET_VOLUME;
@@ -33,93 +32,73 @@ public class WoodenBarrelBlockEntity extends BlockEntity {
         super(BlockEntityRegistry.WOODEN_BARREL.get(), pos, blockState);
     }
 
-    public FluidStacksResourceHandler getFluidTank() {
+    public FluidTank getFluidTank() {
         return fluidTank;
     }
 
     public boolean hasFluid() {
-        return !fluidTank.getResource(0).isEmpty() && fluidTank.getAmountAsLong(0) > 0;
+        return !fluidTank.getFluid().isEmpty();
     }
 
-    public boolean canInsert(FluidResource resource, int amount) {
-        if (resource.isEmpty() || amount <= 0) {
+    public boolean canInsert(FluidStack resource, int amount) {
+        if (resource == null || resource.isEmpty() || amount <= 0) {
             return false;
         }
 
-        FluidResource current = fluidTank.getResource(0);
-        return (current.isEmpty() || current.equals(resource))
-                && amount <= FLUID_CAPACITY - fluidTank.getAmountAsInt(0);
+        return fluidTank.fill(resource.copyWithAmount(amount), IFluidHandler.FluidAction.SIMULATE) == amount;
     }
 
-    public int insert(FluidResource resource, int amount) {
-        if (resource.isEmpty() || amount <= 0) {
+    public int insert(FluidStack resource, int amount) {
+        if (resource == null || resource.isEmpty() || amount <= 0) {
             return 0;
         }
 
-        try (Transaction transaction = Transaction.openRoot()) {
-            int inserted = fluidTank.insert(0, resource, amount, transaction);
-            if (inserted > 0) {
-                transaction.commit();
-            }
-            return inserted;
-        }
+        return fluidTank.fill(resource.copyWithAmount(amount), IFluidHandler.FluidAction.EXECUTE);
     }
 
-    public boolean insertExactly(FluidResource resource, int amount) {
+    public boolean insertExactly(FluidStack resource, int amount) {
         if (!canInsert(resource, amount)) {
             return false;
         }
 
-        try (Transaction transaction = Transaction.openRoot()) {
-            int inserted = fluidTank.insert(0, resource, amount, transaction);
-            if (inserted != amount) {
-                return false;
-            }
-            transaction.commit();
-            return true;
-        }
+        return fluidTank.fill(resource.copyWithAmount(amount), IFluidHandler.FluidAction.EXECUTE) == amount;
     }
 
-    public boolean canExtract(FluidResource resource, int amount) {
-        return !resource.isEmpty()
+    public boolean canExtract(FluidStack resource, int amount) {
+        return resource != null
+                && !resource.isEmpty()
                 && amount > 0
-                && fluidTank.getResource(0).equals(resource)
-                && amount <= fluidTank.getAmountAsInt(0);
+                && fluidTank.drain(resource.copyWithAmount(amount), IFluidHandler.FluidAction.SIMULATE)
+                .getAmount() == amount;
     }
 
-    public boolean extractExactly(FluidResource resource, int amount) {
+    public boolean extractExactly(FluidStack resource, int amount) {
         if (!canExtract(resource, amount)) {
             return false;
         }
 
-        try (Transaction transaction = Transaction.openRoot()) {
-            int extracted = fluidTank.extract(0, resource, amount, transaction);
-            if (extracted != amount) {
-                return false;
-            }
-            transaction.commit();
-            return true;
-        }
+        return fluidTank.drain(resource.copyWithAmount(amount), IFluidHandler.FluidAction.EXECUTE)
+                .getAmount() == amount;
     }
 
     public boolean canInsertWater(int amount) {
-        return canInsert(FluidResource.of(WATER), amount);
+        return amount > 0 && canInsert(new FluidStack(WATER, amount), amount);
     }
 
     public boolean canExtractWater(int amount) {
-        return canExtract(FluidResource.of(WATER), amount);
+        return amount > 0 && canExtract(new FluidStack(WATER, amount), amount);
     }
 
     public int insertWater(int amount) {
-        return insert(FluidResource.of(WATER), amount);
+        return amount > 0 ? insert(new FluidStack(WATER, amount), amount) : 0;
     }
 
     public boolean insertWaterExactly(int amount) {
-        return insertExactly(FluidResource.of(WATER), amount);
+        return amount > 0 && insertExactly(new FluidStack(WATER, amount), amount);
     }
 
     public boolean extractWaterExactly(int amount) {
-        return extractExactly(FluidResource.of(WATER), amount);
+        return amount > 0 && extractExactly(new FluidStack(WATER, amount), amount);
     }
 
     public void fillFromRain() {
@@ -131,13 +110,13 @@ public class WoodenBarrelBlockEntity extends BlockEntity {
     @Override
     protected void loadAdditional(CompoundTag input, HolderLookup.Provider registries) {
         super.loadAdditional(input, registries);
-        fluidTank.deserialize(input, registries);
+        fluidTank.readFromNBT(registries, input);
     }
 
     @Override
     protected void saveAdditional(CompoundTag output, HolderLookup.Provider registries) {
         super.saveAdditional(output, registries);
-        fluidTank.serialize(output, registries);
+        fluidTank.writeToNBT(registries, output);
     }
 
     private void onFluidChanged() {
@@ -158,24 +137,25 @@ public class WoodenBarrelBlockEntity extends BlockEntity {
         return saveCustomOnly(registries);
     }
 
-    private class WoodenBarrelFluidTank extends FluidStacksResourceHandler {
+    private class WoodenBarrelFluidTank extends FluidTank {
         private WoodenBarrelFluidTank() {
-            super(1, FLUID_CAPACITY);
+            super(FLUID_CAPACITY);
         }
 
         @Override
-        protected void onContentsChanged(int index, FluidStack previousContents) {
+        protected void onContentsChanged() {
             WoodenBarrelBlockEntity.this.onFluidChanged();
         }
 
         @Override
-        public boolean isValid(int index, FluidResource resource) {
-            if (index != 0 || resource.isEmpty()) {
-                return false;
-            }
+        public boolean isFluidValid(FluidStack resource) {
+            return resource != null && !resource.isEmpty()
+                    && (getFluid().isEmpty() || FluidStack.isSameFluidSameComponents(getFluid(), resource));
+        }
 
-            FluidResource current = getResource(index);
-            return current.isEmpty() || current.equals(resource);
+        @Override
+        public boolean isFluidValid(int index, FluidStack resource) {
+            return index == 0 && isFluidValid(resource);
         }
     }
 }
