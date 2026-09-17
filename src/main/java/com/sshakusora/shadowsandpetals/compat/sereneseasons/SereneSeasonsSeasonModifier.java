@@ -22,7 +22,7 @@ public final class SereneSeasonsSeasonModifier implements SandExcavationSeasonMo
         try {
             Class<?> helper = Class.forName("sereneseasons.api.season.SeasonHelper");
             this.getSeasonState = helper.getMethod("getSeasonState", Level.class);
-            Class<?> stateType = Class.forName("sereneseasons.api.season.SeasonState");
+            Class<?> stateType = Class.forName("sereneseasons.api.season.ISeasonState");
             this.getSeason = stateType.getMethod("getSeason");
         } catch (ReflectiveOperationException exception) {
             throw new IllegalStateException("Serene Seasons season API is unavailable", exception);
