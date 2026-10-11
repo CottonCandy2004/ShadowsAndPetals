@@ -37,7 +37,7 @@
 			"to": [14, 4.5, 14.55],
 			"rotation": {"angle": 0, "axis": "y", "origin": [8.5, 0, 7.55]},
 			"faces": {
-				"north": {"uv": [0.33333, 2.33333, 4, 3.66667], "texture": "#sofarightedge"},
+				"north": {"uv": [4.66667, 2.33333, 0, 3.66666], "texture": "#sofarightedge"},
 				"down": {"uv": [15, 0, 10.33333, 4.66667], "texture": "#sofarightedge"}
 			}
 		},

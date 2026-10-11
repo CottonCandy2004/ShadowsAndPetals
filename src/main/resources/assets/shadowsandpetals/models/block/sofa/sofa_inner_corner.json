@@ -63,7 +63,7 @@
 			"rotation": {"angle": 0, "axis": "y", "origin": [4, 0.025, 2]},
 			"faces": {
 				"north": {"uv": [4.33333, 0, 0.33333, 3], "texture": "#sofainnercorner"},
-				"up": {"uv": [4, 0, 0, 0.66667], "texture": "#sofainnercorner"}
+				"up": {"uv": [0.33333, 0, 4.33333, 0.66667], "texture": "#sofainnercorner"}
 			}
 		},
 		{
