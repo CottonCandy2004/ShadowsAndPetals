@@ -9,8 +9,8 @@ import com.sshakusora.shadowsandpetals.data.lang.TooltipLangBuilder;
 import com.sshakusora.shadowsandpetals.data.model.ItemModelCallback;
 import com.sshakusora.shadowsandpetals.data.model.ModelDatagenRegistry;
 import com.sshakusora.shadowsandpetals.registries.CreativeTabContentsRegistry;
-import com.sshakusora.shadowsandpetals.registries.CreativeTabKey;
 import com.sshakusora.shadowsandpetals.registries.CreativeTabOrder;
+import com.sshakusora.shadowsandpetals.registries.CreativeTabRegistry;
 import com.sshakusora.shadowsandpetals.registries.ItemTagRegistry;
 import com.sshakusora.shadowsandpetals.tooltip.TooltipComponentRegistry;
 import com.sshakusora.shadowsandpetals.tooltip.TooltipModifier;
@@ -46,8 +46,8 @@ public class RegItemBuilder<I extends Item> {
     private @Nullable Supplier<? extends ItemModelCallback<I>> itemModelGenerator;
     private @Nullable Function<DeferredItem<I>, ResourceLocation> clientItemModelFactory;
     private @Nullable Function<DeferredItem<I>, ResourceLocation> customClientItemTypeFactory;
-    private final List<CreativeTabKey> creativeTabs = new ArrayList<>();
-    private final Map<CreativeTabKey, CreativeTabOrder> creativeTabOrders = new EnumMap<>(CreativeTabKey.class);
+    private final List<CreativeTabRegistry.CreativeTabKey> creativeTabs = new ArrayList<>();
+    private final Map<CreativeTabRegistry.CreativeTabKey, CreativeTabOrder> creativeTabOrders = new EnumMap<>(CreativeTabRegistry.CreativeTabKey.class);
     private final List<TagKey<Item>> itemTags = new ArrayList<>();
     private final List<ResourceLocation> aliases = new ArrayList<>();
     private boolean hasTooltipDescription;
@@ -205,7 +205,7 @@ public class RegItemBuilder<I extends Item> {
     /**
      * Adds the registered item to a creative tab.
      */
-    public RegItemBuilder<I> creativeTab(CreativeTabKey tab) {
+    public RegItemBuilder<I> creativeTab(CreativeTabRegistry.CreativeTabKey tab) {
         this.creativeTabs.add(tab);
         return this;
     }
@@ -213,7 +213,7 @@ public class RegItemBuilder<I extends Item> {
     /**
      * Adds the registered item to a creative tab in an explicit sort group.
      */
-    public RegItemBuilder<I> creativeTab(CreativeTabKey tab, CreativeTabOrder order) {
+    public RegItemBuilder<I> creativeTab(CreativeTabRegistry.CreativeTabKey tab, CreativeTabOrder order) {
         this.creativeTabs.add(tab);
         this.creativeTabOrders.put(tab, order);
         return this;
@@ -222,7 +222,7 @@ public class RegItemBuilder<I extends Item> {
     /**
      * Adds the registered item to multiple creative tabs.
      */
-    public RegItemBuilder<I> creativeTabs(CreativeTabKey... tabs) {
+    public RegItemBuilder<I> creativeTabs(CreativeTabRegistry.CreativeTabKey... tabs) {
         this.creativeTabs.addAll(Arrays.asList(tabs));
         return this;
     }
@@ -285,7 +285,7 @@ public class RegItemBuilder<I extends Item> {
             DatagenRecipeRegistry.add(deferredItem.getId(), provider -> recipeGenerator.accept(provider, deferredItem));
         }
         applyModelDatagen(deferredItem);
-        for (CreativeTabKey tab : creativeTabs) {
+        for (CreativeTabRegistry.CreativeTabKey tab : creativeTabs) {
             CreativeTabContentsRegistry.add(tab, deferredItem,
                     creativeTabOrders.getOrDefault(tab, CreativeTabOrder.DEFAULT));
         }
@@ -358,8 +358,8 @@ public class RegItemBuilder<I extends Item> {
         private Item.Properties properties = new Item.Properties();
         private final Map<String, String> langNames = new LinkedHashMap<>();
         private @Nullable Function<DeferredItem<BlockItem>, ResourceLocation> clientItemModelFactory;
-        private final List<CreativeTabKey> creativeTabs = new ArrayList<>();
-        private final Map<CreativeTabKey, CreativeTabOrder> creativeTabOrders = new EnumMap<>(CreativeTabKey.class);
+        private final List<CreativeTabRegistry.CreativeTabKey> creativeTabs = new ArrayList<>();
+        private final Map<CreativeTabRegistry.CreativeTabKey, CreativeTabOrder> creativeTabOrders = new EnumMap<>(CreativeTabRegistry.CreativeTabKey.class);
         private final List<TagKey<Item>> itemTags = new ArrayList<>();
         private final List<ResourceLocation> aliases = new ArrayList<>();
 
@@ -419,18 +419,18 @@ public class RegItemBuilder<I extends Item> {
             return clientItem(item -> modelId);
         }
 
-        public BlockItemBuilder creativeTab(CreativeTabKey tab) {
+        public BlockItemBuilder creativeTab(CreativeTabRegistry.CreativeTabKey tab) {
             this.creativeTabs.add(tab);
             return this;
         }
 
-        public BlockItemBuilder creativeTab(CreativeTabKey tab, CreativeTabOrder order) {
+        public BlockItemBuilder creativeTab(CreativeTabRegistry.CreativeTabKey tab, CreativeTabOrder order) {
             this.creativeTabs.add(tab);
             this.creativeTabOrders.put(tab, order);
             return this;
         }
 
-        public BlockItemBuilder creativeTabs(CreativeTabKey... tabs) {
+        public BlockItemBuilder creativeTabs(CreativeTabRegistry.CreativeTabKey... tabs) {
             this.creativeTabs.addAll(Arrays.asList(tabs));
             return this;
         }
@@ -494,7 +494,7 @@ public class RegItemBuilder<I extends Item> {
                     ? clientItemModelFactory.apply(deferredItem)
                     : null;
             ModelDatagenRegistry.addItem(deferredItem, null, modelId, null);
-            for (CreativeTabKey tab : creativeTabs) {
+            for (CreativeTabRegistry.CreativeTabKey tab : creativeTabs) {
                 CreativeTabContentsRegistry.add(tab, deferredItem,
                         creativeTabOrders.getOrDefault(tab, CreativeTabOrder.DEFAULT));
             }

@@ -64,4 +64,12 @@ public final class CreativeTabRegistry {
 
     public static void init() {
     }
+
+    public enum CreativeTabKey {
+        NATURE,
+        ARCHITECTURE,
+        FURNISHINGS,
+        TRADITIONS,
+        CUISINE
+    }
 }

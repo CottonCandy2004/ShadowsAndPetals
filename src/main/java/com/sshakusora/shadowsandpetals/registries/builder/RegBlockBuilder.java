@@ -66,8 +66,8 @@ public class RegBlockBuilder<B extends Block> {
     private @Nullable CTTextureSelector ctTextureSelector;
     private @Nullable CTTextureType ctTextureType;
     private int ctPadding;
-    private final List<CreativeTabKey> creativeTabs = new ArrayList<>();
-    private final Map<CreativeTabKey, CreativeTabOrder> creativeTabOrders = new EnumMap<>(CreativeTabKey.class);
+    private final List<CreativeTabRegistry.CreativeTabKey> creativeTabs = new ArrayList<>();
+    private final Map<CreativeTabRegistry.CreativeTabKey, CreativeTabOrder> creativeTabOrders = new EnumMap<>(CreativeTabRegistry.CreativeTabKey.class);
     private final List<ResourceLocation> aliases = new ArrayList<>();
     private final List<ResourceLocation> itemAliases = new ArrayList<>();
     private final List<StateAliasSpec<?>> stateAliases = new ArrayList<>();
@@ -386,7 +386,7 @@ public class RegBlockBuilder<B extends Block> {
     /**
      * Adds the registered block item to a creative tab.
      */
-    public RegBlockBuilder<B> creativeTab(CreativeTabKey tab) {
+    public RegBlockBuilder<B> creativeTab(CreativeTabRegistry.CreativeTabKey tab) {
         this.creativeTabs.add(tab);
         return this;
     }
@@ -394,7 +394,7 @@ public class RegBlockBuilder<B extends Block> {
     /**
      * Adds the registered block item to a creative tab in an explicit sort group.
      */
-    public RegBlockBuilder<B> creativeTab(CreativeTabKey tab, CreativeTabOrder order) {
+    public RegBlockBuilder<B> creativeTab(CreativeTabRegistry.CreativeTabKey tab, CreativeTabOrder order) {
         this.creativeTabs.add(tab);
         this.creativeTabOrders.put(tab, order);
         return this;
@@ -403,7 +403,7 @@ public class RegBlockBuilder<B extends Block> {
     /**
      * Adds the registered block item to multiple creative tabs.
      */
-    public RegBlockBuilder<B> creativeTabs(CreativeTabKey... tabs) {
+    public RegBlockBuilder<B> creativeTabs(CreativeTabRegistry.CreativeTabKey... tabs) {
         Collections.addAll(this.creativeTabs, tabs);
         return this;
     }
@@ -722,7 +722,7 @@ public class RegBlockBuilder<B extends Block> {
             throw new IllegalStateException("Block '" + name + "' cannot be added to a creative tab without an item");
         }
 
-        for (CreativeTabKey tab : creativeTabs) {
+        for (CreativeTabRegistry.CreativeTabKey tab : creativeTabs) {
             CreativeTabContentsRegistry.add(tab, block::get,
                     creativeTabOrders.getOrDefault(tab, CreativeTabOrder.DEFAULT));
         }
