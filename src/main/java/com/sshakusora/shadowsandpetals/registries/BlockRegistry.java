@@ -21,35 +21,28 @@ import com.sshakusora.shadowsandpetals.client.tooltip.RockeryTooltipComponent;
 import com.sshakusora.shadowsandpetals.compat.chinjufu.ChinjufuBlockCompat;
 import com.sshakusora.shadowsandpetals.compat.chinjufu.ChinjufuIds;
 import com.sshakusora.shadowsandpetals.data.DatagenLangRegistry;
-import com.sshakusora.shadowsandpetals.data.DatagenRecipeFactory;
-import com.sshakusora.shadowsandpetals.data.ModRecipeProvider;
+import com.sshakusora.shadowsandpetals.data.lang.BlockTooltipData;
 import com.sshakusora.shadowsandpetals.data.model.generator.*;
+import com.sshakusora.shadowsandpetals.data.recipe.BlockRecipeData;
 import com.sshakusora.shadowsandpetals.item.CopperTeapotBlockItem;
 import com.sshakusora.shadowsandpetals.item.RecessedLampBlockItem;
 import com.sshakusora.shadowsandpetals.item.barrel.WoodenBarrelBlockItem;
 import com.sshakusora.shadowsandpetals.item.barrel.WoodenBarrelTooltipModifier;
 import com.sshakusora.shadowsandpetals.item.chime.WindChimeTooltipModifier;
 import com.sshakusora.shadowsandpetals.item.hammer.HammerItem;
-import com.sshakusora.shadowsandpetals.recipe.WindChimeDyeRecipe;
-import com.sshakusora.shadowsandpetals.util.WoolUtils;
 import com.sshakusora.shadowsandpetals.worldgen.SAPTreeGrowers;
-import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
-import net.neoforged.neoforge.common.NeoForgeMod;
-import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.registries.DeferredBlock;
 
 import java.util.List;
@@ -151,7 +144,7 @@ public class BlockRegistry {
             .creativeTab(CreativeTabRegistry.CreativeTabKey.NATURE, CreativeTabOrder.NATURE_METALS)
             .blockstate(() -> StandardBlockModels::cubeAll)
             .loot((provider, block) -> provider.dropSelf(block.get()))
-            .recipe((provider, block) -> DatagenRecipeFactory.storageBlock(provider, block, ItemRegistry.RAW_BAUXITE.get(), "raw_bauxite_from_block"))
+            .recipe(BlockRecipeData::rawBauxiteBlock)
             .lang(DatagenLangRegistry.ZH_CN, "粗矾土块")
             .register();
 
@@ -166,7 +159,7 @@ public class BlockRegistry {
             .creativeTab(CreativeTabRegistry.CreativeTabKey.NATURE, CreativeTabOrder.NATURE_METALS)
             .blockstate(() -> StandardBlockModels::cubeAll)
             .loot((provider, block) -> provider.dropSelf(block.get()))
-            .recipe((provider, block) -> DatagenRecipeFactory.storageBlock(provider, block, ItemRegistry.ALUMINUM_INGOT.get(), "aluminum_ingot_from_block"))
+            .recipe(BlockRecipeData::aluminumBlock)
             .lang(DatagenLangRegistry.ZH_CN, "铝块")
             .register();
 
@@ -179,51 +172,12 @@ public class BlockRegistry {
                     .noOcclusion())
             .tags(BlockTags.MINEABLE_WITH_PICKAXE, BlockTagRegistry.WOOD_POST_HANGING_CONNECTIONS)
             .withItem()
-            .tooltipDescription(tooltip -> tooltip
-                    .summary(
-                            "A hanging ornament with independently dyeable _ribbon_ and _vane_.",
-                            "悬绳与短册可_分别染色_的悬挂饰物。")
-                    .behaviour(
-                            "When crafted with dye:", "与染料合成时：",
-                            "Change the _ribbon_ or _vane_ color.", "改变_悬绳_或_短册_颜色。")
-                    .behaviour(
-                            "Over time:", "经过一段时间后：",
-                            "Play soft ambient chimes.", "发出轻柔的环境风铃声。")
-                    .action(
-                            "Right-click", "右键点击",
-                            "_Ring_ the wind chime.", "_敲响_风铃。"))
+            .tooltipDescription(BlockTooltipData::windChime)
             .tooltipModifier(new WindChimeTooltipModifier())
             .creativeTab(CreativeTabRegistry.CreativeTabKey.TRADITIONS, CreativeTabOrder.TRADITIONS_CHIMES)
             .blockstate(() -> WindChimeModels::block)
             .loot((provider, block) -> provider.dropSelf(block.get()))
-            .recipe((provider, windChime) -> {
-                provider.shaped(RecipeCategory.DECORATIONS, windChime.get())
-                        .define('S', Items.STRING)
-                        .define('G', Items.GLASS_PANE)
-                        .define('A', Items.AMETHYST_SHARD)
-                        .define('P', Items.PAPER)
-                        .pattern(" S ")
-                        .pattern("GAG")
-                        .pattern(" P ")
-                        .unlockedBy(provider.hasName(Items.AMETHYST_SHARD), provider.hasItem(Items.AMETHYST_SHARD))
-                        .save(provider.output());
-
-                provider.output().accept(
-                        provider.id("wind_chime_ribbon_dyeing"),
-                        new WindChimeDyeRecipe(WindChimeDyeRecipe.Target.RIBBON),
-                        null
-                );
-                provider.output().accept(
-                        provider.id("wind_chime_vane_dyeing"),
-                        new WindChimeDyeRecipe(WindChimeDyeRecipe.Target.VANE),
-                        null
-                );
-                provider.output().accept(
-                        provider.id("wind_chime_dual_dyeing"),
-                        new WindChimeDyeRecipe(WindChimeDyeRecipe.Target.BOTH),
-                        null
-                );
-            })
+            .recipe(BlockRecipeData::windChime)
             .itemModel(() -> WindChimeModels::item)
             .customClientItem(ShadowsAndPetals.asResource("wind_chime"))
             .lang(DatagenLangRegistry.ZH_CN, "风铃")
@@ -239,26 +193,9 @@ public class BlockRegistry {
             .tags(BlockTags.MINEABLE_WITH_PICKAXE)
             .withCustomItem(CopperTeapotBlockItem::new)
             .creativeTab(CreativeTabRegistry.CreativeTabKey.CUISINE, CreativeTabOrder.CUISINE_TEA)
-            .tooltipDescription(tooltip -> tooltip
-                    .summary(
-                            "A _decorative copper teapot_ that can hold fluids.",
-                            "可盛装液体的_铜制装饰茶壶_。")
-                    .behaviour(
-                            "Right-click to open:", "右键打开：",
-                            "Open the teapot screen.", "打开茶壶界面。")
-                    .behaviour(
-                            "When placed on an irori:", "放置在围炉上时：",
-                            "Lift to sit on the _irori grate_.", "抬高并摆放在_围炉炉架_上。"))
+            .tooltipDescription(BlockTooltipData::copperTeapot)
             .blockstate(() -> DecorationBlockModels::copperTeapot)
-            .recipe((provider, block) -> {
-                provider.shaped(RecipeCategory.DECORATIONS, block.get())
-                        .define('C', Items.COPPER_INGOT)
-                        .pattern("C C")
-                        .pattern("C C")
-                        .pattern(" C ")
-                        .unlockedBy("has_copper_ingot", provider.hasItem(Items.COPPER_INGOT))
-                        .save(provider.output());
-            })
+            .recipe(BlockRecipeData::copperTeapot)
             .clientItem(ShadowsAndPetals.asResource("item/teapot/copper"))
             .lang(DatagenLangRegistry.ZH_CN, "铜茶壶")
             .register();
@@ -272,17 +209,7 @@ public class BlockRegistry {
                     .requiresCorrectToolForDrops())
             .tags(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)
             .withItem()
-            .tooltipDescription(tooltip -> tooltip
-                    .summary(
-                            "An unfinished architectural block with _connected textures_.",
-                            "具有_连接纹理_的素面建筑方块。")
-                    .behaviour(
-                            "When placed beside itself:", "与同类方块相邻放置时:",
-                            "Join into a _continuous concrete surface_.", "连接成_连续的混凝土表面_。")
-                    .behaviour(
-                            "When hit with a Hammer:", "使用锤子敲击时:",
-                            "Cycle between _blank_, _single-hole_, and _four-hole_ textures.",
-                            "在_空白_、_单孔_和_四孔_纹理之间循环切换。"))
+            .tooltipDescription(BlockTooltipData::rawConcrete)
             .creativeTab(CreativeTabRegistry.CreativeTabKey.ARCHITECTURE, CreativeTabOrder.ARCHITECTURE_CONCRETE)
             .blockstate(() -> (context, generator) -> StandardBlockModels.cubeAll(
                     context,
@@ -297,18 +224,7 @@ public class BlockRegistry {
                             ShadowsAndPetals.asResource("block/raw_concrete/connected_dense_hole_bleed")),
                     RawConcreteBlock::selectTextureIndex,
                     CTTextureType.OMNIDIRECTIONAL, 1)
-            .recipe((provider, block) -> {
-                provider.shaped(RecipeCategory.BUILDING_BLOCKS, block.get(), 8)
-                        .define('P', ItemTags.PLANKS)
-                        .define('C', Tags.Items.CONCRETE_POWDERS)
-                        .pattern("PPP")
-                        .pattern("PCP")
-                        .pattern("PPP")
-                        .unlockedBy("has_concrete_powder", provider.hasTag(Tags.Items.CONCRETE_POWDERS))
-                        .save(provider.output());
-                provider.stonecutter(RecipeCategory.BUILDING_BLOCKS, block.get(), 1, Blocks.WHITE_CONCRETE);
-                addIsolatedRawConcreteConversionRecipe(provider, block);
-            })
+            .recipe(BlockRecipeData::rawConcrete)
             .lang(DatagenLangRegistry.ZH_CN, "清水混凝土")
             .register();
 
@@ -321,24 +237,7 @@ public class BlockRegistry {
                     .requiresCorrectToolForDrops())
             .tags(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)
             .withItem()
-            .tooltipDescription(tooltip -> tooltip
-                    .summary(
-                            "A raw concrete block with a _separate connected-texture island_.",
-                            "与普通清水混凝土保持_纹理分隔_的建筑方块。")
-                    .behaviour(
-                            "When placed beside another isolated block:",
-                            "与其他隔离清水混凝土相邻放置时:",
-                            "Join into a _continuous concrete surface_.",
-                            "连接成_连续的混凝土表面_。")
-                    .behaviour(
-                            "When placed beside raw concrete:",
-                            "与普通清水混凝土相邻放置时:",
-                            "Keep a _visible seam_ between the two texture groups.",
-                            "在两组纹理之间保留_明显接缝_。")
-                    .behaviour(
-                            "When hit with a Hammer:", "使用锤子敲击时:",
-                            "Cycle between _blank_, _single-hole_, and _four-hole_ textures.",
-                            "在_空白_、_单孔_和_四孔_纹理之间循环切换。"))
+            .tooltipDescription(BlockTooltipData::isolatedRawConcrete)
             .creativeTab(CreativeTabRegistry.CreativeTabKey.ARCHITECTURE, CreativeTabOrder.ARCHITECTURE_ISOLATED_CONCRETE)
             .blockstate(() -> (context, generator) -> StandardBlockModels.cubeAllWithItemTexture(
                     context,
@@ -354,12 +253,7 @@ public class BlockRegistry {
                             ShadowsAndPetals.asResource("block/raw_concrete/connected_dense_hole_bleed")),
                     RawConcreteBlock::selectTextureIndex,
                     CTTextureType.OMNIDIRECTIONAL, 1)
-            .recipe((provider, block) -> provider.shapeless(
-                            RecipeCategory.BUILDING_BLOCKS,
-                            RAW_CONCRETE.get())
-                    .requires(block.get())
-                    .unlockedBy(provider.hasName(block.get()), provider.hasItem(block.get()))
-                    .save(provider.output(), provider.id("raw_concrete_from_isolated_raw_concrete").toString()))
+            .recipe(BlockRecipeData::isolatedRawConcrete)
             .lang(DatagenLangRegistry.ZH_CN, "隔离清水混凝土")
             .register();
 
@@ -376,7 +270,7 @@ public class BlockRegistry {
             .creativeTab(CreativeTabRegistry.CreativeTabKey.FURNISHINGS, CreativeTabOrder.FURNISHINGS_INGOT_PILES)
             .blockstate(() -> DecorationBlockModels::ingotPile)
             .loot((provider, pile) -> provider.dropSlab(pile.get()))
-            .recipe((provider, pile) -> DatagenRecipeFactory.ingotPile(provider, pile, ItemRegistry.ALUMINUM_INGOT.get(), "aluminum_ingot_from_pile"))
+            .recipe(BlockRecipeData::aluminumIngotPile)
             .lang(DatagenLangRegistry.ZH_CN, "铝锭堆")
             .register();
 
@@ -393,7 +287,7 @@ public class BlockRegistry {
             .creativeTab(CreativeTabRegistry.CreativeTabKey.FURNISHINGS, CreativeTabOrder.FURNISHINGS_INGOT_PILES)
             .blockstate(() -> DecorationBlockModels::ingotPile)
             .loot((provider, pile) -> provider.dropSlab(pile.get()))
-            .recipe((provider, pile) -> DatagenRecipeFactory.ingotPile(provider, pile, Items.IRON_INGOT, "iron_ingot_from_pile"))
+            .recipe(BlockRecipeData::ironIngotPile)
             .lang(DatagenLangRegistry.ZH_CN, "铁锭堆")
             .register();
 
@@ -410,7 +304,7 @@ public class BlockRegistry {
             .creativeTab(CreativeTabRegistry.CreativeTabKey.FURNISHINGS, CreativeTabOrder.FURNISHINGS_INGOT_PILES)
             .blockstate(() -> DecorationBlockModels::ingotPile)
             .loot((provider, pile) -> provider.dropSlab(pile.get()))
-            .recipe((provider, pile) -> DatagenRecipeFactory.ingotPile(provider, pile, Items.COPPER_INGOT, "copper_ingot_from_pile"))
+            .recipe(BlockRecipeData::copperIngotPile)
             .lang(DatagenLangRegistry.ZH_CN, "铜锭堆")
             .register();
 
@@ -427,7 +321,7 @@ public class BlockRegistry {
             .creativeTab(CreativeTabRegistry.CreativeTabKey.FURNISHINGS, CreativeTabOrder.FURNISHINGS_INGOT_PILES)
             .blockstate(() -> DecorationBlockModels::ingotPile)
             .loot((provider, pile) -> provider.dropSlab(pile.get()))
-            .recipe((provider, pile) -> DatagenRecipeFactory.ingotPile(provider, pile, Items.GOLD_INGOT, "gold_ingot_from_pile"))
+            .recipe(BlockRecipeData::goldIngotPile)
             .lang(DatagenLangRegistry.ZH_CN, "金锭堆")
             .register();
 
@@ -444,7 +338,7 @@ public class BlockRegistry {
             .creativeTab(CreativeTabRegistry.CreativeTabKey.FURNISHINGS, CreativeTabOrder.FURNISHINGS_INGOT_PILES)
             .blockstate(() -> DecorationBlockModels::ingotPile)
             .loot((provider, pile) -> provider.dropSlab(pile.get()))
-            .recipe((provider, pile) -> DatagenRecipeFactory.ingotPile(provider, pile, Items.NETHERITE_INGOT, "netherite_ingot_from_pile"))
+            .recipe(BlockRecipeData::netheriteIngotPile)
             .lang(DatagenLangRegistry.ZH_CN, "下界合金锭堆")
             .register();
 
@@ -456,47 +350,11 @@ public class BlockRegistry {
                     .noOcclusion())
             .tags(BlockTags.MINEABLE_WITH_PICKAXE)
             .withItem()
-            .tooltipDescription(tooltip -> tooltip
-                    .summary(
-                            "A modular _hearth_ that shares its grill, fuel, and fire across connected blocks.",
-                            "在相连方块间共享炉架、燃料与火焰的组合式_围炉_。")
-                    .behaviour(
-                            "While burning:", "燃烧时：",
-                            "Cook campfire and smoking recipes on the grill, repel nearby _Phantoms_, and suppress their spawning.",
-                            "在炉架上烹饪篝火与烟熏配方，驱散附近的_幻翼_并抑制其生成。")
-                    .behaviour(
-                            "When all fuel is exhausted:", "所有燃料耗尽时：",
-                            "Leave behind ash that can be collected as _Bone Meal_.", "留下可收集为_骨粉_的灰烬。")
-                    .action(
-                            "Right-click with an Iron Ingot:", "手持铁锭右键：",
-                            "_Install_ a grill across the connected hearth.", "为整组围炉_安装_炉架。")
-                    .action(
-                            "Shift Right-click:", "Shift+右键：",
-                            "Open the shared _menu_ to add or retrieve fuel.", "打开共享_界面_以存取燃料。")
-                    .action(
-                            "Use Flint and Steel or a Fire Charge:", "使用打火石或火焰弹：",
-                            "_Ignite_ the loaded fuel.", "_点燃_已添加的燃料。")
-                    .action(
-                            "Right-click the Grill with Cookable Food:", "手持可烹饪食物右键炉架：",
-                            "Place one item on the _grill_.", "将一份食物放上_炉架_。")
-                    .action(
-                            "Empty-hand Right-click the Food:", "空手右键炉架上的食物：",
-                            "Take it from the _grill_.", "从_炉架_上取回食物。")
-                    .action(
-                            "Right-click the Ash:", "右键点击灰烬：",
-                            "Collect it as _Bone Meal_.", "将其收集为_骨粉_。"))
+            .tooltipDescription(BlockTooltipData::irori)
             .creativeTab(CreativeTabRegistry.CreativeTabKey.FURNISHINGS, CreativeTabOrder.FURNISHINGS_IRORI)
             .blockstate(() -> DecorationBlockModels::irori)
             .loot((provider, irori) -> provider.dropSelf(irori.get()))
-            .recipe((provider, irori) -> provider.shaped(RecipeCategory.DECORATIONS, irori.get())
-                    .define('L', ItemTags.LOGS)
-                    .define('B', Items.STONE_BRICKS)
-                    .define('G', Items.GRAVEL)
-                    .pattern("LLL")
-                    .pattern("BGB")
-                    .pattern("BBB")
-                    .unlockedBy(provider.hasName(Items.STONE_BRICKS), provider.hasItem(Items.STONE_BRICKS))
-                    .save(provider.output()))
+            .recipe(BlockRecipeData::irori)
             .lang(DatagenLangRegistry.ZH_CN, "日式围炉")
             .register();
 
@@ -538,22 +396,11 @@ public class BlockRegistry {
                     .lightLevel(state -> state.getValue(BedroomLampBlock.LIT) ? 10 : 0))
             .tags(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.MINEABLE_WITH_AXE)
             .withItem()
-            .tooltipDescription(tooltip -> tooltip
-                    .summary(
-                            "A warm decorative _bedside lamp_.",
-                            "散发温暖光线的装饰性_卧室台灯_。")
-                    .behaviour(
-                            "When right-clicked:", "右键点击时:",
-                            "Toggle the light _on or off_.", "切换灯的_开关状态_。"))
+            .tooltipDescription(BlockTooltipData::bedroomLamp)
             .creativeTab(CreativeTabRegistry.CreativeTabKey.FURNISHINGS, CreativeTabOrder.FURNISHINGS_LAMPS)
             .blockstate(() -> DecorationBlockModels::bedroomLamp)
             .loot((provider, lamp) -> provider.dropSelf(lamp.get()))
-            .recipe((provider, lamp) -> provider.shapeless(RecipeCategory.DECORATIONS, lamp.get(), 2)
-                    .requires(provider.ingredient(Tags.Items.DUSTS_REDSTONE), 2)
-                    .requires(Items.GLOWSTONE)
-                    .requires(Tags.Items.INGOTS_IRON)
-                    .unlockedBy(provider.hasName(Items.GLOWSTONE), provider.hasItem(Items.GLOWSTONE))
-                    .save(provider.output()))
+            .recipe(BlockRecipeData::bedroomLamp)
             .clientItem(ShadowsAndPetals.asResource("block/bedroom_lamp/off"))
             .lang(DatagenLangRegistry.ZH_CN, "卧室台灯")
             .register();
@@ -568,22 +415,11 @@ public class BlockRegistry {
                     .lightLevel(state -> state.getValue(WallLampBlock.LIT) ? 10 : 0))
             .tags(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.MINEABLE_WITH_AXE)
             .withItem()
-            .tooltipDescription(tooltip -> tooltip
-                    .summary(
-                            "A compact lamp that mounts to a _sturdy wall face_.",
-                            "安装在_坚固墙面_上的小型灯具。")
-                    .behaviour(
-                            "When right-clicked:", "右键点击时:",
-                            "Toggle the light _on or off_.", "切换灯的_开关状态_。"))
+            .tooltipDescription(BlockTooltipData::wallLamp)
             .creativeTab(CreativeTabRegistry.CreativeTabKey.FURNISHINGS, CreativeTabOrder.FURNISHINGS_LAMPS)
             .blockstate(() -> DecorationBlockModels::wallLamp)
             .loot((provider, lamp) -> provider.dropSelf(lamp.get()))
-            .recipe((provider, lamp) -> provider.shapeless(RecipeCategory.DECORATIONS, lamp.get(), 2)
-                    .requires(provider.ingredient(Tags.Items.DUSTS_REDSTONE), 2)
-                    .requires(Items.GLOWSTONE)
-                    .requires(ItemRegistry.ALUMINUM_INGOT.get())
-                    .unlockedBy(provider.hasName(Items.GLOWSTONE), provider.hasItem(Items.GLOWSTONE))
-                    .save(provider.output()))
+            .recipe(BlockRecipeData::wallLamp)
             .clientItem(ShadowsAndPetals.asResource("block/wall_lamp/off"))
             .lang(DatagenLangRegistry.ZH_CN, "壁灯")
             .register();
@@ -597,33 +433,11 @@ public class BlockRegistry {
                     .noOcclusion()
                     .lightLevel(state -> state.getValue(EmergencyLampBlock.LIT) ? 10 : 0))
             .withItem()
-            .tooltipDescription(tooltip -> tooltip
-                    .summary(
-                            "A rugged lamp that attaches to _any sturdy face_.",
-                            "可安装在_任意坚固面_上的耐用防爆灯。")
-                    .behaviour(
-                            "When right-clicked:", "右键点击时:",
-                            "Toggle the light _on or off_.", "切换灯的_开关状态_。"))
+            .tooltipDescription(BlockTooltipData::emergencyLamp)
             .creativeTab(CreativeTabRegistry.CreativeTabKey.FURNISHINGS, CreativeTabOrder.FURNISHINGS_LAMPS)
             .blockstate(() -> DecorationBlockModels::emergencyLamp)
             .loot((provider, lamp) -> provider.dropSelf(lamp.get()))
-            .recipe((provider, lamp) -> {
-                provider.shapeless(RecipeCategory.DECORATIONS, lamp.get(), 2)
-                        .requires(provider.ingredient(Tags.Items.DUSTS_REDSTONE), 2)
-                        .requires(Items.WHITE_STAINED_GLASS)
-                        .requires(Items.GLOWSTONE)
-                        .requires(Tags.Items.INGOTS_IRON)
-                        .unlockedBy(provider.hasName(Items.GLOWSTONE), provider.hasItem(Items.GLOWSTONE))
-                        .save(provider.output());
-
-                provider.shapeless(RecipeCategory.DECORATIONS, lamp.get(), 2)
-                        .requires(provider.ingredient(Tags.Items.DUSTS_REDSTONE), 2)
-                        .requires(Items.WHITE_STAINED_GLASS)
-                        .requires(Items.GLOWSTONE)
-                        .requires(ItemRegistry.ALUMINUM_INGOT.get())
-                        .unlockedBy(provider.hasName(Items.GLOWSTONE), provider.hasItem(Items.GLOWSTONE))
-                        .save(provider.output(), provider.id("emergency_lamp_from_aluminum").toString());
-            })
+            .recipe(BlockRecipeData::emergencyLamp)
             .clientItem(ShadowsAndPetals.asResource("block/emergency_lamp/off"))
             .lang(DatagenLangRegistry.ZH_CN, "防爆灯")
             .register();
@@ -638,37 +452,11 @@ public class BlockRegistry {
                     .lightLevel(state -> state.getValue(RecessedLampBlock.LIT) ? 10 : 0))
             .tags(BlockTags.MINEABLE_WITH_PICKAXE)
             .withCustomItem(RecessedLampBlockItem::new)
-            .tooltipDescription(tooltip -> tooltip
-                    .summary(
-                            "A compact light recessed into a _floor or ceiling_.",
-                            "嵌入_地面或天花板_的小型灯具。")
-                    .behaviour(
-                            "When right-clicked:", "右键点击时:",
-                            "Toggle the light _on or off_.", "切换灯的_开关状态_。"))
+            .tooltipDescription(BlockTooltipData::recessedLamp)
             .creativeTab(CreativeTabRegistry.CreativeTabKey.FURNISHINGS, CreativeTabOrder.FURNISHINGS_LAMPS)
             .blockstate(() -> DecorationBlockModels::recessedLamp)
             .loot((provider, lamp) -> provider.dropSelf(lamp.get()))
-            .recipe((provider, lamp) -> {
-                provider.shaped(RecipeCategory.DECORATIONS, lamp.get(), 4)
-                        .define('I', Tags.Items.INGOTS_IRON)
-                        .define('L', Items.GLOWSTONE)
-                        .define('G', Tags.Items.GLASS_PANES_COLORLESS)
-                        .pattern("GIG")
-                        .pattern("ILI")
-                        .pattern("GIG")
-                        .unlockedBy("has_iron_ingot", provider.hasTag(Tags.Items.INGOTS_IRON))
-                        .save(provider.output());
-
-                provider.shaped(RecipeCategory.DECORATIONS, lamp.get(), 4)
-                        .define('I', ItemRegistry.ALUMINUM_INGOT.get())
-                        .define('L', Items.GLOWSTONE)
-                        .define('G', Tags.Items.GLASS_PANES_COLORLESS)
-                        .pattern("GIG")
-                        .pattern("ILI")
-                        .pattern("GIG")
-                        .unlockedBy("has_aluminum_ingot", provider.hasItem(ItemRegistry.ALUMINUM_INGOT.get()))
-                        .save(provider.output(), provider.id("recessed_lamp_from_aluminum").toString());
-            })
+            .recipe(BlockRecipeData::recessedLamp)
             .clientItem(ShadowsAndPetals.asResource("block/recessed_lamp/up_off"))
             .lang(DatagenLangRegistry.ZH_CN, "嵌灯")
             .register();
@@ -696,22 +484,11 @@ public class BlockRegistry {
                     .noOcclusion()
                     .lightLevel(state -> state.getValue(DeskLampBlock.LIT) ? 10 : 0))
             .withItem()
-            .tooltipDescription(tooltip -> tooltip
-                    .summary(
-                            "A focused lamp for a _sturdy tabletop_.",
-                            "放置在_坚固台面_上的聚光台灯。")
-                    .behaviour(
-                            "When right-clicked:", "右键点击时:",
-                            "Toggle the light _on or off_.", "切换灯的_开关状态_。"))
+            .tooltipDescription(BlockTooltipData::deskLamp)
             .creativeTab(CreativeTabRegistry.CreativeTabKey.FURNISHINGS, CreativeTabOrder.FURNISHINGS_LAMPS)
             .blockstate(() -> DecorationBlockModels::deskLamp)
             .loot((provider, lamp) -> provider.dropSelf(lamp.get()))
-            .recipe((provider, lamp) -> provider.shapeless(RecipeCategory.DECORATIONS, lamp.get(), 2)
-                    .requires(provider.ingredient(Tags.Items.DUSTS_REDSTONE), 2)
-                    .requires(Items.GLOWSTONE)
-                    .requires(ItemRegistry.ALUMINUM_INGOT.get(), 2)
-                    .unlockedBy(provider.hasName(Items.GLOWSTONE), provider.hasItem(Items.GLOWSTONE))
-                    .save(provider.output()))
+            .recipe(BlockRecipeData::deskLamp)
             .clientItem(ShadowsAndPetals.asResource("block/desk_lamp/off"))
             .lang(DatagenLangRegistry.ZH_CN, "台灯")
             .register();
@@ -727,42 +504,9 @@ public class BlockRegistry {
             .tags(BlockTags.MINEABLE_WITH_PICKAXE)
             .withItem()
             .creativeTab(CreativeTabRegistry.CreativeTabKey.TRADITIONS, CreativeTabOrder.TRADITIONS_BONSAI)
-            .tooltipDescription(tooltip -> tooltip
-                    .summary(
-                            "A _decorative pot_ for growing trees.",
-                            "可栽种树木的_装饰花盆_。")
-                    .behaviour(
-                            "Use a Sapling on an empty pot:", "对空花盆使用树苗：",
-                            "Create a miniature tree matching the sapling's _wood and foliage_.",
-                            "栽种具有对应_树干与树叶_的微型盆景。")
-                    .behaviour(
-                            "Use a Dead Bush on an empty pot:", "对空花盆使用枯死的灌木：",
-                            "Create a leafless _dead-tree bonsai_.",
-                            "栽种一株无叶的_枯木盆景_。")
-                    .action(
-                            "Empty-hand Right-click:", "已种植时空手右键：",
-                            "_Cycle_ through four bonsai shapes.",
-                            "切换四种_盆景造型_。")
-                    .action(
-                            "Sneak + Empty-hand Right-click:", "潜行时空手右键：",
-                            "Rotate the pot by _22.5°_.",
-                            "将花盆旋转_22.5°_。")
-                    .action(
-                            "Use Shears on a living bonsai:", "对活盆景使用剪刀：",
-                            "Remove its leaves and turn it into a _dead tree_.",
-                            "剪去树叶，使其变为_枯木盆景_。")
-                    .action(
-                            "Use Shears on a dead bonsai:", "对枯木盆景使用剪刀：",
-                            "Recover the planted item and return to an _empty pot_.",
-                            "取回种植物，并恢复为_空花盆_。"))
+            .tooltipDescription(BlockTooltipData::bonsai)
             .loot((provider, block) -> provider.dropSelf(block.get()))
-            .recipe((provider, block) -> provider.shaped(RecipeCategory.DECORATIONS, block.get(), 3)
-                    .define('A', ItemRegistry.ALUMINUM_INGOT.get())
-                    .define('D', ItemTags.DIRT)
-                    .pattern("ADA")
-                    .pattern(" A ")
-                    .unlockedBy("has_aluminum_ingot", provider.hasItem(ItemRegistry.ALUMINUM_INGOT.get()))
-                    .save(provider.output()))
+            .recipe(BlockRecipeData::bonsai)
             .blockstate(() -> BonsaiBlockModels::block)
             .lang(DatagenLangRegistry.ZH_CN, "盆栽")
             .register();
@@ -773,61 +517,13 @@ public class BlockRegistry {
                     .noOcclusion())
             .tags(BlockTags.MINEABLE_WITH_AXE)
             .withCustomItem(WoodenBarrelBlockItem::new)
-            .tooltipDescription(tooltip -> tooltip
-                    .summary(
-                            "A wooden vessel for _storing fluids_.",
-                            "用于_储存流体_的木制容器。"
-                    )
-                    .behaviour(
-                            "When exposed to rain:", "暴露在雨中时：",
-                            "_Slowly collects water_.", "_缓慢收集雨水_。"
-                    )
-                    .behaviour(
-                            "When broken:", "被破坏时：",
-                            "Keeps its _stored fluid_.", "保留其中_储存的流体_。"
-                    )
-                    .action(
-                            "Use a fluid container:", "使用流体容器：",
-                            "_Fill or drain_ the barrel.", "向木桶_灌入或抽取_流体。"
-                    )
-                    .action(
-                            "Use a water bottle:", "使用水瓶：",
-                            "Transfer _250 mB of water_.", "转移 _250 mB 水_。"
-                    )
-                    .action(
-                            "Shift + Right-click with a filled barrel:", "手持装液木桶 Shift + 右键：",
-                            "_Place one bucket_ of its fluid.", "_放出一桶_内部流体。"
-                    )
-            )
+            .tooltipDescription(BlockTooltipData::woodenBarrel)
             .tooltipModifier(new WoodenBarrelTooltipModifier())
             .creativeTab(CreativeTabRegistry.CreativeTabKey.CUISINE, CreativeTabOrder.CUISINE_CONTAINERS)
             .blockstate(() -> DecorationBlockModels::woodenBarrel)
             .customClientItem(ShadowsAndPetals.asResource("wooden_barrel"))
             .loot((provider, block) -> provider.dropSelf(block.get()))
-            .recipe((provider, block) -> {
-                provider.shaped(RecipeCategory.DECORATIONS, block.get())
-                        .define('S', ItemTags.WOODEN_SLABS)
-                        .pattern(" S ")
-                        .pattern("SSS")
-                        .pattern(" S ")
-                        .unlockedBy(provider.hasName(Items.OAK_PLANKS), provider.hasItem(Items.OAK_PLANKS))
-                        .save(provider.output());
-
-                DatagenRecipeFactory.woodenBarrelFluid(
-                        provider,
-                        block,
-                        Fluids.WATER,
-                        Tags.Items.BUCKETS_WATER,
-                        "wooden_barrel_from_water_bucket"
-                );
-                DatagenRecipeFactory.woodenBarrelFluid(
-                        provider,
-                        block,
-                        NeoForgeMod.MILK.value(),
-                        Tags.Items.BUCKETS_MILK,
-                        "wooden_barrel_from_milk_bucket"
-                );
-            })
+            .recipe(BlockRecipeData::woodenBarrel)
             .lang(DatagenLangRegistry.ZH_CN, "木桶")
             .register();
 
@@ -851,16 +547,7 @@ public class BlockRegistry {
                     generator.modLoc("block/roof_tile/" + color.getName())
             ))
             .loot((provider, block) -> provider.dropSelf(block.get()))
-            .recipe((provider, block) -> {
-                provider.shaped(RecipeCategory.BUILDING_BLOCKS, block.get(), 8)
-                        .define('S', Items.STONE_BRICKS)
-                        .define('D', color.getTag())
-                        .pattern("SSS")
-                        .pattern("SDS")
-                        .pattern("SSS")
-                        .unlockedBy(provider.hasName(Items.STONE_BRICKS), provider.hasItem(Items.STONE_BRICKS))
-                        .save(provider.output());
-            })
+            .recipe((provider, block) -> BlockRecipeData.roofTile(provider, block, color))
             .lang(DatagenLangRegistry.ZH_CN, DyedBlockList.zhName(color) + "瓦")
             .register());
 
@@ -876,10 +563,7 @@ public class BlockRegistry {
             .creativeTab(CreativeTabRegistry.CreativeTabKey.ARCHITECTURE, CreativeTabOrder.ARCHITECTURE_ROOF_TILES)
             .blockstate(() -> (context, generator) -> RoofTileModels.shapes(context, generator, color))
             .loot((provider, block) -> provider.dropSlab(block.get()))
-            .recipe((provider, block) -> {
-                provider.slabFromBase(RecipeCategory.BUILDING_BLOCKS, block.get(), ROOF_TILES.get(color).get());
-                provider.stonecutter(RecipeCategory.BUILDING_BLOCKS, block.get(), 2, ROOF_TILES.get(color).get());
-            })
+            .recipe((provider, block) -> BlockRecipeData.roofTileSlab(provider, block, color))
             .lang(DatagenLangRegistry.ZH_CN, DyedBlockList.zhName(color) + "瓦台阶")
             .register());
 
@@ -895,21 +579,7 @@ public class BlockRegistry {
             .creativeTab(CreativeTabRegistry.CreativeTabKey.ARCHITECTURE, CreativeTabOrder.ARCHITECTURE_ROOF_TILES)
             .clientItem(block -> ShadowsAndPetals.asResource("block/" + block.getId().getPath()))
             .loot((provider, block) -> provider.dropSlab(block.get()))
-            .recipe((provider, block) -> {
-                var slab = ROOF_TILE_SLABS.get(color).get();
-                provider.shaped(RecipeCategory.BUILDING_BLOCKS, block.get(), 3)
-                        .define('S', slab)
-                        .pattern("S")
-                        .pattern("S")
-                        .pattern("S")
-                        .unlockedBy(provider.hasName(slab), provider.hasItem(slab))
-                        .save(provider.output());
-                provider.shapeless(RecipeCategory.BUILDING_BLOCKS, slab)
-                        .requires(block.get())
-                        .unlockedBy(provider.hasName(block.get()), provider.hasItem(block.get()))
-                        .save(provider.output(), provider.id(color.getName() + "_roof_tile_vertical_slab_revert").toString());
-                provider.stonecutter(RecipeCategory.BUILDING_BLOCKS, block.get(), 2, ROOF_TILES.get(color).get());
-            })
+            .recipe((provider, block) -> BlockRecipeData.roofTileVerticalSlab(provider, block, color))
             .lang(DatagenLangRegistry.ZH_CN, "竖直" + DyedBlockList.zhName(color) + "瓦台阶")
             .register());
 
@@ -924,10 +594,7 @@ public class BlockRegistry {
             .withItem()
             .creativeTab(CreativeTabRegistry.CreativeTabKey.ARCHITECTURE, CreativeTabOrder.ARCHITECTURE_ROOF_TILES)
             .loot((provider, block) -> provider.dropSelf(block.get()))
-            .recipe((provider, block) -> {
-                provider.stairsFromBase(block.get(), ROOF_TILES.get(color).get());
-                provider.stonecutter(RecipeCategory.BUILDING_BLOCKS, block.get(), 1, ROOF_TILES.get(color).get());
-            })
+            .recipe((provider, block) -> BlockRecipeData.roofTileStairs(provider, block, color))
             .lang(DatagenLangRegistry.ZH_CN, DyedBlockList.zhName(color) + "瓦楼梯")
             .register());
 
@@ -942,25 +609,11 @@ public class BlockRegistry {
                     .noOcclusion())
             .tags(BlockTags.MINEABLE_WITH_AXE)
             .withItem()
-            .tooltipDescription(tooltip -> tooltip
-                    .summary("A decorative _vanity_ with a _usable drawer_.", "带有_抽屉_的装饰性梳妆台。")
-                    .behaviour(
-                            "When the drawer is right-clicked:", "右键点击抽屉时:",
-                            "Open its _9-slot storage_ space.", "打开其_9 格储物空间_。")
-                    .behaviour(
-                            "When the front is obstructed:", "前方被阻挡时:",
-                            "The drawer _cannot open_.", "抽屉_无法打开_。"))
+            .tooltipDescription(BlockTooltipData::vanity)
             .creativeTab(CreativeTabRegistry.CreativeTabKey.FURNISHINGS, CreativeTabOrder.FURNISHINGS_VANITIES)
             .blockstate(() -> DecorationBlockModels::vanity)
             .clientItem(ShadowsAndPetals.asResource("item/vanity/" + woodType.getName()))
-            .recipe((provider, vanity) -> provider.shaped(RecipeCategory.DECORATIONS, vanity.get())
-                    .define('S', woodType.getSlab())
-                    .define('G', Items.GLASS_PANE)
-                    .pattern("S  ")
-                    .pattern("G  ")
-                    .pattern("SSS")
-                    .unlockedBy(provider.hasName(woodType.getPlanks()), provider.hasItem(woodType.getPlanks()))
-                    .save(provider.output()))
+            .recipe((provider, vanity) -> BlockRecipeData.vanity(provider, vanity, woodType))
             .lang(DatagenLangRegistry.ZH_CN, woodType.getZhName() + "梳妆台")
             .register());
 
@@ -996,17 +649,7 @@ public class BlockRegistry {
                             .withItem()
                             .creativeTab(CreativeTabRegistry.CreativeTabKey.ARCHITECTURE, CreativeTabOrder.ARCHITECTURE_WINDOWS)
                             .blockstate(() -> CasementWindowModels::block)
-                            .recipe((provider, block) -> provider.shaped(
-                                            RecipeCategory.DECORATIONS, block.get(), 8)
-                                    .define('P', woodType.getPlanks())
-                                    .define('G', Tags.Items.GLASS_BLOCKS_COLORLESS)
-                                    .pattern("   ")
-                                    .pattern("GP ")
-                                    .pattern("   ")
-                                    .unlockedBy(
-                                            provider.hasName(woodType.getPlanks()),
-                                            provider.hasItem(woodType.getPlanks()))
-                                    .save(provider.output()))
+                            .recipe((provider, block) -> BlockRecipeData.casementWindow(provider, block, woodType))
                             .loot((provider, block) -> provider.dropSelf(block.get()))
                             .lang(DatagenLangRegistry.ZH_CN, woodType.getZhName() + "平开窗")
                             .register());
@@ -1026,14 +669,7 @@ public class BlockRegistry {
                     ShadowsAndPetals.asResource("block/wood_pillar/red_lacquered_wood_pillar")
             ))
             .loot((provider, block) -> provider.dropSelf(block.get()))
-            .recipe((provider, block) -> provider.shapeless(RecipeCategory.DECORATIONS, block.get())
-                    .requires(provider.ingredient(ItemTagRegistry.STRIPPED_WOOD_PILLARS))
-                    .requires(Items.RED_DYE)
-                    .unlockedBy(
-                            provider.hasName(ItemTagRegistry.STRIPPED_WOOD_PILLARS),
-                            provider.hasTag(ItemTagRegistry.STRIPPED_WOOD_PILLARS)
-                    )
-                    .save(provider.output()))
+            .recipe(BlockRecipeData::redLacqueredWoodPillar)
             .lang(DatagenLangRegistry.ZH_CN, "红漆木圆柱")
             .register();
 
@@ -1120,17 +756,7 @@ public class BlockRegistry {
                     .mapColor(color)
                     .noOcclusion())
             .withItem()
-            .tooltipDescription(tooltip -> tooltip
-                    .summary("A soft seat that can be _recolored_.", "一把可以_重新染色_的柔软座椅。")
-                    .behaviour(
-                            "When right-clicked:", "右键点击时:",
-                            "_Sit_ on the chair.", "_坐_在椅子上。")
-                    .behaviour(
-                            "When landed on:", "落在上面时:",
-                            "_Cushion_ the fall and bounce upward.", "_缓冲_坠落并向上弹起。")
-                    .action(
-                            "Right-click with Dye:", "手持染料右键点击:",
-                            "_Recolor_ the chair.", "为椅子_重新染色_。"))
+            .tooltipDescription(BlockTooltipData::cafeChair)
             .creativeTab(CreativeTabRegistry.CreativeTabKey.FURNISHINGS, CreativeTabOrder.FURNISHINGS_CHAIRS)
             .lang(DatagenLangRegistry.ZH_CN, DyedBlockList.zhName(color) + "咖啡椅")
             .blockstate(() -> (context, generator) -> StandardBlockModels.simpleBlockWithItem(
@@ -1138,14 +764,7 @@ public class BlockRegistry {
                     generator,
                     generator.modLoc("block/cafe_chair/" + color.getName())
             ))
-            .recipe((provider, chair) -> provider.shaped(RecipeCategory.DECORATIONS, chair.get())
-                    .define('W', WoolUtils.getWool(color))
-                    .define('S', Items.STICK)
-                    .pattern(" W ")
-                    .pattern(" S ")
-                    .pattern("SSS")
-                    .unlockedBy(provider.hasName(WoolUtils.getWool(color)), provider.hasItem(WoolUtils.getWool(color)))
-                    .save(provider.output()))
+            .recipe((provider, chair) -> BlockRecipeData.cafeChair(provider, chair, color))
             .register());
 
     // Add another colour when its block/sofa/<colour>.json model family exists.
@@ -1189,23 +808,11 @@ public class BlockRegistry {
                     .noOcclusion())
             .tags(BlockTags.MINEABLE_WITH_AXE)
             .withItem()
-            .tooltipDescription(tooltip -> tooltip
-                    .summary(
-                            "A bamboo water feature that fills from above, tips, and _knocks_.",
-                            "从上方蓄液、倾倒并发出_敲击声_的竹制添水。")
-                    .behaviour(
-                            "When supplied by a Pipe above:", "由上方竹管供液时:",
-                            "Fill with the pipe's fluid, then pour and _strike_ in a repeating cycle.", "蓄入竹管提供的流体，随后倾倒并循环_敲击_。"))
+            .tooltipDescription(BlockTooltipData::shishiOdoshi)
             .creativeTab(CreativeTabRegistry.CreativeTabKey.TRADITIONS, CreativeTabOrder.TRADITIONS_WATER_FEATURES)
             .blockstate(() -> DecorationBlockModels::shishiOdoshi)
             .loot((provider, block) -> provider.dropSelf(block.get()))
-            .recipe((provider, block) -> provider.shaped(RecipeCategory.DECORATIONS, block.get())
-                    .define('B', Items.BAMBOO)
-                    .define('S', Items.COBBLESTONE)
-                    .pattern("BBB")
-                    .pattern("SSS")
-                    .unlockedBy(provider.hasName(Items.BAMBOO), provider.hasItem(Items.BAMBOO))
-                    .save(provider.output()))
+            .recipe(BlockRecipeData::shishiOdoshi)
             .lang(DatagenLangRegistry.ZH_CN, "添水")
             .register();
 
@@ -1218,22 +825,11 @@ public class BlockRegistry {
                     .noOcclusion())
             .tags(BlockTags.MINEABLE_WITH_AXE)
             .withItem()
-            .tooltipDescription(tooltip -> tooltip
-                    .summary(
-                            "A bamboo _spout_ that pours fluid from a source behind it.",
-                            "从背后流体源引出液体的竹制_出水管_。")
-                    .behaviour(
-                            "When attached to a compatible fluid source:", "连接兼容的流体源时:",
-                            "Feed fluid into a _Shishi-Odoshi directly below_.", "向_正下方的添水_持续供液。"))
+            .tooltipDescription(BlockTooltipData::shishiOdoshiPipe)
             .creativeTab(CreativeTabRegistry.CreativeTabKey.TRADITIONS, CreativeTabOrder.TRADITIONS_WATER_FEATURES)
             .blockstate(() -> DecorationBlockModels::shishiOdoshiPipe)
             .loot((provider, block) -> provider.dropSelf(block.get()))
-            .recipe((provider, block) -> provider.shaped(RecipeCategory.DECORATIONS, block.get())
-                    .define('B', Items.BAMBOO)
-                    .pattern("B")
-                    .pattern("B")
-                    .unlockedBy(provider.hasName(Items.BAMBOO), provider.hasItem(Items.BAMBOO))
-                    .save(provider.output()))
+            .recipe(BlockRecipeData::shishiOdoshiPipe)
             .lang(DatagenLangRegistry.ZH_CN, "添水竹管")
             .register();
 
@@ -1381,27 +977,10 @@ public class BlockRegistry {
                 .withItem()
                 .creativeTab(CreativeTabRegistry.CreativeTabKey.FURNISHINGS, CreativeTabOrder.FURNISHINGS_SOFAS)
                 .blockstate(() -> SofaModels::block)
-                .recipe((provider, sofa) -> provider.shaped(RecipeCategory.DECORATIONS, sofa, 4)
-                        .define('P', ItemTags.PLANKS)
-                        .define('W', WoolUtils.getWool(color))
-                        .pattern("PW ")
-                        .pattern("PWW")
-                        .pattern("PPW")
-                        .unlockedBy(provider.hasName(WoolUtils.getWool(color)), provider.hasItem(WoolUtils.getWool(color)))
-                        .save(provider.output()))
+                .recipe((provider, sofa) -> BlockRecipeData.sofa(provider, sofa, color))
                 .loot((provider, block) -> provider.dropSelf(block.get()))
                 .lang(DatagenLangRegistry.ZH_CN, DyedBlockList.zhName(color) + "沙发")
                 .register();
-    }
-
-    private static void addIsolatedRawConcreteConversionRecipe(
-            ModRecipeProvider provider,
-            DeferredBlock<RawConcreteBlock> rawConcrete
-    ) {
-        provider.shapeless(RecipeCategory.BUILDING_BLOCKS, ISOLATED_RAW_CONCRETE.get())
-                .requires(rawConcrete.get())
-                .unlockedBy(provider.hasName(rawConcrete.get()), provider.hasItem(rawConcrete.get()))
-                .save(provider.output(), provider.id("isolated_raw_concrete_from_raw_concrete").toString());
     }
 
     static {
