@@ -121,9 +121,9 @@ public final class StandardBlockModels {
         var top = models.slabTop(context.name() + "_top", texture, texture, texture);
         var full = models.cubeAll(context.name() + "_double", texture);
         if (cutoutMipped) {
-            ((BlockModelBuilder) bottom).renderType("cutout_mipped");
-            ((BlockModelBuilder) top).renderType("cutout_mipped");
-            ((BlockModelBuilder) full).renderType("cutout_mipped");
+            bottom.renderType("cutout_mipped");
+            top.renderType("cutout_mipped");
+            full.renderType("cutout_mipped");
         }
         generator.provider().slabBlock(block, bottom, top, full);
         parentBlockItem(block, generator, generator.modLoc("block/" + context.name()));
@@ -138,9 +138,9 @@ public final class StandardBlockModels {
         var inner = models.stairsInner(context.name() + "_inner", texture, texture, texture);
         var outer = models.stairsOuter(context.name() + "_outer", texture, texture, texture);
         if (cutoutMipped) {
-            ((BlockModelBuilder) straight).renderType("cutout_mipped");
-            ((BlockModelBuilder) inner).renderType("cutout_mipped");
-            ((BlockModelBuilder) outer).renderType("cutout_mipped");
+            straight.renderType("cutout_mipped");
+            inner.renderType("cutout_mipped");
+            outer.renderType("cutout_mipped");
         }
         generator.provider().stairsBlock(block, straight, inner, outer);
         parentBlockItem(block, generator, generator.modLoc("block/" + context.name()));
