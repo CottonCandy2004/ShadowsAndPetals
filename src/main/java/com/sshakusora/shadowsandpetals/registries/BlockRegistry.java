@@ -767,8 +767,7 @@ public class BlockRegistry {
             .recipe((provider, chair) -> BlockRecipeData.cafeChair(provider, chair, color))
             .register());
 
-    // Add another colour when its block/sofa/<colour>.json model family exists.
-    public static final DeferredBlock<SofaBlock> BROWN_SOFA = registerSofa(DyeColor.BROWN);
+    public static final DyedBlockList<SofaBlock> SOFAS = new DyedBlockList<>(BlockRegistry::registerSofa);
 
     public static final DeferredBlock<SamonBlock> SAMON = SAPRegistries
             .block("samon", SamonBlock::new)
@@ -975,6 +974,7 @@ public class BlockRegistry {
                         .noOcclusion())
                 .tags(BlockTags.MINEABLE_WITH_AXE)
                 .withItem()
+                .tooltipDescription(BlockTooltipData::sofa)
                 .creativeTab(CreativeTabRegistry.CreativeTabKey.FURNISHINGS, CreativeTabOrder.FURNISHINGS_SOFAS)
                 .blockstate(() -> SofaModels::block)
                 .recipe((provider, sofa) -> BlockRecipeData.sofa(provider, sofa, color))

@@ -2,13 +2,21 @@ package com.sshakusora.shadowsandpetals.block.decoration.sofa;
 
 import com.mojang.serialization.MapCodec;
 import com.sshakusora.shadowsandpetals.block.decoration.AbstractSeatBlock;
+import com.sshakusora.shadowsandpetals.registries.BlockRegistry;
 import com.sshakusora.shadowsandpetals.util.VoxelShapeUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -21,22 +29,25 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.Set;
 
-/** A one-block sofa section whose rendered shape is chosen by the connection planner. */
 public class SofaBlock extends AbstractSeatBlock {
     public static final MapCodec<SofaBlock> CODEC = simpleCodec(SofaBlock::new);
     public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
     public static final EnumProperty<SofaShape> SHAPE = EnumProperty.create("shape", SofaShape.class);
 
     private static final double SEAT_HEIGHT = 0.5D;
+    @Nullable
+    private static Map<Block, DyeColor> COLOR_BY_BLOCK;
 
     private static final VoxelShape NORTH_SINGLE = Shapes.or(
             Block.box(13.5D, 0.0D, 0.5D, 15.5D, 4.0D, 14.5D),
@@ -215,6 +226,62 @@ public class SofaBlock extends AbstractSeatBlock {
         return mirror == Mirror.NONE
                 ? mirrored
                 : mirrored.setValue(SHAPE, mirrorShape(state.getValue(SHAPE)));
+    }
+
+    @Override
+    protected ItemInteractionResult useItemOn(
+            ItemStack stack,
+            BlockState state,
+            Level level,
+            BlockPos pos,
+            Player player,
+            InteractionHand hand,
+            BlockHitResult hitResult
+    ) {
+        if (stack.getItem() instanceof DyeItem) {
+            DyeColor dyeColor = DyeColor.getColor(stack);
+            if (dyeColor != null) {
+                BlockState dyedState = getDyedState(state, dyeColor);
+                if (dyedState.getBlock() != state.getBlock()) {
+                    if (!level.isClientSide()) {
+                        level.setBlock(pos, dyedState, Block.UPDATE_ALL);
+                        level.playSound(null, pos, SoundEvents.DYE_USE, SoundSource.BLOCKS, 0.45F, 0.95F);
+                        if (!player.isCreative()) {
+                            stack.shrink(1);
+                        }
+                    }
+                    return ItemInteractionResult.SUCCESS;
+                }
+            }
+        }
+        return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
+    }
+
+    public static BlockState getDyedState(BlockState state, DyeColor dyeColor) {
+        return BlockRegistry.SOFAS.get(dyeColor).get().defaultBlockState()
+                .setValue(FACING, state.getValue(FACING))
+                .setValue(SHAPE, state.getValue(SHAPE))
+                .setValue(WATERLOGGED, state.getValue(WATERLOGGED));
+    }
+
+    private static Map<Block, DyeColor> getColorMap() {
+        if (COLOR_BY_BLOCK == null) {
+            COLOR_BY_BLOCK = new IdentityHashMap<>();
+            for (DyeColor dyeColor : DyeColor.values()) {
+                COLOR_BY_BLOCK.put(BlockRegistry.SOFAS.get(dyeColor).get(), dyeColor);
+            }
+        }
+        return COLOR_BY_BLOCK;
+    }
+
+    public static DyeColor getColor(BlockState state) {
+        return getColorMap().getOrDefault(state.getBlock(), DyeColor.WHITE);
+    }
+
+    public static boolean canApplyDye(BlockState state, DyeColor dyeColor) {
+        return state.getBlock() instanceof SofaBlock
+                && dyeColor != null
+                && getColor(state) != dyeColor;
     }
 
     @Override

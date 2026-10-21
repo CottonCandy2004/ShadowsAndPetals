@@ -167,6 +167,13 @@ public final class BlockTooltipData {
                 .action("Right-click with Dye:", "手持染料右键点击:", "_Recolor_ the chair.", "为椅子_重新染色_。");
     }
 
+    public static void sofa(TooltipLangBuilder tooltip) {
+        tooltip.summary("A soft modular seat that can be _recolored_.", "一张可以_重新染色_的柔软模块沙发。")
+                .behaviour("When right-clicked:", "右键点击时:", "_Sit_ on the sofa.", "_坐_在沙发上。")
+                .behaviour("When landed on:", "落在上面时:", "_Cushion_ the fall and bounce upward.", "_缓冲_坠落并向上弹起。")
+                .action("Right-click with Dye:", "手持染料右键点击:", "_Recolor_ the sofa.", "为沙发_重新染色_。");
+    }
+
     public static void shishiOdoshi(TooltipLangBuilder tooltip) {
         tooltip.summary(
                         "A bamboo water feature that fills from above, tips, and _knocks_.",

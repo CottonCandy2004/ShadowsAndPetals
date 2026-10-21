@@ -6,7 +6,6 @@ import com.sshakusora.shadowsandpetals.data.model.SAPBlockModelGenerator;
 import net.minecraft.core.Direction;
 import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
 
-/** Blockstate and item-model generation for the modular sofa meshes. */
 public final class SofaModels {
     private SofaModels() {
     }
