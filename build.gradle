@@ -55,7 +55,6 @@ neoForge {
         client {
             client()
 
-            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
             systemProperty 'neoforge.disableGlValidation', 'true'
         }
 
@@ -63,7 +62,6 @@ neoForge {
             client()
             gameDirectory = project.file('run')
             programArguments = ['--username', 'SShakusora']
-            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
             systemProperty 'neoforge.disableGlValidation', 'true'
         }
 
@@ -71,18 +69,11 @@ neoForge {
             client()
             gameDirectory = project.file('run')
             programArguments = ['--quickPlaySingleplayer', 'sap_structure_editor_1_21_1']
-            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
             systemProperty 'shadowsandpetals.structureEditor', 'true'
         }
 
         server {
             server()
-            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
-        }
-
-        gameTestServer {
-            type = "gameTestServer"
-            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
 
         data {
@@ -156,12 +147,6 @@ tasks.named('runStructureEditor') {
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
-sourceSets.test {
-    compileClasspath += sourceSets.main.compileClasspath
-    runtimeClasspath += sourceSets.main.runtimeClasspath
-}
-
-
 dependencies {
     // Create
     implementation("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
@@ -169,10 +154,6 @@ dependencies {
     compileOnly "dev.engine-room.flywheel:flywheel-neoforge-api-${minecraft_version}:${flywheel_version}"
     runtimeOnly "dev.engine-room.flywheel:flywheel-neoforge-${minecraft_version}:${flywheel_version}"
     implementation "com.tterrag.registrate:Registrate:${registrate_version}"
-
-    testImplementation platform("org.junit:junit-bom:5.12.2")
-    testImplementation "org.junit.jupiter:junit-jupiter"
-    testRuntimeOnly "org.junit.platform:junit-platform-launcher"
 
     // JEI
     compileOnly "mezz.jei:jei-1.21.1-common-api:19.21.0.247"
@@ -195,10 +176,6 @@ dependencies {
     shaderpacks "maven.modrinth:photon-shader:v1.3b@zip"
     shaderpacks "maven.modrinth:makeup-ultra-fast-shaders:9.5c@zip"
 
-}
-
-tasks.named('test', Test) {
-    useJUnitPlatform()
 }
 
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
